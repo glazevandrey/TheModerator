@@ -1,0 +1,312 @@
+/* Visual polish, 14.11.2026. Presentation only; original handlers and layout retained. */
+#stage#stage button{text-shadow:0 2px 2px #0009}
+#stage#stage .ux-lower{gap:8px;grid-template-columns:minmax(0,23fr) minmax(0,51fr) minmax(0,26fr)}
+#stage#stage .modhead{height:32px;min-height:32px;padding:0 12px;display:flex;align-items:center;border-bottom:1px solid #0c090bc9;box-shadow:inset 0 1px 0 #ffffff12,0 1px 0 #b9996b12}
+#stage#stage .actions{gap:8px;padding-bottom:12px}
+#stage#stage .bigrow,#stage#stage .hcrow{width:calc(100% - 24px);max-width:none;margin-left:12px;margin-right:12px}
+#stage#stage .actions .bigrow{height:66px}
+#stage#stage #actRec{padding:0 76px 0 14px;gap:9px;justify-content:flex-start}
+#stage#stage #actRec .tx b{font-size:18px}
+#stage#stage #actRec .st{width:25px;height:25px;flex:none}
+#stage#stage #actRec .cambadge{right:14px;bottom:12px;width:48px;height:41px;transform:rotate(-7deg);background:linear-gradient(135deg,#fff1cf,#cdbb97);border:1px solid #f7e7c4;border-radius:6px;box-shadow:0 4px 0 #2b2119,0 5px 8px #0007,inset 0 1px 1px #fff9;color:#302921}
+#stage#stage #actRec .cambadge .i{width:34px;height:34px}
+#stage#stage .hcrow.ux-wallet{height:88px;min-height:88px;gap:6px;padding:6px 8px 8px}
+#stage#stage #donateStatus{display:none}
+#stage#stage .ux-wallet #actDonate{height:38px;min-height:38px;flex:1;gap:0}
+#stage#stage .ux-wallet #actDonate b{font-size:21px;letter-spacing:.015em}
+#stage#stage .ux-wallet #actDonate .i{width:25px;height:25px;stroke-width:2}
+#stage#stage .ux-wallet #actDonate small{font-size:13px;padding:5px 6px}
+#stage#stage .ux-donate-main{gap:9px}
+#stage#stage .lighting .lamps{max-width:none;width:100%;margin:0;padding:10px 12px 12px;gap:10px}
+#stage#stage .lighting .lamp,#stage#stage .lighting #lamp-window{padding:10px;gap:7px;border:1px solid #746053;border-radius:10px;background:var(--noise),linear-gradient(125deg,#53443d 0%,#40342f 25%,#30282a 65%,#3c302a);box-shadow:inset 0 2px 1px #f3d4a128,inset 2px 0 2px #d3ab7922,inset 0 -3px 3px #0c080bc9,0 4px 0 #100c0e,0 5px 7px #0008}
+#stage#stage .lamptop{font-size:17px;color:#e1d1b6;text-shadow:0 2px 2px #000b}
+#stage#stage .lamp .mline{font-size:10px}
+#stage#stage .lamp .mline span{min-width:60px}
+#stage#stage .lamp .lstatus{font-size:12px;min-height:21px}
+#stage#stage .mk{min-height:45px;border:1px solid #87735e;border-radius:7px;background:var(--noise),linear-gradient(#6c5b51 0%,#51423d 45%,#423532 100%);color:#d8c8b0;box-shadow:inset 0 2px 1px #fff0ca33,inset 1px 0 #baa07a26,0 4px 0 #191111,0 6px 6px #0006;text-shadow:0 2px 2px #000c}
+#stage#stage .mk.on[data-m="STABLE"],#stage#stage .mk.on[data-m="BOOST"]{background:var(--noise),linear-gradient(#ae8843 0%,#997235 45%,#7b5727 100%);color:#fff0cb;outline:none;border-color:#c5a365;box-shadow:inset 0 2px 1px #ffedb94d,inset 0 -2px 2px #4c321b88,0 3px 0 #312012,0 4px 6px #0006;text-shadow:0 2px 2px #4c2d12}
+#stage#stage .mk.on[data-m="DIM"]{background:var(--noise),linear-gradient(#71828a,#495d64);color:#f0e7d5;text-shadow:0 2px 2px #17282b}
+#stage#stage .smarthome{padding-bottom:12px}
+#stage#stage .smarthome .shhint{display:none}
+#stage#stage .smarthome .shbtns{width:100%;max-width:none;margin:0;flex:1;min-height:0;padding:10px 12px 0;gap:10px;grid-template-rows:repeat(2,minmax(0,1fr))}
+#stage#stage .smarthome .shb,#stage#stage .smarthome #actBlinds{height:100%;min-height:0;padding:7px;gap:5px;border:1px solid #8c7661;border-radius:10px;background:var(--noise),linear-gradient(150deg,#706054 0%,#55443e 40%,#43332f 100%);color:#e4d2b4;box-shadow:inset 0 2px 1px #ffe4b538,inset 1px 0 2px #e2c29922,inset 0 -2px 1px #241714,0 4px 0 #1a100f,0 6px 7px #0008;text-shadow:0 2px 2px #000b}
+#stage#stage .smarthome .shb>.i,#stage#stage .smarthome #actBlinds>.i{width:28px;height:28px;filter:drop-shadow(0 2px 1px #0009)}
+#stage#stage .smarthome .shb>span[data-i18n],#stage#stage .smarthome #actBlinds>span{font-size:14px}
+#stage#stage.notes-pinned .glassnote{overflow:visible;margin:12px 5px 8px;height:calc(100% - 20px);max-height:calc(100% - 20px);padding:19px 15px 14px;gap:10px;transform:rotate(.7deg);border-radius:2px 3px 7px 2px;border:1px solid #c2a66b;background:radial-gradient(ellipse at 15% 5%,#fff8da88,transparent 65%),radial-gradient(ellipse at 100% 90%,#b7833f2e,transparent 60%),repeating-linear-gradient(0deg,transparent 0px,transparent 4px,#846a2d06 5px),linear-gradient(110deg,#e6cd91,#f3e2ad 42%,#e4ca87);box-shadow:0 13px 18px #0009,4px 4px 0 #a1875755,inset 0 1px 1px #fff9,inset -4px -5px 12px #9b652326;color:#392b1e}
+#stage#stage.notes-pinned .glassnote:before{content:'';position:absolute;left:calc(50% - 45px);top:-13px;width:90px;height:29px;background:linear-gradient(110deg,#d5c6a577,#f1e5cb9e 45%,#cbbb9699);transform:rotate(-5deg);border:1px solid #e7dbc14d;box-shadow:0 2px 3px #0003,inset 0 1px 0 #fff4;clip-path:polygon(1% 0,98% 2%,100% 20%,98% 40%,100% 63%,98% 80%,99% 100%,1% 97%,2% 76%,0 56%,2% 34%,0 14%)}
+#stage#stage.notes-pinned .glassnote>b{font-size:16px;letter-spacing:.045em;line-height:1.1;color:#765635;text-shadow:0 1px #fff5}
+#stage#stage.notes-pinned .glassnote>.gn{font-family:'Caveat','Comic Sans MS',cursive;font-weight:600;font-size:28px;line-height:1.18;letter-spacing:.01em;color:#35271d;flex:1}
+#stage#stage.notes-pinned .glassnote .banleg{font-family:'Caveat','Comic Sans MS',cursive;font-size:26px;font-weight:700;line-height:1.1;gap:7px;padding-top:11px;border-top:1px dashed #92714499}
+#stage#stage.notes-pinned .glassnote .banleg .bh{font-size:13px;letter-spacing:.025em;line-height:1.1;margin:0}
+#stage#stage.notes-pinned .glassnote .banleg .bi,#stage#stage.notes-pinned .glassnote .banleg .bi svg{width:29px;height:29px}
+#stage#stage.notes-pinned .glassnote .banleg .br{gap:8px}
+#stage#stage.notes-pinned .glassnote .wo{align-self:flex-end;margin-top:3px;font-size:28px;line-height:1.1;white-space:nowrap;color:#9a3c2d;transform:rotate(-4deg)}
+/* Surface hierarchy and tactile controls, using the existing Rubik UI font. */
+#stage#stage{--text:#e2d3c1;--text2:#bdac9e;--muted:#a7988c}
+#stage#stage .mod{border:1px solid #6d5960;background:var(--noise),linear-gradient(160deg,#493b42,#352c32 60%,#30272d);background-blend-mode:soft-light,normal;box-shadow:inset 0 1px 1px #ffe4d326,inset 0 -2px 2px #0c090c99,0 3px 5px #0007}
+#stage#stage .modhead{color:#efdbc0;background:linear-gradient(#3d3239,#30272e);font-size:14px;letter-spacing:.045em;text-shadow:0 1px 1px #0008}
+#stage#stage .modhead .i{color:#e9b65e}
+#stage#stage .stream,#stage#stage .chat{border-color:#79656d;box-shadow:inset 0 1px 1px #ffdfc329,0 3px 8px #0009}
+#stage#stage .video{box-shadow:inset 0 0 0 1px #aa8d6e55,0 0 0 2px #120e14;outline:1px solid #77615244;outline-offset:-1px}
+#stage#stage button{font-family:var(--f-ui);text-shadow:0 1px 1px #1c111b80}
+#stage#stage .pbtn,#stage#stage .shb,#stage#stage .mk{transition:background .12s,box-shadow .12s,transform .07s,filter .12s}
+#stage#stage .pbtn:hover:not(:disabled),#stage#stage .shb:hover:not(:disabled),#stage#stage .mk:hover:not(:disabled){filter:brightness(1.12)}
+#stage#stage .mk:focus-visible,#stage#stage .shb:focus-visible,#stage#stage .pbtn:focus-visible{outline:2px solid #ffe1a0;outline-offset:3px}
+#stage#stage .lighting .lamp,#stage#stage .lighting #lamp-window{border:1px solid #77616a;background:linear-gradient(145deg,#3a3037,#29222a 75%);box-shadow:inset 0 1px 1px #ffe5d12b,inset 0 -2px 2px #100b11,0 3px 0 #151017,0 4px 7px #0006}
+#stage#stage .lamptop{font-size:17px;color:#f0dbc1;text-shadow:0 1px 1px #130c1480}
+#stage#stage .lamptop .k{color:#d0bfb3;background:#18131b;box-shadow:inset 0 1px 2px #0009,0 1px #cfb4a422}
+#stage#stage .mk{padding:0 2px;border:1px solid #7c6873;background:linear-gradient(#5a4c58,#42353f);color:#cdbfb5;box-shadow:inset 0 1px 1px #ffe4d132,inset 0 -1px #1f1421,0 3px 0 #1b131c,0 4px 5px #0006;font-weight:900;letter-spacing:0;text-shadow:0 1px 1px #160c1780}
+#stage#stage .mk.on[data-m="DIM"],#stage#stage .mk.on[data-m="STABLE"],#stage#stage .mk.on[data-m="BOOST"]{outline:none;border:1px solid #d9b369;color:#fff0ca;transform:translateY(1px);background:linear-gradient(#ac8944,#89642c);box-shadow:inset 0 1px 1px #fff0bd6b,inset 0 -1px #543716,0 2px 0 #362315,0 0 8px #d19c4930;text-shadow:0 1px 1px #543114b3}
+#stage#stage .mk.on[data-m="BOOST"]{border-color:#ffd080;background:linear-gradient(#c89743,#ab742b);box-shadow:inset 0 1px 2px #fff3cb88,inset 0 -1px #61401d,0 2px 0 #392517,0 0 10px #e6b35b66}
+#stage#stage .mk.on[data-m="DIM"]{background:linear-gradient(#967840,#74592f);box-shadow:inset 0 1px 1px #fff0bc55,0 2px 0 #352616,0 0 6px #cca35a22}
+#stage#stage .mk:active:not(:disabled),#stage#stage .shb:active:not(:disabled),#stage#stage #actBlinds:active:not(:disabled),#stage#stage #actRec:active:not(:disabled),#stage#stage #actDonate:active:not(:disabled){transform:translateY(3px);box-shadow:inset 0 1px 2px #100b1399,0 1px 0 #18101b}
+#stage#stage .mk:disabled{color:#887a80;filter:brightness(.7) saturate(.4);box-shadow:inset 0 1px 3px #08060ba6;transform:none}
+#stage#stage .lamp .mline{color:#c8b7a7}
+#stage#stage .lamp .seg{background:#100d13;border-radius:4px;box-shadow:inset 0 1px 3px #000,0 1px #c4a68e22}
+#stage#stage .lamp .prox i{background:linear-gradient(#ed8677,#c4463c)}
+#stage#stage .lamp .heat i{background:linear-gradient(#c3d78f,#8ca555)}
+#stage#stage .lamp .hv{color:#e0c7a7;font-weight:800}
+#stage#stage .lamp .lstatus{background:linear-gradient(#25322b,#1c251f);border:1px solid #53674b;border-radius:5px;color:#aacb8a;text-shadow:0 1px #0b150c;box-shadow:inset 0 1px 1px #ffffff0d}
+#stage#stage .lighting .lamp.motion,#stage#stage .lighting .lamp.adapt,#stage#stage .lighting .lamp.redeyes,#stage#stage .lighting .lamp.burned{border-color:#b66e60;box-shadow:inset 0 1px #e7ad8d33,0 0 0 1px #bd554d55,0 3px 0 #251318,0 0 10px #9f3b2926}
+#stage#stage .lamp.motion .lstatus,#stage#stage .lamp.hot .lstatus,#stage#stage .lamp.adapt .lstatus,#stage#stage .lamp.redeyes .lstatus,#stage#stage .lamp.burned .lstatus{background:linear-gradient(#6c2c2d,#482025);border:1px solid #b85d50;color:#ffd8be;animation:none;text-shadow:0 1px #3a1015}
+#stage#stage .lamp.hot .heat i{background:linear-gradient(#f1b86d,#c7613f)}
+#stage#stage #actRec{color:#edbd64;background:var(--noise),linear-gradient(#76613b,#594729 65%,#44321f);background-blend-mode:soft-light,normal;box-shadow:inset 0 1px 1px #fff0b83b,inset 0 0 0 1px #c49c5955,0 4px 0 #271c0e,0 6px 8px #0008}
+#stage#stage #actRec .tx b{color:#edbd64;font-weight:900;letter-spacing:.01em;text-shadow:0 2px 0 #35240b99}
+#stage#stage .hcrow.ux-wallet{height:88px;min-height:88px;background:linear-gradient(#30272e,#261f27);box-shadow:inset 0 1px 2px #08050bb3,0 1px #bfa18b22}
+#stage#stage .ux-wallet .hcval{font-size:25px;color:#f2c167;text-shadow:0 1px 1px #3b230e}
+#stage#stage .ux-wallet .hcbar{height:8px;min-height:8px;border-radius:5px;background:#120d14}
+#stage#stage .ux-wallet .hcbar i{background:linear-gradient(#f3c978,#d79a3f);box-shadow:0 0 6px #daa34833}
+#stage#stage .ux-wallet #actDonate{min-height:40px;height:40px;gap:3px;border:1px solid #8e7688;background:linear-gradient(#655363,#493949);color:#c5b9c0;box-shadow:inset 0 1px 1px #fff0dc38,0 3px 0 #231924,0 4px 6px #0008}
+#stage#stage .ux-wallet #actDonate b{font-size:19px;letter-spacing:0;text-shadow:0 1px 1px #28172980}
+#stage#stage .ux-wallet #actDonate .i{width:23px;height:23px}
+#stage#stage .ux-wallet #actDonate small{font-size:11px;padding:3px 5px}
+#stage#stage #donateStatus{display:block;font:500 11px/1.1 var(--f-ui);color:#b8a9b2;text-shadow:none}
+#stage#stage .ux-wallet #actDonate:disabled{filter:none;cursor:not-allowed;color:#b1a4ac;background:linear-gradient(#554650,#3e313c);border-color:#75616d;box-shadow:inset 0 1px 1px #fff0e31c,0 3px 0 #221823}
+#stage#stage .ux-wallet.can-donate #actDonate{border-color:#b6c2a0;background:linear-gradient(#6e856c,#4a6756);color:#f2edda;box-shadow:inset 0 1px 1px #fffbd94d,0 3px 0 #24362a,0 0 8px #b6cf8726}
+#stage#stage .ux-wallet.can-donate #donateStatus{color:#d3dfbe}
+#stage#stage .smarthome .shb,#stage#stage .smarthome #actBlinds{border:1px solid #897180;background:var(--noise),linear-gradient(#60505d,#443641);background-blend-mode:soft-light,normal;color:#efddc8;box-shadow:inset 0 1px 1px #ffe6d640,inset 0 -1px #291b29,0 4px 0 #211721,0 5px 7px #0008;text-shadow:0 1px 1px #1d101f80}
+#stage#stage .smarthome .shb>.i,#stage#stage .smarthome #actBlinds>.i{color:#e8b654;filter:drop-shadow(0 1px 1px #0006)}
+#stage#stage .smarthome .shb.alarm>.i{color:#df8976}
+#stage#stage .smarthome .shb>span[data-i18n],#stage#stage .smarthome #actBlinds>span{font-weight:900;letter-spacing:.01em}
+#stage#stage .smarthome .shb:disabled,#stage#stage .smarthome #actBlinds:disabled{filter:brightness(.67) saturate(.5);box-shadow:inset 0 1px 2px #0008,0 1px 0 #160e17;transform:translateY(2px)}
+#stage#stage .smarthome #actBlinds.shut{border-color:#9bac78;background:linear-gradient(#5a6b49,#3d4f36);color:#e1eccb}
+#stage#stage .smarthome #actBlinds.jam{border-color:#b57160;background:linear-gradient(#703c39,#47272c);color:#ffd4c1}
+#stage#stage .smarthome #actBlinds.call{animation:polish-blinds .9s ease-in-out infinite alternate}
+@keyframes polish-blinds{from{box-shadow:inset 0 1px 1px #ffe6d640,0 4px 0 #211721}to{box-shadow:inset 0 1px 1px #ffe6d640,0 4px 0 #211721,0 0 0 1px #d9b36d,0 0 8px #e4b45d44}}
+#stage#stage .chat #chatlist{background:linear-gradient(135deg,#30272e,#292129);box-shadow:inset 0 2px 4px #08050c88,0 1px #bba18922}
+#stage#stage .chat .msg{color:#e3d7cc}
+#stage#stage .chat .msg .u{filter:brightness(1.12)}
+#stage#stage .chat .msg.troll:not(.deleted),#stage#stage .chat .msg.spam:not(.deleted){background:#9c3d3d10;box-shadow:inset 2px 0 #a44d4755}
+#stage#stage .chat .msg.sel:not(.deleted){background:#b0834826;box-shadow:inset 0 0 0 1px #d3aa6e}
+#stage#stage .chat .msg.sel.troll:not(.deleted),#stage#stage .chat .msg.sel.spam:not(.deleted){background:linear-gradient(90deg,#903b3d52,#5e2b3433);box-shadow:inset 0 0 0 2px #c76b5c}
+#stage#stage .chat .msg.unmasked{color:#302017;background:linear-gradient(#ecdaa5,#cfb67c);box-shadow:inset 0 1px #fff4cb88,0 2px 3px #0005}
+#stage#stage .chat .msg.unmasked .u{filter:none}
+#stage#stage .msgban{border:1px solid #e28b76;background:linear-gradient(#bc6053,#8d3c38);box-shadow:inset 0 1px #ffd5b44d,0 2px 0 #4a2025;text-shadow:0 1px 1px #56201f80}
+#stage#stage .msgban:active{transform:translateY(-50%) translateY(1px);box-shadow:inset 0 1px 2px #35151d80}
+#stage#stage #systemPanel .modhead{height:auto;min-height:0;background:none;border:0;box-shadow:none;font-size:11px;padding:0}
+#stage#stage #systemPanel .sysmsg{color:#bba995;text-shadow:0 1px #0c090d}
+#stage#stage #systemPanel[data-lv="1"] .modhead,#stage#stage #systemPanel[data-lv="1"] .sysmsg{color:#e4b56c}
+#stage#stage #systemPanel[data-lv="2"] .modhead,#stage#stage #systemPanel[data-lv="2"] .sysmsg{color:#ef9c7e}
+#stage#stage #systemPanel[data-lv="3"] .modhead,#stage#stage #systemPanel[data-lv="3"] .sysmsg{color:#ffb29f}
+#stage#stage #systemPanel[data-lv="1"],#stage#stage #systemPanel[data-lv="2"],#stage#stage #systemPanel[data-lv="3"]{background:linear-gradient(90deg,#894f2c22,transparent);border-radius:6px}
+/* Touch and 4:3 retain their existing geometry and clear tap targets. */
+#stage#stage.mobile .modhead{height:25px;min-height:25px;font-size:11px;padding:0 8px}
+#stage#stage.mobile .actions{gap:7px;padding-bottom:9px}
+#stage#stage.mobile .actions .bigrow{height:55px}
+#stage#stage.mobile .bigrow,#stage#stage.mobile .hcrow{width:calc(100% - 16px);margin-left:8px;margin-right:8px}
+#stage#stage.mobile #actRec{padding-left:8px;padding-right:48px;gap:5px}
+#stage#stage.mobile #actRec .tx b{font-size:15px}
+#stage#stage.mobile #actRec .st{width:19px;height:19px}
+#stage#stage.mobile #actRec .cambadge{display:grid;width:35px;height:32px;right:7px;bottom:10px}
+#stage#stage.mobile #actRec .cambadge .i{width:26px;height:26px}
+#stage#stage.mobile .hcrow.ux-wallet{height:100px;min-height:100px}
+#stage#stage.mobile .ux-wallet #actDonate b{font-size:15px}
+#stage#stage.mobile .ux-wallet #actDonate .i{width:18px;height:18px}
+#stage#stage.mobile #donateStatus{font-size:11px}
+#stage#stage.mobile .lighting .lamps{padding:7px 8px 10px;gap:8px}
+#stage#stage.mobile .lighting .lamp,#stage#stage.mobile .lighting #lamp-window{padding:6px;gap:6px}
+#stage#stage.mobile .lamptop{font-size:16px}
+#stage#stage.mobile .lamp .mline span{min-width:55px}
+#stage#stage.mobile .lamp .lstatus{font-size:11px;min-height:21px}
+#stage#stage.mobile .smarthome{padding-bottom:10px}
+#stage#stage.mobile .smarthome .shbtns{padding:7px 8px 0;gap:9px}
+#stage#stage.mobile .smarthome .shb,#stage#stage.mobile .smarthome #actBlinds{height:100%;min-height:0;padding:5px;gap:4px}
+#stage#stage.mobile .smarthome .shb>span[data-i18n],#stage#stage.mobile .smarthome #actBlinds>span{font-size:12px}
+#stage#stage.mobile .smarthome .shb>.i,#stage#stage.mobile .smarthome #actBlinds>.i{width:25px;height:25px}
+#stage#stage.mobile .glassnote{overflow:visible;background:linear-gradient(110deg,#e7ce95,#f2e0ac 45%,#e3c98b);box-shadow:0 9px 22px #0009,inset 0 1px #fff8}
+#stage#stage.mobile .glassnote .gn{font-size:27px;line-height:1.17}
+#stage#stage .glassnote>.gn{min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#ac8b50 transparent}
+#stage#stage.compact.notes-pinned .glassnote>b{font-size:14px;letter-spacing:.01em}
+#stage#stage.compact #actRec .tx b{font-size:16px}
+#stage#stage.compact #actRec{padding-right:62px;gap:6px}
+#stage#stage.compact #actRec .cambadge{width:40px;height:36px;right:10px;bottom:14px}
+/* Reserve a full two-line donation button rather than clipping its status. */
+#stage#stage .actions .bigrow{height:54px}
+#stage#stage #actRec .cambadge{bottom:6px}
+#stage#stage .hcrow.ux-wallet{height:100px;min-height:100px;gap:4px;padding:6px 8px 8px}
+#stage#stage .ux-wallet .ux-money{height:25px;min-height:25px}
+#stage#stage .ux-wallet #actDonate{height:44px;min-height:44px;gap:2px;padding:3px 7px}
+#stage#stage .ux-wallet #actDonate .i{width:21px;height:21px}
+#stage#stage.mobile .actions .bigrow{height:55px}
+#stage#stage.mobile .ux-wallet #actDonate .i{width:18px;height:18px}
+@media(prefers-reduced-motion:reduce){#stage#stage .smarthome #actBlinds.call{animation:none}#stage#stage button{transition:none}}
+
+/* Desktop console proportions follow the 1672 × 941 reference frame. */
+#stage#stage.notes-pinned {
+  background:radial-gradient(ellipse at center,#262026,#100d11 80%);
+  --f-ui:"Segoe UI",Arial,sans-serif;
+}
+#stage.notes-pinned .props,#stage.notes-pinned .lampglow {display:none}
+#stage#stage.notes-pinned .monitor {
+  left:1%;top:2.9%;width:98%;height:92%;border-radius:40px;
+  border:1px solid #54434d;
+  box-shadow:inset 0 3px 2px #79637055,inset 0 0 0 5px #322930,inset 0 -8px 12px #0d0a0ec9,0 14px 0 #151115,0 20px 26px #000b;
+}
+#stage.notes-pinned .monitor::after {opacity:.25}
+#stage#stage.notes-pinned .screen {
+  left:1.1%;top:2.1%;width:97.8%;height:90.5%;padding:10px 12px 12px;gap:12px;
+}
+#stage#stage.notes-pinned .ux-upper,#stage#stage.wide.notes-pinned .ux-upper {grid-template-columns:minmax(0,50fr) minmax(0,36.5fr) minmax(0,12.5fr);gap:10px}
+#stage#stage.notes-pinned .ux-lower {height:35.2%;grid-template-columns:minmax(0,23.6fr) minmax(0,50.3fr) minmax(0,25.5fr);gap:10px}
+#stage#stage.notes-pinned .bezel-bottom {bottom:1.6%;height:4%;left:1.8%;right:1.8%}
+#stage.notes-pinned .screenfx {opacity:.35}
+#stage.notes-pinned .scan {opacity:.35}
+#stage#stage.notes-pinned .stream {padding:4px;gap:3px}
+#stage#stage.notes-pinned .streamhead {height:43px;min-height:43px}
+#stage#stage.notes-pinned .streamhead .clock {font:700 23px/1.2 Georgia,serif;color:#ffd26a}
+#stage#stage.notes-pinned .streambar {height:34px;min-height:34px}
+#stage .viewer-eye {color:#f7c476}
+#stage#stage.notes-pinned #chatlist {margin:5px;padding:4px 8px;background:#2b252b}
+#stage#stage.notes-pinned .msg {min-height:34px;padding-top:4px;padding-bottom:4px;align-items:center;font:17px/1.35 "Segoe UI",Arial,sans-serif}
+#stage#stage.notes-pinned .msg .t {font-weight:400;color:#f4eae1}
+#stage#stage.notes-pinned .msg.unmasked .t {color:#241a17}
+#stage#stage.notes-pinned .msg .u {font-weight:700}
+#stage#stage.notes-pinned .chat .ux-moderation {height:39px;min-height:39px;padding-right:155px}
+#stage#stage.notes-pinned .chat .trustrow {height:42px;min-height:42px;padding-right:165px;gap:9px}
+#stage#stage.notes-pinned .chatfoot,#stage#stage.notes-pinned .trustrow .lbl {font:700 15px/1.2 "Segoe UI",sans-serif;color:#f0ddcc;letter-spacing:0}
+#stage #stars {margin-left:auto;color:#f6e6d6;font-weight:700}
+#stage#stage.notes-pinned .chat #actBan {display:flex!important;position:absolute;bottom:26px;right:12px;width:132px;height:49px;border:1px solid #e69580;justify-content:center;border-radius:9px}
+#stage#stage.notes-pinned #actBan small {font-size:18px}
+#stage #toxValue {color:#ffe7cb;font-size:16px}
+#stage.mobile #toxValue {display:none}
+#stage#stage.notes-pinned .glassnote {margin:14px 4px 5px;height:calc(100% - 19px);max-height:none;gap:9px;padding:18px 14px 13px;transform:rotate(.45deg)}
+#stage#stage.notes-pinned .glassnote>b {font-size:14px;color:#39291a;letter-spacing:0}
+#stage#stage.notes-pinned .glassnote>.gn {font-size:25px;line-height:1.12}
+#stage#stage.notes-pinned .glassnote .banleg {font-size:22px;gap:5px}
+#stage#stage.notes-pinned .glassnote .banleg .bi,#stage#stage.notes-pinned .glassnote .banleg svg {width:26px;height:26px}
+#stage#stage.notes-pinned .glassnote .wo {font-size:26px}
+#stage#stage.notes-pinned .modhead {height:38px;min-height:38px;font-size:16px;letter-spacing:.01em}
+#stage#stage.notes-pinned .actions {gap:10px}
+#stage#stage.notes-pinned .actions .bigrow {height:26%}
+#stage#stage.notes-pinned #actRec .cambadge {bottom:12px}
+#stage#stage.notes-pinned .hcrow.ux-wallet {height:auto;flex:1;min-height:0;gap:7px}
+#stage#stage.notes-pinned .ux-wallet #actDonate {height:auto;flex:1}
+#stage#stage.notes-pinned .lighting .lamp {justify-content:space-between;gap:4px}
+#stage#stage.notes-pinned .lamp .mline {font-size:12px}
+#stage#stage.notes-pinned .mline .hv {font-size:16px;min-width:35px}
+#stage#stage.notes-pinned .mk {position:relative;min-height:48px;font-size:14px;padding-bottom:4px}
+#stage#stage.notes-pinned .mk::after {content:'';position:absolute;bottom:7px;left:39%;width:22%;height:2px;background:currentColor;opacity:.65}
+#stage#stage.notes-pinned .lighting .lamp .lstatus {margin:0;min-height:36px;display:grid;place-content:center;font-size:14px}
+#stage#stage.notes-pinned .smarthome .shhint {display:block;margin:9px 12px 0;padding:6px 8px;border-radius:6px;background:#2d252c;color:#e6d8cb;font:12px/1.25 "Segoe UI",sans-serif}
+#stage#stage.notes-pinned .smarthome .shb small {opacity:1;background:#322931;padding:3px 6px;border-radius:4px;font-size:12px}
+#stage#stage.notes-pinned .bezel-bottom #systemPanel .modhead {min-height:0;height:auto}
+
+#stage#stage.notes-pinned .seg i,#stage#stage.notes-pinned .toxbar .tb i {transition:none}
+#stage#stage.notes-pinned .chat .msg:not(.sel):not(:hover) {padding-right:8px}
+#stage#stage.notes-pinned .chat #actBan.armed {background:linear-gradient(#bb554c,#92342e);box-shadow:inset 0 1px #ffc5aa77,0 3px 0 #4f201f,0 5px 7px #0007}
+#stage#stage.notes-pinned .lighting #lamp-window .lstatus {min-height:36px}
+#stage#stage.notes-pinned .chathead .hint {font-size:11px}
+#stage#stage.notes-pinned .glassnote:before {width:72px;left:calc(50% - 36px);height:24px}
+
+/* CRT face and illuminated controls. */
+#stage .vignette {opacity:.28}
+#stage .grain {opacity:.027}
+#stage #feed {filter:contrast(1.09) saturate(1.2) brightness(1.06)}
+#stage .monitor::after {pointer-events:none}
+#stage#stage .modhead {color:#ffecd6}
+#stage .streamhead .live {background:linear-gradient(#cb594c,#a5302e);border:1px solid #e58c76;color:#fff4e7;letter-spacing:.04em}
+#stage#stage .streambar,#stage#stage .lamptop {color:#ffecd8}
+#stage#stage .paniclbl,#stage .viewer-eye {color:#ffca66}
+#stage .panic i {background:linear-gradient(90deg,#ffd46e,#ffbd43 40%,#f78044 75%,#e54e46)}
+#stage .night i {background:linear-gradient(90deg,#b7e787,#94af66 55%,#ffc25e)}
+#stage#stage .chat .msg .u {filter:brightness(1.18) saturate(1.15)}
+#stage#stage .chat .msg.sel:is(.troll,.spam):not(.deleted) {background:linear-gradient(90deg,#542e35,#472a31);box-shadow:inset 0 0 0 2px #ec7164}
+#stage#stage .chat .msg.unmasked:not(.isyou) {background:linear-gradient(#ffe6ab,#e6c788);color:#221a14}
+#stage#stage .msgban,#stage#stage.notes-pinned .chat #actBan.armed {
+  background:linear-gradient(#d56452,#a33931 75%,#95332c);border:1px solid #f49b85;color:#fff3de;
+  box-shadow:inset 0 1px 1px #ffd9bb80,0 3px 0 #52201e,0 4px 6px #0008;
+}
+#stage #actBan .gv,#stage .msgban svg {color:#ffcd66;stroke-width:2.4}
+#stage#stage .credits i:not(.off) {background:linear-gradient(#b8df96,#80ad62);box-shadow:inset 0 1px #e4f3c366,0 0 5px #9aba6433}
+#stage#stage.notes-pinned .glassnote {
+  background:repeating-linear-gradient(0deg,transparent 0 3px,#a0783520 4px),radial-gradient(ellipse at 32% 47%,#ffedb7,transparent 78%),linear-gradient(105deg,#eac880,#ffe4a3 58%,#e3c076);
+}
+#stage#stage .glassnote .gn {color:#26190f}
+#stage#stage .glassnote .banleg .bh {color:#982921}
+#stage#stage .glassnote .banleg .bh.ok {color:#39582e}
+#stage#stage.notes-pinned .glassnote .wo {color:#b12e20}
+#stage#stage #actRec {
+  border:1px solid #b8904b;background:linear-gradient(155deg,#957747,#68522f 63%,#574025);
+  box-shadow:inset 0 1px #ffdfa388,inset 0 -2px 2px #382712,0 4px 0 #25190d,0 5px 8px #0009;
+}
+#stage#stage #actRec .tx b,#stage#stage #actRec .st {color:#ffcb6b;fill:currentColor}
+#stage#stage #actRec .st {filter:drop-shadow(0 1px 1px #392614)}
+#stage#stage .ux-wallet .hcbar {padding:1px;height:11px;min-height:11px}
+#stage#stage .ux-wallet .hcbar i {border-radius:5px;background:linear-gradient(#ffce62,#efac39)}
+#stage#stage .ux-wallet .coin {background:linear-gradient(#ffce67,#e5a337);color:#221610}
+#stage#stage .ux-wallet #actDonate:disabled {color:#e1d3d7;background:linear-gradient(#655460,#483b45);border-color:#8c7784}
+#stage#stage .ux-wallet #donateStatus {color:#ded0c5}
+#stage#stage.notes-pinned .ux-wallet .coin {width:32px;height:32px;font-size:13px}
+#stage#stage.notes-pinned .ux-wallet .ux-money {height:32px;min-height:32px}
+#stage#stage.notes-pinned .ux-wallet .hcval {font-size:29px;min-width:0;color:#ffcb64;margin-left:7px}
+#stage#stage.notes-pinned .ux-wallet .tiny {color:#e2d1bd;text-transform:uppercase}
+#stage#stage.notes-pinned .ux-wallet #actDonate small {background:#796674;color:#fff2ef;border-radius:5px;opacity:1}
+#stage#stage .lighting .lamp.motion {border-color:#e18267}
+#stage#stage .lamp .bulb.stable {background:radial-gradient(circle,#fff8c1,#ffdf79 60%,#e4ac43);box-shadow:0 0 10px #fac252aa}
+#stage#stage .lamp .bulb.boost {background:radial-gradient(circle,#fffde1,#ffe397 60%,#ffb43f);box-shadow:0 0 0 2px #e69a41,0 0 13px 2px #ffa636b0}
+#stage#stage .lamp .prox i {background:linear-gradient(#ff9282,#ef544a)}
+#stage#stage .lamp:not(.hot) .heat i {background:linear-gradient(#c4ed90,#8bb955)}
+#stage#stage .mk.on[data-m="STABLE"] {background:linear-gradient(#ba954d,#896629);border-color:#e1c17b}
+#stage#stage .mk.on[data-m="BOOST"] {background:linear-gradient(#e6a342,#b77822);border-color:#ffcc6b;box-shadow:inset 0 1px #ffe6a7,0 2px 0 #67431f,0 0 9px #ffaa4e99}
+#stage#stage .lighting .lamp .lstatus[data-type] {display:flex;align-items:center;justify-content:center;gap:.52em;color:#a8d784;border-color:#516742;background:linear-gradient(#283029,#202620)}
+#stage#stage .lighting .lamp .lstatus[data-type="alert"] {color:#ffdfcf;border-color:#ce5446;background:linear-gradient(#60282b,#431b1d);box-shadow:inset 0 1px #ed89752e,0 0 5px #a2342b35}
+#stage#stage .lighting .lamp .lstatus[data-type="cooling"] {background:#273536;border-color:#546f70;color:#bddade}
+#stage .lstatus svg {width:1.35em;height:1.35em;flex:none}
+#stage .lstatus[data-type="alert"] svg {color:#ff9851;stroke-width:4}
+#stage#stage .smarthome :is(.shb,#actBlinds):not(:disabled):not(.shut):not(.jam) {background:linear-gradient(155deg,#675665,#41353f 90%);border-color:#98808f}
+#stage#stage .smarthome :is(.shb,#actBlinds)>.i {color:#ffc352}
+#stage#stage .smarthome .shb.alarm>.i {color:#fa806b}
+#stage#stage.notes-pinned .smarthome :is(.shb,#actBlinds)>.i {width:31px;height:31px}
+#stage#stage #systemPanel[data-lv="2"] .bang,#stage#stage #systemPanel[data-lv="3"] .bang {background:#592b24;box-shadow:0 0 6px #d65a344d;animation:none}
+#stage#stage #systemPanel:not([data-lv="0"]) .bang .i {color:#ffad58;stroke-width:4}
+#stage#stage #systemPanel:not([data-lv="0"]) .modhead {color:#ff8067}
+#stage#stage #systemPanel:not([data-lv="0"]) #sysTitle::after {content:":"}
+#stage#stage #systemPanel:not([data-lv="0"]) .sysmsg {color:#fff0dd}
+#stage#stage.notes-pinned .bezel-bottom .sysmsg,#stage#stage.notes-pinned .bezel-bottom #sysTitle {font-size:13px}
+#stage#stage.notes-pinned .bezelbtns .bzb {border:1px solid #63505b;color:#e4d2c5}
+#stage .bezelbtns .pled {background:#acdf83;box-shadow:0 0 8px #91d65e}
+#stage#stage.notes-pinned .chat .msg {min-height:36px}
+#stage#stage.notes-pinned .chat .msg .av {width:27px;height:27px}
+#stage#stage.notes-pinned .glassnote .banleg {gap:7px;font-size:23px}
+#stage#stage .smarthome #actAlarm.shb>.i {color:#ff806c}
+#stage#stage.notes-pinned .smarthome .shb>span[data-i18n],#stage#stage.notes-pinned .smarthome #actBlinds>span {font-size:16px}
+#stage#stage.notes-pinned .chat .msg.sel.troll .t {color:#ffc1ab}
+#stage#stage #systemPanel:not([data-lv="0"]) #sysTitle {color:#ff8067}
+#stage#stage.notes-pinned .lighting .lamp .lstatus {font-size:15px}
+#stage#stage.notes-pinned .streamhead .clock {font:700 23px/1.1 "Segoe UI",Arial,sans-serif}
+#stage#stage.notes-pinned .screen {width:98.1%;height:91%}
+#stage#stage.notes-pinned .chat .msgban {padding:6px 10px}
+#stage#stage.notes-pinned.finban .chat .ux-moderation {position:static}
+
+
+/* Reserve a bounded writing area and fit each tip to its actual line breaks. */
+#stage#stage .glassnote>.gn {
+  --note-type-size:23px;flex:1 1 0;min-height:0;overflow:visible;
+  font-size:var(--note-type-size);line-height:1.1;overflow-wrap:anywhere;
+}
+#stage#stage.notes-pinned .glassnote {padding:16px 12px 12px;gap:6px}
+#stage#stage.notes-pinned .glassnote .banleg {font-size:20px;gap:3px;padding-top:7px}
+#stage#stage.notes-pinned .glassnote .banleg .bi,#stage#stage.notes-pinned .glassnote .banleg .bi svg {width:23px;height:23px}
+#stage#stage.notes-pinned .glassnote .wo {font-size:24px}
+#stage#stage.mobile .glassnote {height:calc(100% - 60px);width:350px;max-width:calc(100% - 24px);gap:6px;padding:16px;overflow:visible}
+#stage#stage.mobile .glassnote>.gn {--note-type-size:25px}

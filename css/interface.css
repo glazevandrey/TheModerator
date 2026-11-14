@@ -1,0 +1,209 @@
+/* Separate review build. ID scope overrides all three original fixed layouts. */
+#stage#stage{--text:#e0d4c3;--text2:#baaea1;--muted:#a1948b;overflow:clip}
+#viewport{overflow:clip}
+#stage#stage .screen{overflow:clip}
+#stage#stage .monitor{left:20px;top:14px;width:calc(100% - 40px);height:calc(100% - 58px);border-radius:24px}
+#stage#stage .screen{left:18px;top:18px;width:calc(100% - 36px);height:calc(100% - 68px);padding:12px;display:flex;flex-direction:column;gap:12px;border-radius:12px}
+#stage#stage .bezel-bottom{height:34px;left:24px;right:24px;bottom:8px}
+.ux-toolbar{height:38px;flex:none;display:flex;align-items:center;gap:14px;padding:0 2px}
+.ux-preview{font-size:12px;letter-spacing:.18em;color:#a39688;font-weight:800}
+#stage#stage .ux-toolbar .clock{font-size:32px;min-width:104px;text-align:center}
+#stage#stage .ux-toolbar .iconkey{width:42px;height:36px}
+#stage#stage .ux-notes{height:36px;color:#e9cf90;font-size:13px;position:relative}
+.ux-notes i{width:6px;height:6px;border-radius:50%;background:#e9b65e;visibility:hidden}
+.ux-notes.unread i{visibility:visible}
+.ux-upper{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,58fr) minmax(0,42fr);gap:12px}
+.ux-lower{height:240px;flex:none;display:grid;grid-template-columns:minmax(0,23fr) minmax(0,53fr) minmax(0,24fr);gap:12px}
+#stage#stage .ux-upper>.mod,#stage#stage .ux-lower>.mod{position:relative;inset:auto;width:auto;height:100%;min-width:0;min-height:0;margin:0}
+#stage#stage .stream{padding:6px;gap:5px}
+#stage#stage .streamhead{height:40px;min-height:40px;gap:9px;padding:0 8px}
+#stage#stage .daylbl{font-size:13px;letter-spacing:.03em;color:var(--text2)}
+#stage#stage .chan{font-size:19px}
+#stage#stage .tech{display:none}
+#stage#stage .netbat{font-size:11px;white-space:nowrap}
+#stage#stage .video{width:100%;height:auto;flex:1;min-height:0}
+#stage#stage #feed{width:100%;height:100%;object-fit:contain}
+#stage#stage .streambar{height:36px;min-height:36px;gap:12px;padding:0 8px}
+#stage#stage .seg.night{width:100px}
+#stage#stage .paniclbl{font-size:13px;letter-spacing:.06em}
+#stage#stage .panicval{font-size:17px}
+#stage#stage .caption{font-size:20px;max-width:92%;bottom:12px}
+#stage#stage .chat{display:flex;flex-direction:column;overflow:hidden}
+#stage#stage .chathead{height:42px;min-height:42px;gap:9px}
+#stage#stage .chathead b{font-size:16px}
+#stage#stage .chathead .hint{font-size:12px;letter-spacing:0;white-space:nowrap;color:var(--text2)}
+#stage#stage .activity{gap:2px;padding:4px}
+#stage#stage .activity i{width:7px;height:9px}
+#stage#stage #chatlist{min-height:0;margin:6px;padding:3px}
+#stage#stage .msg{font-size:17px;line-height:1.35;padding:7px 10px;min-height:38px}
+#stage#stage .msg .av{width:25px;height:25px}
+#stage#stage .msg .body{padding-top:0}
+/* One stable action target; selecting a line never bans it immediately. */
+#stage#stage .msgban{display:none!important}
+#stage#stage .msg.sel{background:#51422f;box-shadow:inset 4px 0 #e9b65e,inset 0 0 0 1px #bd9553}
+.ux-moderation{display:flex;align-items:center;gap:12px;padding:8px 12px 10px;border-top:1px solid #53464a;background:linear-gradient(#292329,#211c21);flex:none}
+#stage#stage .chatfoot{height:auto;display:block;flex:1;min-width:0;border:0;padding:0;color:var(--text2);font-size:15px;line-height:1.35;overflow-wrap:anywhere}
+#stage#stage .has-selection .chatfoot{color:#ffe1a1;font-weight:800}
+#stage#stage #actBan{width:150px;height:54px;flex:none;gap:10px}
+#stage#stage #actBan .gv{width:24px;height:24px}
+#stage#stage #actBan .tx{flex-direction:row;align-items:center;gap:12px}
+#stage#stage #actBan .tx b{font-size:22px}
+#stage#stage .chat .trustrow{height:32px;min-height:32px;padding:0 12px;gap:10px;background:#211d21;box-shadow:none;border-radius:0 0 10px 10px}
+#stage#stage .chat .trustrow .sh{width:17px;height:17px}
+#stage#stage .chat .trustrow .lbl{font-size:12px}
+#stage#stage .credits i{width:22px;height:11px}
+#stage#stage .actions{padding:0;gap:10px;overflow:hidden}
+#stage#stage .modhead{height:34px;min-height:34px;font-size:13px;letter-spacing:.07em}
+#stage#stage .actions .modhead{width:100%}
+#stage#stage .bigrow{height:76px;flex:none;margin:0 12px}
+#stage#stage #actRec{width:100%;padding:0 12px;gap:10px}
+#stage#stage #actRec .tx b{font-size:18px;line-height:1.2;letter-spacing:.01em}
+#stage#stage #actRec .st{width:27px;height:27px}
+#stage#stage .cambadge{width:23px;height:21px;right:8px;bottom:6px}
+#stage#stage .cambadge .i{width:15px;height:15px}
+.ux-money{display:flex;align-items:center;gap:8px;padding:0 14px;height:24px}
+#stage#stage .ux-money .hcval{font-size:24px}
+#stage#stage .hcrow{position:relative;display:flex;flex-wrap:wrap;align-content:start;gap:8px;height:auto;margin:0 12px}
+#stage#stage .hcrow .hcbar{width:100%;flex:auto;height:9px}
+#stage#stage .hcrow>.tiny{display:none}
+#stage#stage #actDonate{width:100%;height:45px;min-height:45px;justify-content:center;gap:8px}
+#stage#stage #actDonate b{font-size:16px}
+#stage#stage .lamps{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:10px;gap:10px}
+#stage#stage .lamp{position:relative;min-width:0;padding:9px 9px 7px;display:flex;flex-direction:column;gap:9px}
+#stage#stage .lamptop{font-size:16px;gap:7px;flex:none}
+#stage#stage .lamptop .k{font-size:12px;color:var(--text2)}
+#stage#stage .mline{font-size:11px;letter-spacing:.02em;color:var(--text2);gap:6px;flex:none}
+#stage#stage .mline span{display:block;min-width:64px}
+#stage#stage .mline .seg{height:11px}
+#stage#stage .mline .hv{font-size:13px;min-width:22px}
+#stage#stage .modes{gap:5px}
+#stage#stage .mk{min-height:45px;padding:0 2px;font-size:13px;letter-spacing:0;color:#d2c5b7;touch-action:manipulation}
+#stage#stage .mk.on{outline:1px solid #e7c88d;outline-offset:-2px}
+#stage#stage .mk:disabled{opacity:.45}
+#stage#stage .lstatus{display:block;min-height:22px;font-size:12px;letter-spacing:.03em;line-height:1.25;padding:4px 2px;margin-top:auto}
+#stage#stage .lamp.motion{box-shadow:inset 0 1px 3px #0008,0 0 0 2px #d2a151}
+#stage#stage .lamp.motion .lstatus{color:#efc67e;animation:none}
+#stage#stage .lamp.hot .lstatus,#stage#stage .lamp.hot .hv{color:#ffad76}
+#stage#stage .lamp.adapt .lstatus,#stage#stage .lamp.redeyes .lstatus{color:#ffe5df;background:#672923;animation:ux-alert .5s ease-out}
+#stage#stage .lamp.burned .lstatus{color:#ffb2a7;border:1px dashed #ba6255}
+#stage#stage .blindsbtn{position:relative;inset:auto;min-height:29px;width:100%;justify-content:center;font-size:12px;padding:4px;letter-spacing:0;gap:5px}
+#stage#stage .blindsbtn .i{width:15px;height:15px}
+#stage#stage #lamp-window{gap:7px}
+#stage#stage #lamp-window .lstatus{min-height:18px;padding:2px}
+#stage#stage .shbtns{display:flex;flex-direction:column;padding:10px 12px 6px;gap:9px}
+#stage#stage .shb{width:100%;height:46px;min-height:46px;flex-direction:row;justify-content:flex-start;gap:10px;padding:0 12px;font-size:14px;letter-spacing:.01em;text-align:left}
+#stage#stage .shb>.i{width:23px;height:23px}
+#stage#stage .shb>span[data-i18n]{flex:1}
+#stage#stage .shb small{font-size:12px;color:var(--text2);opacity:1}
+#stage#stage .shb:disabled{filter:none;color:#a0968d;background:linear-gradient(#302b31,#252126);box-shadow:inset 0 0 0 1px #50434a,0 2px #131014}
+#stage#stage .shb:disabled .i{color:#8d8074}
+#stage#stage .shb .cd,#stage#stage .pbtn .cd{height:4px;background:#c39b5a}
+#stage#stage .shhint{display:block;padding:0 12px;font-size:12px;line-height:1.3;color:var(--text2)}
+.ux-remaining{font-size:12px;font-style:normal;color:#e9c989;white-space:nowrap}
+#stage#stage #actRec .ux-remaining{position:absolute;right:9px;top:7px}
+#stage#stage #actDonate .ux-remaining:empty{display:none}
+#stage#stage #systemPanel{position:relative;inset:auto;width:100%;height:30px;min-height:30px;display:flex;flex-direction:row;align-items:center;gap:12px;padding:0 10px;box-shadow:inset 0 1px #4c4145;background:#211d21;border-radius:5px}
+#stage#stage #systemPanel::before{display:none}
+#stage#stage .system .modhead{background:none;box-shadow:none;height:auto;min-height:0;padding:0;white-space:nowrap}
+#stage#stage .system .modhead b{font-size:11px;letter-spacing:.05em}
+#stage#stage .system .lcd{display:none}
+#stage#stage .system .ledgrid{display:grid;grid-template-columns:repeat(12,5px);gap:3px;padding:0}
+#stage#stage .system .ledgrid i{height:7px}
+#stage#stage .system .sysmsg{margin:0;font-size:11px;letter-spacing:.02em}
+#stage#stage .glassnote{position:absolute;display:flex;flex-direction:column;gap:12px;right:20px;left:auto;top:62px;width:350px;max-height:calc(100% - 80px);height:auto;padding:24px;z-index:47;overflow-y:auto;transform:rotate(-1deg);border-radius:2px;background:linear-gradient(135deg,#f0dfa1,#d6bb74);color:#392b19;box-shadow:0 12px 30px #0009,inset 0 -2px #aa8e4f}
+#stage#stage .glassnote::before{content:"";position:absolute;top:0;left:120px;width:80px;height:16px;background:#fff4;transform:rotate(2deg)}
+#stage#stage .glassnote>b{font-size:14px;letter-spacing:.1em;color:#66502d}
+#stage#stage .glassnote .gn{font-family:var(--f-hand);font-size:28px;line-height:1.15;font-weight:700}
+#stage#stage .glassnote .wo{font-family:var(--f-hand);font-size:25px;color:#8f3027}
+#stage#stage .glassnote .banleg{font-size:16px}
+#stage#stage .glassnote .banleg{display:flex;flex-direction:column;gap:6px;border-top:1px dashed #967b41;padding-top:10px}
+#stage#stage .glassnote .banleg .bh{font:800 12px var(--f-ui);color:#8f3027;margin:3px 0}
+#stage#stage .glassnote .banleg .bh.ok{color:#405d30}
+#stage#stage .glassnote .banleg .br{display:flex;align-items:center;gap:7px}
+#stage#stage .glassnote .banleg .bi,#stage#stage .glassnote .banleg .bi svg{display:block;width:24px;height:24px;flex:none}
+.ux-close{position:absolute;right:8px;top:8px;width:36px;height:36px;border:1px solid #8a703e;border-radius:3px;background:#cdb373;color:#392b19;font-size:26px;cursor:pointer}
+#stage#stage .callout{z-index:48;max-height:90%;overflow:auto}
+#stage#stage.finban .chat{opacity:1;filter:none}
+#stage#stage.finban .chat .ux-moderation{position:relative;z-index:45}
+@keyframes ux-alert{0%{box-shadow:0 0 0 3px #ffa091}100%{box-shadow:0 0 0 0 transparent}}
+/* Tablet / 4:3: keep the camera ratio and use the extra vertical room. */
+#stage#stage.compact .ux-lower{height:270px;grid-template-columns:minmax(0,22fr) minmax(0,54fr) minmax(0,24fr)}
+#stage#stage.compact .chathead .hint,#stage#stage.compact .activity{display:none}
+#stage#stage.compact .mk{font-size:12px;min-height:50px}
+#stage#stage.compact .mline span{min-width:55px;font-size:10px}
+#stage#stage.compact .shb{height:54px;font-size:13px}
+#stage#stage.compact .actions .modhead{font-size:11px}
+/* Touch landscape has its own arrangement; controls get more of the screen. */
+#stage#stage.mobile .monitor{inset:0;width:100%;height:100%;border-radius:10px}
+#stage#stage.mobile .screen{inset:6px;width:calc(100% - 12px);height:calc(100% - 12px);padding:7px;gap:8px}
+#stage#stage.mobile .ux-toolbar{height:40px;gap:10px}
+#stage#stage.mobile .ux-preview{font-size:10px}
+#stage#stage.mobile .ux-toolbar .clock{font-size:28px;min-width:86px}
+#stage#stage.mobile .ux-toolbar .iconkey,#stage#stage.mobile .ux-notes{height:40px}
+#stage#stage.mobile .ux-upper{gap:8px;grid-template-columns:minmax(0,57fr) minmax(0,43fr)}
+#stage#stage.mobile .ux-lower{height:208px;gap:8px;grid-template-columns:minmax(0,21fr) minmax(0,55fr) minmax(0,24fr)}
+#stage#stage.mobile .streamhead{height:30px;min-height:30px;gap:6px}
+#stage#stage.mobile .ava{width:24px;height:24px}
+#stage#stage.mobile .chan{font-size:16px}
+#stage#stage.mobile .live{font-size:10px;padding:3px 5px}
+#stage#stage.mobile .daylbl{font-size:11px}
+#stage#stage.mobile .netbat{font-size:10px}
+#stage#stage.mobile .streambar{height:26px;min-height:26px;gap:8px}
+#stage#stage.mobile .sb{font-size:13px}
+#stage#stage.mobile .paniclbl{font-size:11px}
+#stage#stage.mobile .seg.night{width:52px}
+#stage#stage.mobile .caption{font-size:18px;padding:5px 9px;bottom:6px}
+#stage#stage.mobile .chathead{height:28px;min-height:28px;padding:0 8px;gap:6px}
+#stage#stage.mobile .chathead b{font-size:13px}
+#stage#stage.mobile .chathead .hint,#stage#stage.mobile .activity{display:none}
+#stage#stage.mobile .toxbar{margin-left:auto}
+#stage#stage.mobile .toxbar>span{font-size:10px}
+#stage#stage.mobile #chatlist{margin:3px}
+#stage#stage.mobile .msg{font-size:16px;min-height:33px;padding:5px 7px;gap:6px}
+#stage#stage.mobile .msg .av{width:22px;height:22px}
+#stage#stage.mobile .ux-moderation{padding:5px 8px 8px;gap:8px}
+#stage#stage.mobile .chatfoot{font-size:13px;line-height:1.2}
+#stage#stage.mobile #actBan{width:112px;height:43px;padding:0 8px;gap:7px}
+#stage#stage.mobile #actBan .tx b{font-size:19px}
+#stage#stage.mobile #actBan .gv{width:20px;height:20px}
+#stage#stage.mobile #actBan small{display:none}
+#stage#stage.mobile .chat .trustrow{height:22px;min-height:22px;gap:7px}
+#stage#stage.mobile .chat .trustrow .lbl{font-size:10px}
+#stage#stage.mobile .credits i{width:17px;height:8px}
+#stage#stage.mobile .modhead{height:25px;min-height:25px;font-size:11px;padding:0 8px}
+#stage#stage.mobile .actions{gap:7px}
+#stage#stage.mobile .actions .modhead{font-size:10px}
+#stage#stage.mobile .bigrow{height:55px;margin:0 8px}
+#stage#stage.mobile #actRec .tx b{font-size:15px}
+#stage#stage.mobile #actRec .st{width:22px;height:22px}
+#stage#stage.mobile #actRec{padding:0 8px;gap:6px}
+#stage#stage.mobile .cambadge{display:none}
+#stage#stage.mobile .ux-money{padding:0 10px;height:21px}
+#stage#stage.mobile .ux-money .hcval{font-size:22px}
+#stage#stage.mobile .hcrow{margin:0 8px;gap:6px}
+#stage#stage.mobile #actDonate{height:40px;min-height:40px;padding:0 7px}
+#stage#stage.mobile #actDonate b{font-size:14px}
+#stage#stage.mobile .lamps{padding:6px;gap:7px}
+#stage#stage.mobile .lamp,#stage#stage.mobile #lamp-window{padding:6px;gap:6px}
+#stage#stage.mobile .lamptop{font-size:13px;gap:5px}
+#stage#stage.mobile .lamptop .k{display:none}
+#stage#stage.mobile .mline{gap:4px;font-size:10px}
+#stage#stage.mobile .mline span{display:block;min-width:49px;font-size:9px}
+#stage#stage.mobile .mline .seg{height:9px}
+#stage#stage.mobile .mline .hv{font-size:11px;min-width:17px}
+#stage#stage.mobile .modes{gap:3px}
+#stage#stage.mobile .mk{min-height:40px;font-size:11px;padding:0 1px}
+#stage#stage.mobile .lstatus{font-size:10px;min-height:18px;padding:2px}
+#stage#stage.mobile .blindsbtn{position:relative;inset:auto;min-height:38px;font-size:10px;padding:3px}
+#stage#stage.mobile .shbtns{padding:6px 8px;gap:8px}
+#stage#stage.mobile .shb{height:39px;min-height:39px;padding:0 8px;gap:7px;font-size:12px}
+#stage#stage.mobile .shb .i{width:20px;height:20px}
+#stage#stage.mobile .shhint{font-size:10px;line-height:1.2;padding:0 8px}
+#stage#stage.mobile #systemPanel{height:21px;min-height:21px;gap:9px;padding:0 6px}
+#stage#stage.mobile .system .modhead b,#stage#stage.mobile .system .sysmsg{font-size:9px}
+#stage#stage.mobile .system .ledgrid{grid-template-columns:repeat(12,4px);gap:2px}
+#stage#stage.mobile .glassnote{top:46px;right:12px;width:330px;max-height:calc(100% - 58px);padding:20px}
+#stage#stage.mobile .glassnote .gn{font-size:25px}
+#stage#stage.mobile .tiptoast{top:32px;left:7px;right:7px;padding:7px 9px;font-size:13px;line-height:1.25;max-height:calc(100% - 124px);overflow:auto;pointer-events:auto}
+@media(prefers-reduced-motion:reduce){#stage#stage .lamp .lstatus,#stage#stage .lamp.cue,#stage#stage .blindsbtn.call{animation:none}}
+

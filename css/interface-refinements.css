@@ -1,0 +1,174 @@
+/* 13.11: focused art-direction revision, kept inside the preview. */
+#stage#stage{--text:#d6c9b7;--text2:#b4a494;--muted:#97877d}
+#stage#stage .monitor{top:14px;height:calc(100% - 82px);border-radius:40px 40px 30px 30px}
+#stage#stage .screen{left:24px;top:24px;width:calc(100% - 48px);height:calc(100% - 78px);border-radius:18px}
+#stage#stage .ux-lower{height:220px;grid-template-columns:minmax(0,23fr) minmax(0,51fr) minmax(0,26fr)}
+#stage#stage .mod{border-radius:12px;background:var(--noise),linear-gradient(180deg,#42383c 0%,#373034 38%,#30292d 100%);background-blend-mode:overlay,normal}
+#stage#stage .modhead{border-radius:12px 12px 0 0}
+#stage#stage .lamp{border-radius:9px;padding:10px;gap:10px}
+#stage#stage #lamp-window{gap:10px}
+#stage#stage .lamp .lstatus{min-height:22px;padding:4px 2px}
+#stage#stage .mk{border-radius:7px;background:var(--noise),linear-gradient(180deg,#4a4043,#342c30);background-blend-mode:overlay,normal;box-shadow:inset 0 1px 0 #ffffff17,inset 0 0 0 1px #514249,0 3px 0 #151114;color:#b8a99a}
+#stage#stage .mk.on{outline:none;box-shadow:inset 0 1px 0 #ffffff3b,0 1px 0 #151114}
+#stage#stage .mk.on[data-m="STABLE"]{background:var(--noise),linear-gradient(#ad935c,#80683c);color:#f2dfb2}
+#stage#stage .mk.on[data-m="DIM"]{background:var(--noise),linear-gradient(#70818a,#495e68);color:#dbe8ec}
+#stage#stage .mk.on[data-m="BOOST"]{background:var(--noise),linear-gradient(#e3aa70,#ba7d41);color:#302012}
+#stage#stage .pbtn,#stage#stage .shb{border-radius:12px}
+#stage#stage #actRec{background:var(--noise),linear-gradient(#625942,#48402c 65%,#342d20);box-shadow:inset 0 1px 0 #ffffff29,inset 0 0 0 1px #75624766,0 5px 0 #18130d,0 8px 12px #0006}
+#stage#stage .shb{background:var(--noise),linear-gradient(#50454c,#3b323a);box-shadow:inset 0 1px 0 #ffffff24,inset 0 0 0 1px #63515d77,0 4px 0 #181116,0 6px 10px #0006}
+#stage#stage .bigrow{height:66px}
+#stage#stage .actions{gap:8px}
+#stage#stage .hcrow{gap:7px}
+#stage#stage #actDonate{min-height:42px;height:42px}
+#stage#stage .shbtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px 12px 8px}
+#stage#stage .shb{height:65px;min-height:65px;flex-direction:column;justify-content:center;align-items:center;padding:5px;gap:4px;font-size:13px;text-align:center}
+#stage#stage .shb>span[data-i18n]{flex:0}
+#stage#stage .shb small{position:absolute;right:7px;top:6px;font-size:10px;opacity:.65}
+#stage#stage .shb .i{width:24px;height:24px}
+#stage#stage .shb .ux-remaining{position:absolute;bottom:7px;right:6px;font-size:11px}
+#stage#stage #actBlinds{position:relative;inset:auto;width:100%;height:65px;min-height:65px;letter-spacing:.03em;font-size:13px;color:#d6c9b7;background:var(--noise),linear-gradient(#50454c,#3b323a);box-shadow:inset 0 1px 0 #ffffff24,inset 0 0 0 1px #63515d77,0 4px 0 #181116,0 6px 10px #0006}
+#stage#stage #actBlinds.shut{background:var(--noise),linear-gradient(#6e7956,#48533a);color:#e1e8ca}
+#stage#stage #actBlinds.cool{color:#b8aa9c}
+#stage#stage #actBlinds .i{width:24px;height:24px}
+#stage#stage #actBlinds em{position:absolute;bottom:6px;right:7px;font-size:11px;font-style:normal}
+#stage#stage .shhint{font-size:11px;line-height:1.25}
+/* The original BAN node stays available to scripts; the visible action is on the selected row. */
+#stage#stage #actBan{display:none!important}
+#stage#stage .msg{padding-right:10px}
+#stage#stage .msg.sel{padding-right:86px;background:rgba(233,182,94,.12);box-shadow:inset 0 0 0 2px rgba(233,182,94,.6)}
+#stage#stage .msg.sel:not(.sys):not(.donation):not(.deleted) .msgban{display:inline-flex!important;border-radius:6px;padding:8px 10px;font-size:12px}
+#stage#stage .ux-moderation{padding:7px 12px;min-height:30px;gap:0}
+#stage#stage .chatfoot{font-size:13px}
+#stage#stage.compact .ux-lower{height:240px}
+#stage#stage.ultrawide .ux-upper{grid-template-columns:minmax(0,46fr) minmax(0,54fr)}
+#stage#stage.mobile .monitor{inset:0;width:100%;height:100%;border-radius:18px}
+#stage#stage.mobile .screen{inset:6px;width:calc(100% - 12px);height:calc(100% - 12px);border-radius:12px}
+#stage#stage.mobile .ux-lower{height:208px;grid-template-columns:minmax(0,21fr) minmax(0,53fr) minmax(0,26fr)}
+#stage#stage.mobile .bigrow{height:55px}
+#stage#stage.mobile #actDonate{min-height:40px;height:40px}
+#stage#stage.mobile .lamp,#stage#stage.mobile #lamp-window{padding:6px;gap:6px}
+#stage#stage.mobile .shbtns{padding:8px;gap:9px}
+#stage#stage.mobile .shb,#stage#stage.mobile #actBlinds{height:64px;min-height:64px;font-size:12px;gap:4px}
+#stage#stage.mobile .shb .i,#stage#stage.mobile #actBlinds .i{width:22px;height:22px}
+#stage#stage.mobile .shhint{font-size:10px}
+#stage#stage.mobile .msg.sel .msgban{min-height:37px;padding:8px 10px;font-size:12px}
+#stage#stage.mobile .ux-moderation{min-height:24px;padding:4px 8px}
+/* Restore the default scene's fixed proportions and uniform scaling. */
+#stage#stage .monitor{left:56px;top:20px;width:1424px;height:862px}
+#stage#stage .screen{left:26px;top:26px;width:1372px;height:784px}
+#stage#stage .ux-upper{grid-template-columns:876px minmax(0,1fr)}
+#stage#stage .ux-lower{height:228px}
+#stage#stage .stream{gap:4px}
+#stage#stage .streambar{height:30px;min-height:30px}
+#stage#stage .streamhead .clock{font-size:24px;min-width:70px;text-align:center}
+#stage#stage .streamhead .ux-notes{height:30px;padding:0 9px;font-size:11px;gap:5px}
+#stage#stage .streamhead .iconkey{width:30px;height:30px}
+#stage#stage .bezel-bottom{gap:12px}
+#stage#stage .bezel-bottom #systemPanel{flex:1;width:auto;max-width:760px;min-width:0;height:28px;min-height:28px;background:transparent;box-shadow:none;padding:0;gap:10px}
+#stage#stage .bezel-bottom .sysmsg{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#stage#stage .bezel-bottom .system .modhead{flex:none}
+#stage#stage .bezel-bottom .brandplate{font-size:11px;letter-spacing:.18em;padding:6px 10px}
+#stage#stage .lighting .lamps{width:100%;max-width:760px;margin:0 auto}
+#stage#stage .smarthome .shbtns{width:100%;max-width:370px;margin:0 auto}
+#stage#stage .bigrow,#stage#stage .hcrow{width:calc(100% - 24px);max-width:320px;margin-left:auto;margin-right:auto}
+#stage#stage.wide .monitor{left:20px;top:10px;width:1760px;height:820px}
+#stage#stage.wide .screen{left:20px;top:20px;width:1720px;height:756px}
+#stage#stage.wide .ux-upper{grid-template-columns:848px minmax(0,1fr)}
+#stage#stage.wide .ux-lower{height:216px}
+#stage#stage.compact .ux-lower{height:228px}
+#stage#stage.mobile .monitor{inset:0;width:100%;height:100%}
+#stage#stage.mobile .screen{inset:6px;width:calc(100% - 12px);height:calc(100% - 12px)}
+#stage#stage.mobile .ux-upper{grid-template-columns:minmax(0,57fr) minmax(0,43fr)}
+#stage#stage.mobile .ux-lower{height:208px}
+#stage#stage.mobile .streambar{height:26px;min-height:26px}
+#stage#stage.mobile .streamhead .ux-notes{height:37px;min-width:37px;justify-content:center;padding:0}
+#stage#stage.mobile .streamhead .ux-notes [data-i18n],#stage#stage.mobile .streamhead .ux-notes i{display:none}
+#stage#stage.mobile .streamhead .iconkey{width:37px;height:37px}
+#stage#stage.mobile .streamhead .clock{font-size:24px;min-width:65px}
+#stage#stage.mobile .streamhead{height:38px;min-height:38px;gap:5px}
+#stage#stage.mobile .streamhead .netbat{display:none}
+#stage#stage.mobile #systemPanel .netbat{font-size:10px;white-space:nowrap;margin-left:auto}
+#stage#stage.mobile .bigrow,#stage#stage.mobile .hcrow{max-width:none;width:calc(100% - 16px)}
+/* Permanent paper notes on desktop; keep the approved camera size and scale. */
+#stage#stage.notes-pinned .ux-upper{grid-template-columns:876px minmax(0,1fr) 180px}
+#stage#stage.wide.notes-pinned .ux-upper{grid-template-columns:848px minmax(0,1fr) 244px}
+#stage#stage.notes-pinned .glassnote{position:relative;inset:auto;width:auto;height:calc(100% - 14px);max-height:calc(100% - 14px);min-height:0;margin:8px 4px 6px;padding:18px 16px 14px;align-self:stretch;transform:rotate(.7deg);z-index:3;overflow:auto;background:linear-gradient(180deg,#f1e29a,#e3cf7e);box-shadow:0 10px 18px #0007,inset 0 -20px 30px #8c6e142e}
+#stage#stage.notes-pinned #notesClose{display:none}
+#stage#stage.notes-pinned .glassnote>.gn{font-size:25px;line-height:1.1;flex:1}
+#stage#stage.notes-pinned .glassnote>b{font-size:12px;letter-spacing:.1em;color:#8a6a40}
+#stage#stage.notes-pinned .glassnote .wo{font-size:26px;margin-top:auto;white-space:nowrap}
+#stage#stage.notes-pinned .glassnote .banleg{font-size:20px;gap:4px}
+#stage#stage.notes-pinned .glassnote .banleg .bh{font-size:11px;letter-spacing:.04em}
+#stage#stage.notes-pinned .chathead .hint{display:none}
+#stage#stage.wide.notes-pinned .chathead .hint{display:block}
+/* Reserving the button space avoids a text jump when the pointer enters a row. */
+#stage#stage .msg:not(.sys):not(.donation):not(.deleted){padding-right:86px}
+#stage#stage .msg:hover:not(.sys):not(.donation):not(.deleted) .msgban{display:inline-flex!important;border-radius:6px;padding:8px 10px;font-size:12px}
+#stage#stage.mobile .msg:hover:not(.sys):not(.donation):not(.deleted) .msgban{min-height:37px}
+/* Unified HC wallet: balance / price, progress, then a single donation action. */
+#stage#stage .hcrow.ux-wallet{height:100px;min-height:100px;display:flex;flex-direction:column;flex-wrap:nowrap;gap:5px;padding:7px 8px 8px;align-content:normal;border-radius:10px;background:var(--noise),linear-gradient(#2c252a,#241f24);box-shadow:inset 0 1px 3px #0009,inset 0 0 0 1px #65514955}
+#stage#stage .ux-wallet .ux-money{height:23px;min-height:23px;width:100%;padding:0;gap:7px}
+#stage#stage .ux-wallet .coin{width:23px;height:23px;font-size:10px}
+#stage#stage .ux-wallet .hcval{font-size:23px;min-width:0;text-align:left;line-height:1}
+#stage#stage .ux-wallet-target{font-size:13px;color:#aa9b8d;white-space:nowrap}
+#stage#stage .ux-wallet-target b{font-weight:700}
+#stage#stage .ux-wallet .ux-money>.tiny{display:block;margin-left:auto;font-size:10px;letter-spacing:.02em;font-weight:600;color:#ae9e8d}
+#stage#stage .ux-wallet .hcbar{width:100%;height:7px;min-height:7px;flex:none;padding:1px;border-radius:4px}
+#stage#stage .ux-wallet .hcbar i{background:linear-gradient(90deg,#b58b48,#e2b765);mask:none;-webkit-mask:none;border-radius:3px}
+#stage#stage .ux-wallet #actDonate{flex:1;min-height:42px;height:42px;flex-direction:column;gap:3px;padding:4px 7px;justify-content:center;border-radius:8px;color:#a99d93;background:var(--noise),linear-gradient(#4b4247,#3b343a);box-shadow:inset 0 1px 0 #ffffff18,inset 0 0 0 1px #6c596355,0 3px 0 #181217}
+#stage#stage .ux-wallet #actDonate:disabled{filter:none;cursor:not-allowed}
+.ux-donate-main{display:flex;align-items:center;justify-content:center;gap:7px;line-height:1}
+#stage#stage .ux-wallet #actDonate b{font-size:15px;letter-spacing:.01em}
+#stage#stage .ux-wallet #actDonate .i{width:16px;height:16px;color:inherit;fill:none;stroke:currentColor;stroke-width:2.2}
+#stage#stage .ux-wallet #actDonate small{font-size:10px;line-height:1;letter-spacing:0;padding:4px 5px;border-radius:50%;background:#ffffff10;color:inherit}
+.ux-donate-status{font-size:11px;line-height:1.1;color:#a99d93;font-weight:500}
+#stage#stage .ux-wallet #actDonate>.ux-remaining{display:none}
+#stage#stage .ux-wallet.can-donate #actDonate{color:#e4f2ec;background:var(--noise),linear-gradient(#607f7c,#415f61);box-shadow:inset 0 1px 0 #ffffff35,inset 0 0 0 1px #9ac7b577,0 3px 0 #1e3437,0 0 9px #78b9ac22}
+#stage#stage .ux-wallet.can-donate .ux-donate-status{color:#b6d4c7}
+#stage#stage.mobile .hcrow.ux-wallet{height:100px;min-height:100px;gap:5px;padding:6px}
+#stage#stage.mobile .ux-wallet .ux-money{height:23px;min-height:23px;padding:0;gap:5px}
+#stage#stage.mobile .ux-wallet .hcval{font-size:22px}
+#stage#stage.mobile .ux-wallet .ux-money>.tiny{font-size:9px}
+#stage#stage.mobile .ux-wallet #actDonate{height:42px;min-height:42px;padding:4px 2px}
+#stage#stage.mobile .ux-wallet #actDonate b{font-size:13px}
+#stage#stage.mobile .ux-donate-status{font-size:11px}
+/* Large tutorial cards, a spotlight and an arrow point at the required action. */
+#stage#stage #guideCard{position:absolute;z-index:45;transform:none;margin:0;padding:18px 20px;min-width:0;max-width:none;max-height:calc(100% - 16px);overflow:auto;text-align:left;border:2px solid #c3664c;border-radius:8px;background:linear-gradient(#fff0cc,#e7cf98);box-shadow:0 7px 22px #0009,inset 0 0 0 2px #fff4d855;color:#231c14}
+#stage#stage #guideText{font:700 20px/1.35 var(--f-ui);color:#231c14}
+#stage#stage #guideCard .cstep{font-size:12px;line-height:1.2;margin-bottom:8px;color:#966039}
+#stage#stage #guideStatus{font:600 12px/1.3 var(--f-ui);text-transform:none;letter-spacing:0;margin-top:10px;color:#796143}
+#stage#stage #guideCard .cbtns{margin-top:12px}
+#stage#stage #guideCard button{min-height:36px}
+#stage#stage #guideCard .cskip{font-size:13px;color:#71583d}
+#guideShade{position:absolute;inset:0;z-index:41;background:#08060aaa;pointer-events:none}
+#guideSpot{position:absolute;z-index:42;border:3px solid #ffd280;border-radius:9px;box-shadow:0 0 0 4000px #08060a66,0 0 20px #ffc65c99;pointer-events:none}
+#guideArrow{position:absolute;z-index:44;height:4px;background:#ffd280;transform-origin:left center;filter:drop-shadow(0 2px 2px #000);pointer-events:none}
+#guideArrow:after{content:'';position:absolute;right:-2px;top:-6px;border-left:14px solid #ffd280;border-top:8px solid transparent;border-bottom:8px solid transparent}
+#stage#stage .guide-target{outline:2px solid #ffd280;outline-offset:3px}
+#stage#stage .guide-ban-row{background:#714b3e55}
+#stage#stage.guide-active .tiptoast{display:none!important}
+#stage#stage.mobile #guideCard{padding:14px 16px}
+#stage#stage.mobile #guideText{font-size:20px}
+/* Keep the lower content inside its own panel, including a visible bottom inset. */
+#stage#stage .lighting .lamps{grid-template-rows:minmax(0,1fr)}
+#stage#stage .lighting .lamp,#stage#stage .lighting #lamp-window{min-height:0;padding:8px;gap:6px}
+#stage#stage .lighting .modes,#stage#stage .lighting .lstatus{flex-shrink:0}
+#stage#stage .actions{gap:6px;padding-bottom:10px}
+#stage#stage .actions .bigrow{height:56px}
+#stage#stage .smarthome{padding-bottom:8px}
+#stage#stage .smarthome .shbtns{flex:none;padding:10px 12px 8px;gap:9px}
+#stage#stage .smarthome .shb,#stage#stage .smarthome #actBlinds{height:56px;min-height:56px}
+#stage#stage .smarthome .shhint{flex-shrink:0}
+#stage#stage .ux-wallet-target{font-size:15px}
+#stage#stage .ux-wallet .ux-money>.tiny{font-size:11px}
+#stage#stage .ux-wallet #actDonate b{font-size:17px}
+#stage#stage .ux-donate-status{font-size:12px}
+#stage#stage.mobile .lighting .lamp,#stage#stage.mobile .lighting #lamp-window{padding:6px;gap:6px}
+#stage#stage.mobile .actions .bigrow{height:55px}
+#stage#stage.mobile .smarthome{padding-bottom:6px}
+#stage#stage.mobile .smarthome .shbtns{padding:6px 8px;gap:7px}
+#stage#stage.mobile .smarthome .shb,#stage#stage.mobile .smarthome #actBlinds{height:60px;min-height:60px;padding:4px;gap:3px}
+#stage#stage.mobile .smarthome .shb>.i,#stage#stage.mobile .smarthome #actBlinds>.i{width:20px;height:20px}
+#stage#stage.mobile .ux-wallet-target{font-size:14px}
+#stage#stage.mobile .ux-wallet #actDonate b{font-size:14px}
+#stage#stage.mobile .ux-donate-status{font-size:11px}

@@ -1,0 +1,13 @@
+/* Short, event-driven motion; no new continuous effects or gameplay cues. */
+.shift-transition{position:absolute;inset:0;z-index:85;overflow:hidden;pointer-events:auto;background:transparent}
+.shift-transition .shift-backdrop{position:absolute;inset:0;background:#100d12}
+.shift-transition .shift-room{position:absolute;overflow:hidden;background:#09070b;box-shadow:0 0 0 1px #ba968d35,0 12px 35px #0008;transform-origin:0 0;will-change:left,top,width,height}
+.shift-transition .shift-room canvas{display:block;width:100%;height:100%;object-position:50% 46%}
+.shift-transition .motion-menu-ghost{pointer-events:none!important}
+.shift-transition .motion-menu-ghost *{pointer-events:none!important}
+#stage#stage .ux-wallet .hcbar #hcfill{transition:width .2s ease-out}
+#stage#stage .chat .msg:not(.banning){transition:box-shadow .14s ease-out,background-color .14s ease-out}
+@media(prefers-reduced-motion:reduce){
+  #stage#stage .ux-wallet .hcbar #hcfill{transition:none}
+  #stage#stage .chat .msg:not(.banning){transition:none}
+}

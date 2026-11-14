@@ -1,0 +1,304 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>The Moderator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<!--YASDK-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&family=Nunito:wght@600;700;800&family=Caveat:wght@600;700&family=VT323&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/interface.css">
+<link rel="stylesheet" href="css/interface-refinements.css">
+<link rel="stylesheet" href="css/visual-polish.css">
+<link rel="stylesheet" href="css/mobile-landscape.css">
+<link rel="stylesheet" href="css/ui-motion.css">
+<!-- boot loader (12.11): painted before the ~5 MB of embedded art / music / code arrives, removed in boot() -->
+<style>#boot{position:fixed;inset:0;z-index:9999;background:#141016;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .4s;font:700 15px/1 system-ui,sans-serif;letter-spacing:.22em;color:#8e8597}
+#boot svg{width:84px;height:84px}#boot .d{transform-origin:50px 50px;animation:bootP 1.4s ease-in-out infinite}#boot .w{transform-origin:50px 50px;animation:bootW 1.4s ease-out infinite}
+@keyframes bootP{50%{transform:scale(.78);opacity:.7}}@keyframes bootW{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.4);opacity:0}}
+#boot.off{opacity:0;pointer-events:none}
+#boot .bar{width:240px;height:6px;border-radius:3px;background:#2a2430;overflow:hidden}#boot .bar i{display:block;height:100%;width:0;background:#d9443c;border-radius:3px;transition:width .25s}</style>
+<div id="boot"><svg viewBox="0 0 100 100"><circle class="w" cx="50" cy="50" r="33" fill="none" stroke="#d9443c" stroke-width="3"/><circle cx="50" cy="50" r="33" fill="none" stroke="#f1e8d8" stroke-width="7"/><circle class="d" cx="50" cy="50" r="16" fill="#d9443c"/></svg><b id="bootT">LOADING</b><div class="bar"><i id="bootB"></i></div></div>
+<script>(function(){ var t=document.getElementById('bootT'), w=/^(ru|uk|be|kk|uz)/i.test(navigator.language||'')?'ЗАГРУЗКА':'LOADING'; t.textContent=w;
+ window.__bp=function(p){ var b=document.getElementById('bootB'); if(!b) return; p=Math.min(1,Math.max(0,p)); b.style.width=Math.round(p*100)+'%'; t.textContent=w+' '+Math.round(p*100)+'%'; }; })();</script>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.6"/></symbol>
+  <symbol id="i-gavel" viewBox="0 0 24 24"><path d="M13.5 3.5l7 7M9.8 7.2l7 7M11.6 5.4L6.3 10.7l7 7 5.3-5.3M9.8 14.2L3 21"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.5l8 3v6c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10v-6z"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.3a4.2 4.2 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 21h6M10 18h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.1V17h5v-1.1c0-.8.4-1.5 1.1-2.1A6 6 0 0 0 12 3z"/></symbol>
+  <symbol id="i-blinds" viewBox="0 0 24 24"><path d="M3 4h18M5 8h14M5 12h14M5 16h14M12 16v5"/></symbol>
+  <symbol id="i-house" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M5 9.5V20h14V9.5M10 20v-6h4v6"/></symbol>
+  <symbol id="i-dog" viewBox="0 0 24 24"><path d="M5 10l-1-5 4 3h6l4-3-1 5c1.5 1.2 2 2.8 2 4.5C19 19 16 21 12 21s-7-2-7-6.5C5 12.8 5.5 11.2 5 10z"/><circle cx="9.5" cy="13" r=".8"/><circle cx="14.5" cy="13" r=".8"/><path d="M11 16.5h2l-1 1.2z"/></symbol>
+  <symbol id="i-steps" viewBox="0 0 24 24"><path d="M7 4c2 0 3 2.5 3 5s-1 4-3 4-3-1.5-3-4 1-5 3-5zM6 15.5h3v1.5a1.5 1.5 0 0 1-3 0zM17 8c2 0 3 2.5 3 5s-1 4-3 4-3-1.5-3-4 1-5 3-5zM16 19.5h3V21a1.5 1.5 0 0 1-3 0z"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 21h4M12 2v2"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="currentColor" stroke="none"/><path d="m6.5 12 3.5 3.5 7.5-8" stroke="#243124" stroke-width="2.5"/></symbol>
+  <symbol id="i-cooling" viewBox="0 0 24 24"><path d="M12 3v16m-6-6 6 6 6-6"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3v11M12 18.5v.5"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H10l-5 4v-4H4z"/></symbol>
+  <symbol id="i-signal" viewBox="0 0 24 24"><path d="M4 20v-3M9 20v-7M14 20v-11M19 20V5"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/></symbol>
+  <symbol id="i-frame" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="1"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 10v4h4l5 4V6l-5 4zM16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6h7l2 2h9v11H3z"/></symbol>
+</svg>
+
+<div id="viewport">
+ <div id="stage">
+  <div class="lampglow" aria-hidden="true"></div>
+
+  <!-- ===== THE MONITOR ===== -->
+  <div class="monitor" id="monitor">
+   <div class="screen" id="screen">
+
+    <!-- stream window -->
+    <section class="mod stream" id="streamPanel">
+      <header class="streamhead">
+        <canvas class="ava" id="miaAva" width="80" height="80" aria-hidden="true"></canvas>
+        <span class="chan">NyanBun</span><span class="live">LIVE</span>
+        <span class="daylbl" id="dayLbl">MON · NIGHT 1</span>
+        <span class="sp"></span>
+        <span class="recdot" id="recind" hidden>● REC</span>
+        <span class="clock" id="clock">23:00</span>
+        <button class="devskip" id="devSkip" type="button" hidden title="DEV: end the night">⏭ 23:59</button><button class="iconkey" id="pauseBtn2" type="button" aria-label="Pause"><svg class="i"><use href="#i-pause"/></svg></button>
+        <span class="netbat" id="netbat" aria-hidden="true"></span><span class="tech" aria-hidden="true"><svg class="i"><use href="#i-signal"/></svg><svg class="i"><use href="#i-grid"/></svg><svg class="i"><use href="#i-frame"/></svg></span>
+      </header>
+      <div class="video" id="video">
+        <canvas id="feed" width="1280" height="640" aria-label="Mia's webcam feed"></canvas>
+        <div class="scan"></div><div class="vvign"></div>
+        <div class="badge focus" id="focusbadge" hidden data-i18n="focus">MIA IS READING YOUR DONATION</div>
+        <div class="badge away" id="awaybadge" hidden data-i18n="away">MIA LEFT TO CHECK THE NOISE</div>
+        <div class="caption" id="caption" hidden></div>
+                <div class="floaty" id="floaty"></div><div class="cueline" id="cueline" hidden></div>
+        <div class="dayintro" id="dayintro" hidden><b></b><span></span></div>
+        <div class="nosig" aria-hidden="true"><div class="bars"></div><b data-i18n="noSignal">NO SIGNAL</b></div>
+        <div class="playbar" id="playbar" hidden><span>▶ LAST_STREAM.mp4</span><div class="pt"><i id="playfill"></i></div></div>
+      </div>
+      <footer class="streambar">
+        <span class="sb"><svg class="i viewer-eye"><use href="#i-eye"/></svg><b id="viewers">1 204</b></span>
+        <span class="sb"><svg class="i star"><use href="#i-star"/></svg><b id="stars">3/3</b></span>
+        <div class="panicwrap"><span class="paniclbl" data-i18n="panicLbl">PANIC</span><div class="seg panic" id="panicbar"><i id="panicfill"></i></div></div>
+        <b class="panicval" id="panicval">0%</b>
+        <div class="seg night" title="23:00 → 00:00"><i id="nightfill"></i></div>
+      </footer>
+    </section>
+
+    <!-- chat -->
+    <section class="mod chat" id="chat">
+      <div class="tiptoast" id="tipToast" hidden></div>
+      <header class="chathead">
+        <svg class="i"><use href="#i-chat"/></svg><b data-i18n="chatTitle">CHAT</b>
+        <div class="activity" id="activity"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <span class="newcount" id="newcount">+0</span>
+        <div class="toxbar" id="toxbar"><span data-i18n="tox">TOXIC</span><div class="tb"><i id="toxfill"></i></div><strong id="toxValue"></strong></div>
+        <span class="sp"></span><span class="hint" data-i18n="chatHint">hover → BAN</span>
+      </header>
+      <div id="chatlist" aria-live="off"></div>
+      <footer class="chatfoot" id="chatfoot">—</footer>
+    </section>
+
+    <!-- bottom: actions -->
+    <section class="mod actions">
+      <div class="bigrow">
+        <button class="pbtn hl" id="actRec" type="button"><svg class="i st"><use href="#i-star"/></svg><span class="tx"><b data-i18n="hlBtn">HIGHLIGHT MOMENT</b><small>REC · R</small></span><span class="cambadge"><svg class="i"><use href="#i-cam"/></svg></span><span class="cd"></span></button>
+        <button class="pbtn ban" id="actBan" type="button"><svg class="i gv"><use href="#i-gavel"/></svg><span class="tx"><b data-i18n="banBtn">BAN</b><small>X</small></span></button>
+      </div>
+      <div class="trustrow">
+        <svg class="i sh"><use href="#i-shield"/></svg><span class="lbl" data-i18n="trust">TRUST</span>
+        <div class="credits" id="credits"><i></i><i></i><i></i></div>
+        <span class="sp"></span>
+        <span class="coin">HC</span><b class="hcval" id="hcval">0</b>
+      </div>
+      <div class="hcrow">
+        <div class="seg hcbar"><i id="hcfill"></i></div><span class="lbl tiny" data-i18n="toDonation">to donation</span>
+        <button class="pbtn donate" id="actDonate" type="button"><svg class="i"><use href="#i-heart"/></svg><b><span data-i18n="donate">DONATE</span> <span id="donateCost">150</span></b><small>G</small><span class="cd"></span></button>
+      </div>
+    </section>
+
+    <!-- bottom: lighting grid -->
+    <section class="mod lighting">
+      <header class="modhead"><svg class="i"><use href="#i-bulb"/></svg><b data-i18n="lighting">LIGHTING GRID</b></header>
+      <div class="lamps">
+        <div class="lamp" id="lamp-window"><div class="lamptop"><span class="bulb"></span><b data-i18n="z_window">WINDOW</b><span class="k">1</span></div>
+          <div class="mline"><span data-i18n="motion">MOTION</span><div class="seg prox"><i></i></div></div>
+          <div class="modes"><button type="button" class="mk" data-m="DIM" data-i18n="m_DIM">DIM</button><button type="button" class="mk" data-m="STABLE" data-i18n="m_STABLE">NORMAL</button><button type="button" class="mk" data-m="BOOST" data-i18n="m_BOOST">BRIGHT</button></div>
+          <div class="mline"><span data-i18n="heat">HEAT</span><div class="seg heat"><i></i></div><b class="hv">0</b></div>
+          <div class="lstatus"><svg class="i" aria-hidden="true"><use href="#i-ok"/></svg><span>OK</span></div>
+          <button class="blindsbtn" id="actBlinds" type="button"><span class="cd"></span><svg class="i"><use href="#i-blinds"/></svg><span id="blindsLbl">BLINDS</span><em id="blindsT"></em><small>B</small></button></div>
+        <div class="lamp" id="lamp-closet"><div class="lamptop"><span class="bulb"></span><b data-i18n="z_closet">CLOSET</b><span class="k">2</span></div>
+          <div class="mline"><span data-i18n="motion">MOTION</span><div class="seg prox"><i></i></div></div>
+          <div class="modes"><button type="button" class="mk" data-m="DIM" data-i18n="m_DIM">DIM</button><button type="button" class="mk" data-m="STABLE" data-i18n="m_STABLE">NORMAL</button><button type="button" class="mk" data-m="BOOST" data-i18n="m_BOOST">BRIGHT</button></div>
+          <div class="mline"><span data-i18n="heat">HEAT</span><div class="seg heat"><i></i></div><b class="hv">0</b></div>
+          <div class="lstatus"><svg class="i" aria-hidden="true"><use href="#i-ok"/></svg><span>OK</span></div></div>
+        <div class="lamp" id="lamp-door"><div class="lamptop"><span class="bulb"></span><b data-i18n="z_door">DOOR</b><span class="k">3</span></div>
+          <div class="mline"><span data-i18n="motion">MOTION</span><div class="seg prox"><i></i></div></div>
+          <div class="modes"><button type="button" class="mk" data-m="DIM" data-i18n="m_DIM">DIM</button><button type="button" class="mk" data-m="STABLE" data-i18n="m_STABLE">NORMAL</button><button type="button" class="mk" data-m="BOOST" data-i18n="m_BOOST">BRIGHT</button></div>
+          <div class="mline"><span data-i18n="heat">HEAT</span><div class="seg heat"><i></i></div><b class="hv">0</b></div>
+          <div class="lstatus"><svg class="i" aria-hidden="true"><use href="#i-ok"/></svg><span>OK</span></div></div>
+      </div>
+    </section>
+
+    <!-- bottom: smart home -->
+    <section class="mod smarthome">
+      <header class="modhead"><svg class="i"><use href="#i-house"/></svg><b data-i18n="smartHome">SMART HOME</b></header>
+      <div class="shbtns">
+        <button class="shb" id="actDog" type="button"><svg class="i"><use href="#i-dog"/></svg><span data-i18n="sh_dog">DOG BARK</span><small>Z</small><span class="cd"></span></button>
+        <button class="shb" id="actSteps" type="button"><svg class="i"><use href="#i-steps"/></svg><span data-i18n="sh_steps">FOOTSTEPS</span><small>C</small><span class="cd"></span></button>
+        <button class="shb alarm" id="actAlarm" type="button"><svg class="i"><use href="#i-bell"/></svg><span data-i18n="sh_alarm">FIRE ALARM</span><small>F</small><span class="cd"></span></button>
+      </div>
+      <div class="shhint" data-i18n="shHint">Scares it off. May send Mia to check.</div>
+    </section>
+
+    <!-- bottom: system status -->
+    <section class="mod system" id="systemPanel">
+      <header class="modhead"><span class="bang"><svg class="i"><use href="#i-alert"/></svg></span><b id="sysTitle">SYSTEM OK</b></header>
+      <div class="lcd"><span id="digits">23:00</span></div>
+      <div class="ledgrid" id="ledgrid"></div>
+      <div class="sysmsg" id="sysmsg">all systems nominal</div>
+    </section>
+
+    <div class="callout" id="callout" hidden><div class="cstep" id="calloutStep"></div><div class="ct" id="calloutText"></div><div class="ck" id="calloutKey"></div>
+      <div class="cbtns"><button class="cnext" id="calloutNext" type="button"></button><button class="cskip" id="calloutSkip" type="button" data-i18n="tutSkip">Skip</button></div></div>
+    <div class="glassnote" id="glassnote"><b data-i18n="tipsLbl">MOD NOTES</b><div class="gn" id="tip2"></div><div class="banleg" id="banLeg" hidden></div><div class="wo" data-i18n="watchOut">WATCH OUT!!</div></div>
+    <!-- finale: archive window -->
+    <div class="archivewin" id="archiveWin" hidden><header><svg class="i"><use href="#i-folder"/></svg><b data-i18n="archiveTitle">ARCHIVE</b></header><div class="files"></div></div>
+    <div class="reflection" id="reflection" aria-hidden="true"></div>
+    <div class="screenfx" aria-hidden="true"></div>
+   </div>
+   <div class="bezel-bottom">
+     <span class="brandplate">MODVIEW <i>CRT-17</i></span>
+     <span class="sp"></span>
+     <div class="bezelbtns">
+       <div class="langsw" role="group" aria-label="Language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="ru">RU</button></div>
+       <button class="bzb" id="pauseBtn" type="button"><svg class="i"><use href="#i-pause"/></svg><span data-i18n="pause">PAUSE</span></button>
+       <button class="bzb" id="muteBtn" type="button"><svg class="i"><use href="#i-sound"/></svg><span id="muteLbl">SOUND</span></button>
+       <span class="pled" aria-hidden="true"></span>
+     </div>
+   </div>
+  </div>
+
+  <!-- ===== THE DESK ===== -->
+  <div class="props" aria-hidden="true">
+    <div class="watchout" data-i18n="watchOut">WATCH OUT!!</div>
+    <svg class="p-lamp" viewBox="0 0 220 420"><defs><radialGradient id="lg1" cx=".5" cy=".55" r=".6"><stop offset="0" stop-color="#fff2c4"/><stop offset=".4" stop-color="#f3b45c"/><stop offset="1" stop-color="#a8621e"/></radialGradient><linearGradient id="lg2" x1="0" x2="1"><stop offset="0" stop-color="#2b2628"/><stop offset=".5" stop-color="#4a4246"/><stop offset="1" stop-color="#1e1a1c"/></linearGradient></defs>
+      <path d="M150 405c0-14 30-20 60-20" stroke="#1a1617" stroke-width="10" fill="none"/>
+      <ellipse cx="190" cy="400" rx="60" ry="14" fill="#1d191b"/><rect x="183" y="250" width="12" height="150" fill="url(#lg2)" transform="rotate(8 189 325)"/>
+      <rect x="120" y="150" width="11" height="130" fill="url(#lg2)" transform="rotate(-38 125 215)"/><circle cx="188" cy="252" r="9" fill="#2e2829"/><circle cx="126" cy="152" r="8" fill="#2e2829"/>
+      <path d="M40 92 L118 60 L150 130 L72 168 Z" fill="url(#lg2)"/><path d="M40 92 L118 60 L122 70 L46 104Z" fill="#555"/>
+      <ellipse cx="66" cy="140" rx="34" ry="20" fill="url(#lg1)" transform="rotate(-26 66 140)"/><ellipse cx="62" cy="142" rx="14" ry="8" fill="#fffbe8" transform="rotate(-26 62 142)"/></svg>
+    <svg class="p-mug" viewBox="0 0 160 170"><defs><linearGradient id="mg1" x1="0" x2="1"><stop offset="0" stop-color="#3a2f2c"/><stop offset=".35" stop-color="#5a4740"/><stop offset="1" stop-color="#241c1a"/></linearGradient></defs>
+      <path class="steam" d="M50 30c-8 10 8 16 0 28M76 22c-8 10 8 16 0 28M100 30c-8 10 8 16 0 28" fill="none" stroke="rgba(214,201,183,.25)" stroke-width="4" stroke-linecap="round"/>
+      <path d="M118 80h12a20 20 0 0 1 0 40h-12" fill="none" stroke="#3e322e" stroke-width="12"/>
+      <path d="M22 66h104l-6 86a12 12 0 0 1-12 10H40a12 12 0 0 1-12-10z" fill="url(#mg1)"/><ellipse cx="74" cy="66" rx="52" ry="11" fill="#2a1f1b"/><ellipse cx="74" cy="67" rx="45" ry="8" fill="#1a110d"/>
+      <path d="M36 82l4 66" stroke="rgba(255,255,255,.08)" stroke-width="7" stroke-linecap="round"/></svg>
+    <svg class="p-phones" viewBox="0 0 360 170"><path d="M60 120C60 30 300 30 300 120" fill="none" stroke="#1d1a1c" stroke-width="16"/><path d="M60 120C60 38 300 38 300 120" fill="none" stroke="#2c282b" stroke-width="6"/>
+      <ellipse cx="62" cy="130" rx="44" ry="30" fill="#1f1b1d"/><ellipse cx="62" cy="128" rx="32" ry="20" fill="#2d2729"/><ellipse cx="298" cy="130" rx="44" ry="30" fill="#1f1b1d"/><ellipse cx="298" cy="128" rx="32" ry="20" fill="#2d2729"/>
+      <path d="M298 156c10 10 30 12 60 6" stroke="#151213" stroke-width="5" fill="none"/></svg>
+    <div class="p-papers"><div class="sheet1"></div><div class="sheet2"><div class="tiplbl" data-i18n="tipsLbl">MOD NOTES</div><div class="tiptext" id="tip">—</div></div></div>
+    <svg class="p-notebook" viewBox="0 0 240 150"><g transform="rotate(-8 120 75)"><rect x="20" y="20" width="200" height="120" rx="8" fill="#6a2a26"/><rect x="20" y="20" width="200" height="120" rx="8" fill="url(#nbtex)" opacity=".4"/><rect x="186" y="20" width="9" height="120" fill="#2a1513"/><rect x="28" y="28" width="150" height="16" rx="2" fill="#8a3a33" opacity=".7"/></g><defs><pattern id="nbtex" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#000" opacity=".2"/><rect width="3" height="3" fill="#fff" opacity=".06"/></pattern></defs></svg>
+    <div class="p-clip"><div class="clipboard"><i class="clip"></i><div class="lines"></div></div><div class="numnote">9-4-1</div><svg class="pen" viewBox="0 0 200 20"><rect x="10" y="5" width="160" height="10" rx="5" fill="#2a2a33"/><path d="M170 5l26 5-26 5z" fill="#c9b48a"/><rect x="30" y="3" width="30" height="3" fill="#8a8a96"/></svg></div>
+    <svg class="p-cup" viewBox="0 0 120 200"><rect x="36" y="10" width="8" height="100" rx="3" fill="#d6a23a" transform="rotate(-10 40 100)"/><rect x="54" y="2" width="8" height="110" rx="3" fill="#b7443f" transform="rotate(3 58 100)"/><rect x="70" y="14" width="8" height="96" rx="3" fill="#778A65" transform="rotate(12 74 100)"/><rect x="62" y="20" width="7" height="90" rx="3" fill="#647C86" transform="rotate(-4 66 100)"/>
+      <rect x="20" y="88" width="80" height="104" rx="10" fill="#3a3539"/><rect x="20" y="88" width="80" height="12" rx="6" fill="#262226"/><rect x="28" y="104" width="8" height="80" rx="4" fill="rgba(255,255,255,.06)"/></svg>
+    <svg class="p-duck" viewBox="0 0 100 90"><ellipse cx="50" cy="66" rx="36" ry="20" fill="#d9b13e"/><circle cx="62" cy="38" r="18" fill="#e2bd4a"/><path d="M76 40l16 2-14 6z" fill="#d07a2e"/><circle cx="66" cy="34" r="2.6" fill="#1a1612"/><ellipse cx="40" cy="60" rx="14" ry="7" fill="#c9a133"/></svg>
+  </div>
+
+  <!-- ===== OVERLAYS (paper on a clipboard) ===== -->
+  <div class="overlay" id="ovMenu" hidden><canvas id="menuCv" width="1536" height="1024" aria-hidden="true"></canvas><div class="mlive" id="menuLive" hidden></div><div class="paper menu" id="menuBody"></div></div>
+  <div class="overlay" id="ovTut" hidden><div class="paper small pausecard"><h2 data-i18n="tutDoneTitle">TUTORIAL COMPLETE</h2><p class="sub" data-i18n="tutDoneSub"></p>
+    <ul class="tutlist" data-i18n-html="tutDoneList"></ul>
+    <button class="pbtn ban playbtn" id="tutNight1" type="button"><b>▶ <span data-i18n="tutFinish">Start night 1</span></b></button>
+    <button class="pbtn plain sm" id="tutMenu" type="button"><b data-i18n="menu">Menu</b></button></div></div>
+  <div class="overlay" id="ovPause" hidden><div class="paper small pausecard"><h2 data-i18n="paused">PAUSED</h2><p class="sub" data-i18n="pausedSub"></p>
+    <button class="pbtn ban playbtn" id="resumeBtn" type="button"><b>▶ <span data-i18n="resume">Resume</span></b></button>
+    <div class="vols"><label class="vol"><span data-i18n="musicV">♪ Music</span><input type="range" id="volMus" min="0" max="100" step="5"><i id="volMusN">100%</i></label><label class="vol"><span data-i18n="sfxV">🔊 Sounds</span><input type="range" id="volSfx" min="0" max="100" step="5"><i id="volSfxN">100%</i></label></div>
+    <div class="prow"><button class="pbtn plain fsbtn" type="button"><b class="fsLbl">Fullscreen</b></button></div>
+    <div class="langsw" role="group" aria-label="Language"><button type="button" data-lang="en">English</button><button type="button" data-lang="ru">Русский</button></div>
+    <button class="pbtn plain sm" id="quitBtn" type="button"><b data-i18n="quit">Menu</b></button></div></div>
+  <div class="overlay" id="ovEnd" hidden>
+    <div class="paper">
+      <h2 id="endTitle"></h2><p class="sub" id="endSub"></p>
+      <div class="stats" id="endStats"></div>
+      <div class="reward"><div class="rw" id="endReward"></div><button class="pbtn adbtn" id="x2Btn" type="button"><span class="adtag">AD</span><b id="x2Lbl">×2</b></button></div>
+      <div class="lbl" data-i18n="archive"></div>
+      <div class="archive" id="endArchive"></div>
+      <div class="whisper" id="endWhisper"></div>
+      <div class="row"><button class="pbtn adbtn big" id="contBtn" type="button"><span class="adtag">AD</span><span class="tx"><b data-i18n="continueAd"></b><small data-i18n="continueSub"></small></span></button><button class="pbtn ban cta" id="nextBtn" type="button"><b id="nextLbl"></b></button><button class="pbtn plain" id="againBtn" type="button"><b id="againLbl"></b></button><button class="pbtn plain shopbtn" id="shopBtn" type="button"><b data-i18n="shop"></b><small id="shopCan"></small></button><button class="pbtn plain" id="menuBtn" type="button"><b data-i18n="menu"></b></button><button class="pbtn plain" id="photoBtn" type="button" hidden><b data-i18n="photoOpen"></b></button></div>
+      <div class="shophint" id="shopHint" hidden></div>
+      <div class="note" id="endNote"></div>
+      <div class="rateItch" id="rateItch" hidden></div>
+    </div>
+  </div>
+  <div class="overlay" id="ovPhoto" hidden><div class="paper"><h2 data-i18n="photoTitle"></h2><div class="polaroid"><canvas id="photoCv" width="640" height="400"></canvas></div><p class="sub" data-i18n="photoText"></p><button class="pbtn plain" id="photoClose" type="button"><b data-i18n="close"></b></button></div></div>
+  <div class="fincard" id="finCard" hidden><p id="finText"></p><button class="pbtn ban cta" id="finNext" type="button"><b data-i18n="finNext"></b></button></div>
+  <div class="police" id="police" hidden></div>
+  <div class="report" id="report" hidden><div class="rp-in"><h2 id="rpTitle"></h2><div class="rp-meta" id="rpMeta"></div><p class="rp-intro" id="rpIntro"></p>
+    <div class="rp-cols"><div class="rp-left">
+      <div class="rp-lbl" id="rpSusLbl"></div><div class="rp-sus" id="rpSus"></div>
+      <div class="rp-lbl" id="rpEvLbl"></div><div class="rp-ev" id="rpEv"></div><div class="rp-note" id="rpNote"></div></div>
+      <div class="rp-view" id="rpView"><b id="rpVTitle"></b><canvas id="rpVPhoto" width="640" height="400" hidden></canvas><pre id="rpVBody"></pre></div></div>
+    <div class="rp-foot"><div class="rp-sent" id="rpSent" hidden></div><button class="pbtn ban cta" id="rpSend" type="button"><b></b></button></div></div></div>
+  <div class="flash" id="flash" hidden><div class="fl-in"><div class="fl-k" id="flK"></div><div class="fl-t" id="flT"></div><div class="fl-h" id="flH"></div><div class="fl-x" id="flX"></div></div><div class="fl-hint" id="flHint"></div></div>
+  <div class="mail" id="mail" hidden><div class="ml-in"><pre class="ml-head" id="mlHead"></pre><div class="ml-body"><p id="mlText"></p><canvas id="mlCam" width="320" height="220"></canvas></div><button class="pbtn ban cta" id="mlNext" type="button"><b></b></button></div></div>
+  <div class="fcur" id="fcur" hidden></div>
+  <div class="epilogue" id="epilogue" hidden>
+    <div class="table"></div>
+    <div class="protocol" id="protocol" role="button" tabindex="0"><h3></h3><div class="meta"></div><p></p><div class="sign">______________ / ______________</div></div>
+    <div class="readhint" id="readHint" data-i18n="readHint"></div>
+    <button class="pbtn plain protonext" id="protoNext" type="button" hidden><b data-i18n="finNext"></b></button>
+  </div>
+  <div class="readdoc" id="readDoc" hidden><div class="rd-in"><h2></h2><div class="rd-meta"></div><p></p><div class="rd-hint" data-i18n="readClose"></div></div></div>
+  <div class="desktop" id="desktop" hidden>
+    <div class="dtop"><b id="deskTitle"></b><span id="deskDate"></span></div>
+    <div class="dicons" id="deskIcons"></div>
+    <div class="dhint" id="deskHint"></div>
+    <div class="dwin" id="deskWin" hidden><header><b id="deskWinTitle"></b><button type="button" id="deskWinClose">✕</button></header><canvas id="deskPhoto" width="640" height="400" hidden></canvas><pre id="deskWinBody"></pre></div>
+    <button class="pbtn ban cta dcont" id="deskCont" type="button"><b></b></button>
+  </div>
+  <div class="endcard" id="endcard" hidden><p class="endlast" id="endLast"></p><p class="endsys" id="endSys"></p><p class="endmia" id="endMia"></p><h1 class="logo">THE M<svg class="logoO" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="12"/><circle cx="50" cy="50" r="33" fill="none" stroke="#d9443c" stroke-width="2.5" opacity=".55"/><circle cx="50" cy="50" r="24" fill="#d9443c"/></svg>DERATOR</h1><p class="sub2" data-i18n="campaignDone"></p><div class="rateItch" id="rateItchEnd" hidden></div><button class="pbtn ban cta" id="restartBtn" type="button"><b data-i18n="menu"></b></button></div>
+
+  <div class="rotate" id="rotate" hidden><div class="phone"></div><b data-i18n="rotate">Turn your phone sideways</b></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+ </div>
+</div>
+
+<script>/* early fit: big data scripts below take seconds to parse - scale the stage right away so it is not drawn huge in the corner */
+(function(){ var w=innerWidth,h=innerHeight,st=document.getElementById('stage'),t=(window.matchMedia&&matchMedia('(pointer:coarse)').matches)||'ontouchstart' in window;
+ var mob=(t&&Math.min(w,h)<=820)||w<760, wide=!mob&&w/h>=1.7; if(mob) st.classList.add('mobile'); if(wide) st.classList.add('wide');
+ var s=Math.min(w/(mob?1280:wide?1800:1536),h/(mob?600:wide?880:1024)); st.style.transform='translate(-50%,-50%) scale('+s+')'; st.style.visibility='visible'; })();</script>
+<script src="js/state.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/i18n-meta.js"></script>
+<script src="js/lines.js"></script>
+<script src="js/vox.js"></script>
+<script src="js/musicdata.js"></script>
+<script src="js/sfxdata.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/scare.js"></script>
+<script src="js/memes.js"></script>
+<script src="js/art.js"></script>
+<script src="js/assets.js"></script>
+<script src="js/platform.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/panic.js"></script>
+<script src="js/lighting.js"></script>
+<script src="js/stalker.js"></script>
+<script src="js/smart-home.js"></script>
+<script src="js/economy.js"></script>
+<script src="js/render.js"></script>
+<script src="js/days.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/story.js"></script>
+<script src="js/interface.js"></script>
+<script src="js/mobile-layout.js"></script>
+<script src="js/onboarding.js"></script>
+<script src="js/ui-motion.js"></script>
+<script src="js/game.js"></script>
+

@@ -1,0 +1,43 @@
+# Generated builds and upload packages
+/dist/
+/upload-to-*.zip
+
+# Local backups, captures, and promotional exports
+/archives/
+/review/
+/marketing/
+
+# Internal project notes
+/NEW_CHAT_PROMPT.md
+/docs/*
+
+# Original recordings, old takes, and source images stay local.
+# Runtime art and audio are already embedded in js/.
+/assets/*/src/
+/assets/voice/old/
+
+# Publish portable build tools; keep local capture/generation scripts on disk.
+/tools/*
+!/tools/build-itch.cjs
+!/tools/build.py
+
+# Local environments, credentials, and editor state
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.idea/
+.vscode/
+.codex/
+.agents/
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+Desktop.ini

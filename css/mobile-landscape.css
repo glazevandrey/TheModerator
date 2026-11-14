@@ -1,0 +1,245 @@
+/* Native CSS pixels on landscape phones. Every rule is isolated from desktop. */
+#mobileRail,#mobileFooter{display:none}
+@media(orientation:landscape) and (max-height:600px){
+#stage#stage.mobile.phone-ui{--f-ui:"Segoe UI",Arial,sans-serif;background:#140f18;overflow:clip}
+#stage#stage.mobile.phone-ui .monitor{inset:0;width:100%;height:100%;border-radius:14px;border:1px solid #70516c;box-shadow:inset 0 1px 1px #e0b2d02b,inset 0 0 0 3px #251c29}
+#stage#stage.mobile.phone-ui .monitor:after{pointer-events:none;opacity:.15}
+#stage#stage.mobile.phone-ui .screen{inset:max(5px,env(safe-area-inset-top)) max(7px,env(safe-area-inset-right)) max(5px,env(safe-area-inset-bottom)) max(7px,env(safe-area-inset-left));width:auto;height:auto;padding:0;display:grid;grid-template-rows:minmax(0,1fr) clamp(106px,28.5vh,122px) 24px;gap:5px;overflow:clip;border-radius:8px}
+#stage#stage.mobile.phone-ui .ux-upper{grid-row:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 36px;gap:6px}
+#stage#stage.mobile.phone-ui .ux-lower{grid-row:2;height:auto;min-height:0;display:grid;grid-template-columns:minmax(0,27fr) minmax(0,52fr) minmax(0,21fr);gap:5px}
+#stage#stage.mobile.phone-ui .ux-upper>.mod,#stage#stage.mobile.phone-ui .ux-lower>.mod{min-width:0;min-height:0;width:auto;height:100%;inset:auto;margin:0;border-radius:9px}
+#stage#stage.mobile.phone-ui .stream{padding:3px;gap:2px;display:flex;flex-direction:column}
+#stage#stage.mobile.phone-ui .streamhead{height:29px;min-height:29px;padding:0 4px;gap:5px;border-radius:6px}
+#stage#stage.mobile.phone-ui .streamhead .ava{width:24px;height:24px}
+#stage#stage.mobile.phone-ui .streamhead .chan{font-size:15px;letter-spacing:0}
+#stage#stage.mobile.phone-ui .streamhead .live{font-size:10px;padding:2px 5px}
+#stage#stage.mobile.phone-ui .streamhead .daylbl{font-size:10px;letter-spacing:0;white-space:nowrap}
+#stage#stage.mobile.phone-ui .streamhead .clock{font:700 18px/1 "Segoe UI",Arial,sans-serif;min-width:51px;padding:3px 4px;color:#ffd26a}
+#stage#stage.mobile.phone-ui .streamhead .iconkey{width:28px;height:26px;flex:none}
+#stage#stage.mobile.phone-ui .streamhead .iconkey .i{width:14px;height:14px}
+#stage#stage.mobile.phone-ui .streamhead .tech,#stage#stage.mobile.phone-ui .netbat{display:none}
+#stage#stage.mobile.phone-ui .video{width:100%;height:auto;min-height:0;flex:1;border-radius:5px}
+#stage#stage.mobile.phone-ui #feed{width:100%;height:100%;object-fit:cover;object-position:50% 46%}
+#stage#stage.mobile.phone-ui .caption{font:600 13px/1.2 "Segoe UI",Arial,sans-serif;max-width:88%;padding:4px 7px;bottom:4px}
+#stage#stage.mobile.phone-ui .cueline{font-size:16px}
+#stage#stage.mobile.phone-ui .cueline b{font-size:11px}
+#stage#stage.mobile.phone-ui .floaty{font-size:23px}
+#stage#stage.mobile.phone-ui .dayintro b{font-size:32px}
+#stage#stage.mobile.phone-ui .dayintro span{font-size:13px}
+#stage#stage.mobile.phone-ui .badge{font-size:10px;padding:4px 6px}
+#stage#stage.mobile.phone-ui .streambar{height:21px;min-height:21px;padding:0 5px;gap:7px}
+#stage#stage.mobile.phone-ui .streambar .sb{font-size:11px;gap:4px}
+#stage#stage.mobile.phone-ui .streambar .i{width:14px;height:14px}
+#stage#stage.mobile.phone-ui .paniclbl{font-size:10px;letter-spacing:0}
+#stage#stage.mobile.phone-ui .panicwrap{gap:5px;min-width:0}
+#stage#stage.mobile.phone-ui .panicval{font-size:12px;min-width:28px}
+#stage#stage.mobile.phone-ui .panic{height:11px}
+#stage#stage.mobile.phone-ui .seg.night{width:35px;height:10px}
+#stage#stage.mobile.phone-ui .chat{display:flex;flex-direction:column;padding:0;gap:0}
+#stage#stage.mobile.phone-ui .chathead{height:28px;min-height:28px;padding:0 6px;gap:5px;order:0}
+#stage#stage.mobile.phone-ui .chathead>b{font-size:12px;letter-spacing:.03em}
+#stage#stage.mobile.phone-ui .chathead>.i{width:15px;height:15px}
+#stage#stage.mobile.phone-ui .activity,#stage#stage.mobile.phone-ui .chathead .hint,#stage#stage.mobile.phone-ui .newcount{display:none}
+#stage#stage.mobile.phone-ui .toxbar{gap:4px;margin-left:auto}
+#stage#stage.mobile.phone-ui .toxbar>span{font-size:8px;letter-spacing:0}
+#stage#stage.mobile.phone-ui .toxbar .tb{width:37px;height:8px}
+#stage#stage.mobile.phone-ui #toxValue{display:block;font-size:11px;color:#f7e1ca}
+#stage#stage.mobile.phone-ui #chatlist{order:2;flex:1;min-height:0;margin:3px;padding:2px;border-radius:4px}
+#stage#stage.mobile.phone-ui .chat .msg{min-height:31px;padding:4px 5px;gap:5px;align-items:center;font:13px/1.25 "Segoe UI",Arial,sans-serif}
+#stage#stage.mobile.phone-ui .chat .msg .body{padding:0}
+#stage#stage.mobile.phone-ui .chat .msg .av{width:19px;height:19px}
+#stage#stage.mobile.phone-ui .chat .msg .t{font-weight:400}
+#stage#stage.mobile.phone-ui .chat .msg .u{font-weight:700}
+#stage#stage.mobile.phone-ui .chat .msg.sys .t,#stage#stage.mobile.phone-ui .chat .msg.deleted .t{font-size:10px}
+#stage#stage.mobile.phone-ui .chat .msg.sel,#stage#stage.mobile.phone-ui .chat .msg:hover{padding-right:51px}
+#stage#stage.mobile.phone-ui .chat .msg.sel .msgban,#stage#stage.mobile.phone-ui .chat .msg:hover .msgban{min-height:27px;padding:3px 5px;font-size:10px;gap:3px;right:4px;border-radius:4px}
+#stage#stage.mobile.phone-ui .msgban .i{width:12px;height:12px}
+#stage#stage.mobile.phone-ui .chat .ux-moderation{order:3;min-height:18px;height:18px;padding:1px 6px;gap:0}
+#stage#stage.mobile.phone-ui .chatfoot{display:block;font:500 10px/1.3 "Segoe UI",Arial,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#stage#stage.mobile.phone-ui .chat .trustrow{order:4;height:22px;min-height:22px;padding:2px 6px;gap:6px}
+#stage#stage.mobile.phone-ui .trustrow .lbl{font:600 10px/1 "Segoe UI",Arial,sans-serif}
+#stage#stage.mobile.phone-ui .trustrow .sh{width:14px;height:14px}
+#stage#stage.mobile.phone-ui .credits{gap:4px}
+#stage#stage.mobile.phone-ui .credits i{width:15px;height:8px}
+#stage#stage.mobile.phone-ui #stars{font-size:10px;margin-left:auto}
+#stage#stage.mobile.phone-ui .tiptoast{order:1;position:static;flex:none;margin:3px 4px;max-height:54px;padding:5px 7px;font:600 11px/1.25 "Segoe UI",Arial,sans-serif;overflow:auto;border-radius:5px;pointer-events:auto}
+#stage#stage.mobile.phone-ui .modhead{height:16px;min-height:16px;padding:0 6px;gap:5px;font:800 10px/1 "Segoe UI",Arial,sans-serif;letter-spacing:.01em;border-radius:8px 8px 0 0}
+#stage#stage.mobile.phone-ui .modhead>.i{width:13px;height:13px}
+#stage#stage.mobile.phone-ui .actions{gap:4px;padding:0 5px 5px;overflow:hidden}
+#stage#stage.mobile.phone-ui .actions>.modhead{width:auto;align-self:stretch;margin-left:-5px;margin-right:-5px}
+#stage#stage.mobile.phone-ui .actions .bigrow{height:40px;min-height:40px;width:100%;max-width:none;margin:0;gap:0}
+#stage#stage.mobile.phone-ui #actRec{height:100%;padding:0 33px 0 6px;gap:5px;border-radius:6px}
+#stage#stage.mobile.phone-ui #actRec .tx b{font:800 12px/1.05 "Segoe UI",Arial,sans-serif;letter-spacing:0}
+#stage#stage.mobile.phone-ui #actRec .st{width:17px;height:17px}
+#stage#stage.mobile.phone-ui #actRec .tx small{display:none}
+#stage#stage.mobile.phone-ui #actRec .cambadge{display:grid;width:26px;height:25px;right:5px;bottom:7px;border-radius:4px}
+#stage#stage.mobile.phone-ui #actRec .cambadge .i{width:21px;height:21px}
+#stage#stage.mobile.phone-ui .hcrow.ux-wallet{flex:1;min-height:31px;height:auto;width:100%;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);grid-template-rows:minmax(19px,1fr) 6px;column-gap:6px;row-gap:2px;border:0;background:none;box-shadow:none;border-radius:0}
+#stage#stage.mobile.phone-ui .ux-wallet .ux-money{grid-column:1;grid-row:1;display:flex;align-items:center;gap:4px;height:auto;min-height:0;padding:0}
+#stage#stage.mobile.phone-ui .ux-wallet .coin{width:18px;height:18px;font-size:9px;flex:none}
+#stage#stage.mobile.phone-ui .ux-wallet .hcval{font:800 19px/1 "Segoe UI",Arial,sans-serif;min-width:0;text-align:left}
+#stage#stage.mobile.phone-ui .ux-wallet-target{font-size:9px;white-space:nowrap}
+#stage#stage.mobile.phone-ui .ux-wallet .ux-money>.tiny{display:none}
+#stage#stage.mobile.phone-ui .ux-wallet .hcbar{grid-column:1;grid-row:2;height:6px;min-height:6px;width:100%;margin:0;padding:1px}
+#stage#stage.mobile.phone-ui .ux-wallet #actDonate{grid-column:2;grid-row:1/3;min-width:0;min-height:31px;height:100%;padding:3px 2px;border-radius:6px;gap:0}
+#stage#stage.mobile.phone-ui .ux-wallet #actDonate .ux-donate-main{gap:4px;max-width:100%}
+#stage#stage.mobile.phone-ui .ux-wallet #actDonate b{font:800 11px/1.05 "Segoe UI",Arial,sans-serif;letter-spacing:0}
+#stage#stage.mobile.phone-ui .ux-wallet #actDonate .i{width:14px;height:14px}
+#stage#stage.mobile.phone-ui .ux-wallet #actDonate small,#stage#stage.mobile.phone-ui #donateStatus{display:none}
+#stage#stage.mobile.phone-ui .ux-remaining{font-size:10px}
+#stage#stage.mobile.phone-ui .lighting .lamps{width:100%;max-width:none;margin:0;padding:3px 3px 4px;gap:4px;min-height:0}
+#stage#stage.mobile.phone-ui .lighting .lamp,#stage#stage.mobile.phone-ui .lighting #lamp-window{position:relative;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:13px minmax(32px,1fr) 8px 16px;min-height:0;padding:3px;gap:2px;border-radius:6px}
+#stage#stage.mobile.phone-ui .lamptop{height:16px;min-height:16px;gap:5px;font:800 12px/1 "Segoe UI",Arial,sans-serif;letter-spacing:0}
+#stage#stage.mobile.phone-ui .lamptop .bulb{width:10px;height:10px}
+#stage#stage.mobile.phone-ui .lamptop .k{display:none}
+#stage#stage.mobile.phone-ui .lamp .lamptop{grid-row:1;height:13px;min-height:13px;padding-right:38%}
+#stage#stage.mobile.phone-ui .lamp .mline:has(.prox){position:absolute;top:7px;right:3px;width:36%;min-height:0;height:6px}
+#stage#stage.mobile.phone-ui .lamp .mline:has(.prox)>span{display:none}
+#stage#stage.mobile.phone-ui .lamp .mline:has(.heat){grid-row:3}
+#stage#stage.mobile.phone-ui .lamp .mline{min-height:9px;gap:4px;font:700 8px/1 "Segoe UI",Arial,sans-serif;flex:none}
+#stage#stage.mobile.phone-ui .lamp .mline>span{display:block;min-width:0;width:36px;font-size:8px;letter-spacing:0}
+#stage#stage.mobile.phone-ui .lamp .mline .seg{height:6px;min-width:0;flex:1}
+#stage#stage.mobile.phone-ui .lamp .mline .hv{font-size:9px;min-width:22px}
+#stage#stage.mobile.phone-ui .modes{grid-row:2;grid-template-columns:repeat(3,minmax(0,1fr));min-width:0;gap:3px;flex:none}
+#stage#stage.mobile.phone-ui .mk{font:800 10px/1 "Segoe UI",Arial,sans-serif;letter-spacing:0;min-width:0;min-height:32px;padding:0 1px;border-radius:5px}
+#stage#stage.mobile.phone-ui .lamp .lstatus,#stage#stage.mobile.phone-ui .lighting .lamp .lstatus[data-type]{grid-row:4;display:flex;min-height:16px;height:16px;align-items:center;justify-content:center;gap:3px;margin:0;padding:1px;font:800 9px/1 "Segoe UI",Arial,sans-serif;border-radius:4px;white-space:nowrap;flex:none}
+#stage#stage.mobile.phone-ui .lstatus svg{width:11px;height:11px}
+#stage#stage.mobile.phone-ui .smarthome{padding:0;overflow:hidden}
+#stage#stage.mobile.phone-ui .smarthome .shhint{display:none}
+#stage#stage.mobile.phone-ui .smarthome .shbtns{width:100%;height:auto;flex:1;min-height:0;max-width:none;margin:0;padding:3px 5px 6px;gap:5px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr))}
+#stage#stage.mobile.phone-ui .smarthome .shb,#stage#stage.mobile.phone-ui .smarthome #actBlinds{height:100%;min-height:30px;padding:3px 1px;gap:2px;border-radius:6px;flex-direction:column}
+#stage#stage.mobile.phone-ui .smarthome .shb>.i,#stage#stage.mobile.phone-ui .smarthome #actBlinds>.i{width:18px;height:18px}
+#stage#stage.mobile.phone-ui .smarthome .shb>span[data-i18n],#stage#stage.mobile.phone-ui .smarthome #actBlinds>span{font:800 9px/1 "Segoe UI",Arial,sans-serif;letter-spacing:0;white-space:nowrap}
+#stage#stage.mobile.phone-ui .smarthome .shb small{display:none}
+#stage#stage.mobile.phone-ui #actBlinds em{bottom:2px;right:3px;font-size:9px}
+#stage#stage.mobile.phone-ui #mobileRail{grid-column:3;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;padding-top:32px;gap:7px}
+#stage#stage.mobile.phone-ui #mobileRail button{position:relative;display:flex;align-items:center;justify-content:center;width:36px;min-width:36px;height:42px;min-height:42px;padding:0;border:1px solid #8e6b81;border-radius:8px;color:#d3bbc9;background:linear-gradient(#564050,#352836);box-shadow:inset 0 1px #e9c3d52b,0 3px 0 #130e16;cursor:pointer}
+#stage#stage.mobile.phone-ui #mobileRail .mobile-tool.on{border-color:#d5ad58;color:#ffd371;background:linear-gradient(#654a31,#3c2c28);box-shadow:inset 0 1px #f6d68455,0 0 6px #e0aa4133}
+#stage#stage.mobile.phone-ui #mobileRail .i{width:20px;height:20px}
+#stage#stage.mobile.phone-ui #notesToggle [data-i18n],#stage#stage.mobile.phone-ui #notesToggle i{display:none}
+#stage#stage.mobile.phone-ui #notesToggle>span:first-child{font-size:24px}
+#stage#stage.mobile.phone-ui #notesToggle.unread:after{content:'';position:absolute;top:4px;right:4px;width:5px;height:5px;border-radius:50%;background:#ffd067;box-shadow:0 0 4px #ffd06799}
+#stage#stage.mobile.phone-ui #mobileFooter{grid-row:3;display:flex;align-items:center;gap:6px;min-width:0;min-height:0;padding:0 5px;border:1px solid #695263;border-radius:6px;background:linear-gradient(#352833,#241c27)}
+#stage#stage.mobile.phone-ui #systemPanel{position:static;flex:1;min-width:0;width:auto;height:100%;min-height:0;margin:0;padding:0;gap:5px;display:flex;border:0;border-radius:0;box-shadow:none;background:none}
+#stage#stage.mobile.phone-ui #systemPanel .modhead{padding:0;gap:4px;height:auto;min-height:0;font-size:8px;background:none;border:0;box-shadow:none}
+#stage#stage.mobile.phone-ui #systemPanel .bang{width:14px;height:14px;padding:2px}
+#stage#stage.mobile.phone-ui #systemPanel .sysmsg{font:600 8px/1 "Segoe UI",Arial,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#stage#stage.mobile.phone-ui #systemPanel .ledgrid{display:grid;grid-template-columns:repeat(12,3px);gap:2px;flex:none}
+#stage#stage.mobile.phone-ui #systemPanel .ledgrid i{width:3px;height:5px}
+#stage#stage.mobile.phone-ui #mobileFooter .bezelbtns{display:flex;gap:5px;height:100%;align-items:center}
+#stage#stage.mobile.phone-ui #mobileFooter .langsw{height:20px;display:flex;border-radius:5px}
+#stage#stage.mobile.phone-ui #mobileFooter .langsw button{height:20px;min-width:29px;padding:0 5px;font-size:10px}
+#stage#stage.mobile.phone-ui #mobileFooter .bzb{height:20px;min-height:20px;width:28px;padding:0;display:grid;place-items:center;border:1px solid #7e6076;border-radius:5px}
+#stage#stage.mobile.phone-ui #mobileFooter .bzb .i{width:14px;height:14px}
+#stage#stage.mobile.phone-ui #muteLbl,#stage#stage.mobile.phone-ui #pauseBtn,#stage#stage.mobile.phone-ui .pled{display:none}
+#stage#stage.mobile.phone-ui #mobileFooter #pauseBtn{display:none}
+#stage#stage.mobile.phone-ui .glassnote{inset:32px 45px auto auto;width:min(330px,55%);height:calc(100% - 66px);max-height:none;padding:12px;gap:5px;border-radius:3px;z-index:47}
+#stage#stage.mobile.phone-ui .glassnote>b{font-size:13px}
+#stage#stage.mobile.phone-ui .glassnote>.gn{--note-type-size:22px;line-height:1.1}
+#stage#stage.mobile.phone-ui .glassnote .banleg{font-size:17px;gap:3px;padding-top:5px}
+#stage#stage.mobile.phone-ui .glassnote .banleg .bh{font-size:10px}
+#stage#stage.mobile.phone-ui .glassnote .banleg .bi,#stage#stage.mobile.phone-ui .glassnote .banleg .bi svg{width:19px;height:19px}
+#stage#stage.mobile.phone-ui .glassnote .wo{font-size:22px;margin-top:0}
+#stage#stage.mobile.phone-ui #notesClose{top:5px;right:5px;width:29px;height:29px;font-size:22px;z-index:1}
+#stage#stage.mobile.phone-ui #guideCard{padding:10px 12px;border-radius:6px}
+#stage#stage.mobile.phone-ui #guideText{font:700 14px/1.25 "Segoe UI",Arial,sans-serif}
+#stage#stage.mobile.phone-ui #guideCard .cstep{font-size:10px;margin-bottom:5px}
+#stage#stage.mobile.phone-ui #guideStatus{font-size:10px;margin-top:5px}
+#stage#stage.mobile.phone-ui #guideCard .cbtns{margin-top:5px;gap:6px}
+#stage#stage.mobile.phone-ui #guideCard button{min-height:28px;font-size:11px;padding:5px 9px}
+#stage#stage.mobile.phone-ui #guideCard .cskip{font-size:10px}
+#stage#stage.mobile.phone-ui .callout:not(#guideCard){padding:9px 11px;max-height:calc(100% - 12px)}
+#stage#stage.mobile.phone-ui .callout .ct{font-size:13px;line-height:1.25}
+#stage#stage.mobile.phone-ui .callout .ck,#stage#stage.mobile.phone-ui .callout .cstep{font-size:9px}
+#stage#stage.mobile.phone-ui .callout .cbtns{margin-top:6px}
+#stage#stage.mobile.phone-ui .callout .cnext{font-size:13px;padding:8px 12px}
+#stage#stage.mobile.phone-ui .callout .cskip{font-size:10px}
+#stage#stage.mobile.phone-ui .paper,#stage#stage.mobile.phone-ui .paper.menu,#stage#stage.mobile.phone-ui .paper.pausecard{width:min(720px,calc(100% - 20px));max-height:calc(100% - 14px);padding:14px 18px 12px;gap:8px;transform:none;box-sizing:border-box}
+#stage#stage.mobile.phone-ui .paper.pausecard{width:min(440px,calc(100% - 20px))}
+#stage#stage.mobile.phone-ui .paper:before{width:95px;height:15px;top:-4px}
+#stage#stage.mobile.phone-ui .paper h1,#stage#stage.mobile.phone-ui .mtop h1{font-size:31px}
+#stage#stage.mobile.phone-ui .paper h2,#stage#stage.mobile.phone-ui .mtop h2{font-size:24px}
+#stage#stage.mobile.phone-ui .paper .sub,#stage#stage.mobile.phone-ui .paper ul{font-size:12px;line-height:1.3}
+#stage#stage.mobile.phone-ui .paper .mtop{gap:8px}
+#stage#stage.mobile.phone-ui .paper .daily{padding:6px 9px}
+#stage#stage.mobile.phone-ui .paper .daily b{font-size:13px}
+#stage#stage.mobile.phone-ui .paper .daily span{font-size:10px}
+#stage#stage.mobile.phone-ui .paper .pbtn.ban.playbtn{height:43px;min-height:43px;gap:3px}
+#stage#stage.mobile.phone-ui .paper .playbtn b{font-size:20px}
+#stage#stage.mobile.phone-ui .paper .playbtn small{font-size:11px}
+#stage#stage.mobile.phone-ui .paper .mgrid{gap:6px}
+#stage#stage.mobile.phone-ui .paper .mtile{gap:3px;padding:7px 9px}
+#stage#stage.mobile.phone-ui .paper .mtile b{font-size:13px}
+#stage#stage.mobile.phone-ui .paper .mtile span{font-size:10px}
+#stage#stage.mobile.phone-ui .paper .mfoot{gap:8px}
+#stage#stage.mobile.phone-ui .paper .bankchip{padding:4px 9px;gap:5px}
+#stage#stage.mobile.phone-ui .paper .bankchip b{font-size:17px}
+#stage#stage.mobile.phone-ui .paper .pbtn.sm{height:30px;padding:0 10px}
+#stage#stage.mobile.phone-ui .paper .pbtn.sm b{font-size:11px}
+#stage#stage.mobile.phone-ui .pausecard .vols{gap:4px}
+#stage#stage.mobile.phone-ui .pausecard .vol{grid-template-columns:95px 1fr 35px;font-size:12px;gap:8px}
+#stage#stage.mobile.phone-ui .pausecard .vol i{font-size:11px}
+#stage#stage.mobile.phone-ui .pausecard .vol input{height:26px}
+#stage#stage.mobile.phone-ui .pausecard .prow{gap:8px}
+#stage#stage.mobile.phone-ui .paper .pbtn.plain{height:34px;min-height:34px;padding:0 13px;font-size:12px}
+#stage#stage.mobile.phone-ui .paper .pbtn.plain b{font-size:12px}
+#stage#stage.mobile.phone-ui .paper .nightgrid{gap:6px}
+#stage#stage.mobile.phone-ui .paper .nightbtn{padding:7px 9px}
+#stage#stage.mobile.phone-ui .paper .nightbtn b{font-size:23px}
+#stage#stage.mobile.phone-ui .paper .nightbtn span{font-size:12px}
+#stage#stage.mobile.phone-ui .paper .nightbtn em{font-size:9px}
+/* Narrative windows use the same native viewport after a night ends. */
+#stage#stage.mobile.phone-ui .archivewin{inset:20px 12px 15px;width:auto;height:auto;overflow:auto}
+#stage#stage.mobile.phone-ui .archivewin header{height:25px;font-size:11px}
+#stage#stage.mobile.phone-ui .archivewin .files{padding:10px;gap:8px}
+#stage#stage.mobile.phone-ui #ovPhoto .polaroid{padding:6px 6px 18px}
+#stage#stage.mobile.phone-ui #ovPhoto .polaroid canvas{height:160px;width:auto;max-width:100%}
+#stage#stage.mobile.phone-ui .fincard{bottom:15px;width:calc(100% - 24px);max-height:calc(100% - 30px);overflow:auto;padding:12px 15px;gap:12px}
+#stage#stage.mobile.phone-ui .fincard p{font-size:14px;line-height:1.3}
+#stage#stage.mobile.phone-ui .fincard .pbtn{height:36px;min-width:90px;padding:0 10px}
+#stage#stage.mobile.phone-ui .fincard .pbtn b{font-size:12px}
+#stage#stage.mobile.phone-ui .desktop .dtop{height:29px;padding:0 12px;font-size:11px}
+#stage#stage.mobile.phone-ui .desktop .dtop span{font-size:17px}
+#stage#stage.mobile.phone-ui .desktop .dicons{left:8px;top:38px;grid-template-columns:repeat(2,82px);gap:6px}
+#stage#stage.mobile.phone-ui .desktop .dicon{gap:4px;padding:6px 3px}
+#stage#stage.mobile.phone-ui .desktop .dicon .di{font-size:29px}
+#stage#stage.mobile.phone-ui .desktop .dicon .dn{font-size:10px}
+#stage#stage.mobile.phone-ui .desktop .dicon em{font-size:9px;right:2px}
+#stage#stage.mobile.phone-ui .desktop .dwin{inset:38px 10px 47px 190px}
+#stage#stage.mobile.phone-ui .desktop .dwin header{height:28px;min-height:28px;font-size:11px;padding-left:10px}
+#stage#stage.mobile.phone-ui .desktop .dwin pre{font-size:13px;line-height:1.35;padding:12px}
+#stage#stage.mobile.phone-ui .desktop .dcont{right:12px;bottom:8px;height:30px;min-height:30px;padding:0 10px}
+#stage#stage.mobile.phone-ui .desktop .dcont b{font-size:12px}
+#stage#stage.mobile.phone-ui .desktop .dhint{left:12px;bottom:10px;max-width:60%;font-size:10px}
+#stage#stage.mobile.phone-ui .rp-in,#stage#stage.mobile.phone-ui .ml-in{width:94%;max-height:94%;padding:13px 16px}
+#stage#stage.mobile.phone-ui .rp-in h2{font-size:19px;letter-spacing:.04em}
+#stage#stage.mobile.phone-ui .rp-meta{font-size:11px;margin-bottom:8px}
+#stage#stage.mobile.phone-ui .rp-intro,#stage#stage.mobile.phone-ui .rp-in p{font-size:12px;line-height:1.35}
+#stage#stage.mobile.phone-ui .rp-s b{font-size:13px}
+#stage#stage.mobile.phone-ui .rp-s span,#stage#stage.mobile.phone-ui .rp-e,#stage#stage.mobile.phone-ui .rp-open{font-size:11px}
+#stage#stage.mobile.phone-ui .rp-view{max-height:220px;padding:8px}
+#stage#stage.mobile.phone-ui .rp-view pre{font-size:12px}
+#stage#stage.mobile.phone-ui .readdoc .rd-in{width:92%;max-height:94%;padding:10px}
+#stage#stage.mobile.phone-ui .readdoc h2{font-size:21px;letter-spacing:.05em}
+#stage#stage.mobile.phone-ui .readdoc .rd-meta{font-size:12px;margin-bottom:10px}
+#stage#stage.mobile.phone-ui .readdoc p{font-size:15px;line-height:1.4}
+#stage#stage.mobile.phone-ui .readdoc .rd-hint{font-size:11px;margin-top:10px}
+#stage#stage.mobile.phone-ui .flash .fl-in{max-width:90%;max-height:90%;overflow:auto}
+#stage#stage.mobile.phone-ui .flash .fl-k{font-size:12px;margin-bottom:10px}
+#stage#stage.mobile.phone-ui .flash .fl-t{font-size:22px;line-height:1.3}
+#stage#stage.mobile.phone-ui .flash.mia .fl-t{font-size:24px}
+#stage#stage.mobile.phone-ui .flash .fl-h{font-size:20px;margin-top:12px}
+#stage#stage.mobile.phone-ui .flash .fl-x{font-size:13px;line-height:1.35;margin-top:8px}
+#stage#stage.mobile.phone-ui .flash .fl-hint{bottom:10px;font-size:10px}
+#stage#stage.mobile.phone-ui .police b,#stage#stage.mobile.phone-ui .police.soft b{font-size:31px}
+#stage#stage.mobile.phone-ui .endcard{gap:10px;padding:15px}
+#stage#stage.mobile.phone-ui .endcard h1{font-size:29px!important}
+#stage#stage.mobile.phone-ui .endcard .endlast{font-size:22px}
+#stage#stage.mobile.phone-ui .endcard .endsys{font-size:13px;margin:0 0 10px}
+#stage#stage.mobile.phone-ui .endcard .endmia,#stage#stage.mobile.phone-ui .endcard p,#stage#stage.mobile.phone-ui .endcard .rateItch{font-size:13px;margin:0}
+@media(max-width:780px){
+#stage#stage.mobile.phone-ui .ux-lower{grid-template-columns:minmax(0,25fr) minmax(0,55fr) minmax(0,20fr)}
+#stage#stage.mobile.phone-ui .mk{text-transform:lowercase;letter-spacing:-.1px}
+#stage#stage.mobile.phone-ui .actions .modhead{font-size:9px;gap:3px;padding:0 4px}
+}
+}

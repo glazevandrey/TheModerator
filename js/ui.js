@@ -31,12 +31,12 @@ window.addEventListener('resize',()=>{ fitStage(); try{ placeCallout(); }catch(e
 // --- Mia speaks (subtitle). On Wednesday/Friday the stalker sometimes types her line before she says it.
 function say(key,text,cool=8){
   if(!S||S.tut.active) return; const now=S.t;
+  if(S.running&&S.storyCaptionUntil>now&&key!=='story')return;
   if(S.mia.last[key]!==undefined && now-S.mia.last[key]<cool) return;
   if(now-S.mia.lineT<2.2 && key!=='force') return;
   S.mia.last[key]=now; S.mia.lineT=now;
-  const show=()=>{ const el=$('caption'); el.innerHTML='<b>'+(LANG==='ru'?'Мия':'Mia')+':</b> '+esc(text); el.hidden=false; captionTimer=4.2; mumble(Math.min(14,Math.max(3,Math.round(String(text).length/5)))); };
-  if(S.running && DY().ev.predict && key==='talk' && !S.tut.active && Math.random()<.3){ stalkerSay(text,{read:true}); later(show,2200); }
-  else show();
+  const show=()=>{ const el=$('caption');el.classList.toggle('story-key',key==='story'); el.innerHTML='<b>'+(LANG==='ru'?'Мия':'Mia')+':</b> '+esc(text); el.hidden=false; captionTimer=4.2; mumble(Math.min(14,Math.max(3,Math.round(String(text).length/5)))); };
+  show();
 }
 function tipKeyOf(text){ for(const L of ['en','ru']) for(const k in STR[L]) if(STR[L][k]===text) return k; return null; }
 function tip(id,text){ if(!S||S.tipsDone[id]||S.tut.active) return;

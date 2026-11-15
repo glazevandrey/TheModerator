@@ -37,11 +37,9 @@ function avatarSVG(m){
   return `<svg viewBox="0 0 24 24">${ears}<circle cx="12" cy="12" r="11" fill="${col}"/><circle cx="6.5" cy="14" r="1.6" fill="rgba(255,120,120,.25)"/><circle cx="17.5" cy="14" r="1.6" fill="rgba(255,120,120,.25)"/>${eye}${mood}</svg>`;
 }
 
-const MON_LOG=[]; // the normal messages of Monday, replayed on the second Monday
 function pushMsg(type,user,text,opts){
   const m={id:nextId++,type,user,text,t:S.t,banned:false,read:false};
   S.chat.push(m); if(S.chat.length>90) S.chat.shift();
-  if(S.night.key==='mon' && type==='normal' && MON_LOG.length<80) MON_LOG.push({user,text});
   renderMsg(m, opts&&opts.top); S.rate+=1;
   /* UI tick; a disguised stalker (copied nick) sounds like a normal viewer, only Stranger_99 himself is the dull low one */
   if(type==='stalker'&&user==='Stranger_99') scareFace();
@@ -57,12 +55,12 @@ function stalkerIdle(){ if(S&&S.guide&&S.guide.active&&S.guide.phase==='ban')ret
 function stalkerSay(pool,opts){
   if(!stalkerIdle()){ (S.stQ=S.stQ||[]).push({pool,opts,t:S.t}); return {}; }
   const name = opts&&opts.name ? opts.name : Math.random()<.4 ? 'Stranger_99' : (Math.random()<.6 ? disguise(recentNormalName()) : genName());
-  const m=pushMsg('stalker',name,typeof pool==='string'?pool:pick(pool),opts);
+  const m=pushMsg('stalker',name,typeof pool==='string'?pool:freshLine(pool,'stalker'),opts);
   if(opts&&opts.read) m.read=true;
   tip('creepy',T('tipCreepy'));
   return m;
 }
-let monIdx=0;
+
 function chatTick(dt){
   const d=dprog(), ev=DY().ev;
   S.rate=Math.max(0,S.rate-dt*.6);
@@ -72,37 +70,35 @@ function chatTick(dt){
     const N=DY(); S.chatT=rnd(.9,2.1)*(1-.3*d)*(raid?.75:1)*N.chat;
     const r=S.guide&&S.guide.active&&S.guide.phase==='ban'?1:Math.random(), tr=((raid?.3:.12)+.06*d)*N.troll, sp=tr+(raid?.12:.05)*N.troll;
     if(r<tr) pushMsg('troll',genName(),pickTroll());
-    else if(r<sp) pushMsg('spam',genName(),pick(C().SPAM));
-    else if(ev.repeat && MON_LOG.length && Math.random()<.7){ const x=MON_LOG[monIdx++%MON_LOG.length]; pushMsg('normal',x.user,x.text); }
+    else if(r<sp) pushMsg('spam',genName(),freshLine(C().SPAM,'spam'));
     else if(!S.tut.active && memeOk() && Math.random()<.07) pushMsg('normal',genName(),memeLine('bg')).meme=true;
-    else pushMsg('normal',genName(),pickNormal());
+    else pushMsg('normal',viewerName(),pickNormal());
   }
   memeTick();
   // regular viewers react to what they can see on stream
   S.nervousT-=dt;
   if(S.nervousT<=0){
     S.nervousT=rnd(6,11); const st=S.st; const N=C().NERVOUS;
-    if(st.stage==='behind') pushMsg('normal',genName(),pick(N.behind));
-    else if((st.stage==='window'||st.stage==='door'||st.stage==='closet') && st.p>.35 && Math.random()<.7) pushMsg('normal',genName(),pick(N[st.stage]));
-    else if(S.decoy && Math.random()<.35) pushMsg('normal',genName(),pick(N[S.decoy.zone]));   // viewers fall for the decoy too
-    else if(S.ev.chairShow>0) pushMsg('normal',genName(),pick(N.chair));
-    else if(S.ev.note && Math.random()<.5) pushMsg('normal',genName(),pick(N.note));
-    else if(ev.loop && Math.random()<.5) pushMsg('normal',genName(),pick(N.loop));
-    else if(ZONES.filter(z=>['DIM','DEAD'].includes(lampMode(z))).length>=2 && Math.random()<.6) pushMsg('normal',genName(),pick(N.dark));
+    if(st.stage==='behind') pushMsg('normal',genName(),freshLine(N.behind,'nervous'));
+    else if((st.stage==='window'||st.stage==='door'||st.stage==='closet') && st.p>.35 && Math.random()<.7) pushMsg('normal',genName(),freshLine(N[st.stage],'nervous'));
+    else if(S.decoy && Math.random()<.35) pushMsg('normal',genName(),freshLine(N[S.decoy.zone],'nervous'));   // viewers fall for the decoy too
+    else if(S.ev.chairShow>0) pushMsg('normal',genName(),freshLine(N.chair,'nervous'));
+    else if(S.ev.note && Math.random()<.5) pushMsg('normal',genName(),freshLine(N.note,'nervous'));
+    else if(ZONES.filter(z=>['DIM','DEAD'].includes(lampMode(z))).length>=2 && Math.random()<.6) pushMsg('normal',genName(),freshLine(N.dark,'nervous'));
   }
   if(S.tut.active){ for(const m of S.chat) if(m.type!=='stalker'&&!m.read&&S.t-m.t>8) m.read=true; return; }
   const st=S.st;
-  if(S.t>(S.tutEnd||0)+10 && !S.tipsDone.anchor){ S.tipsDone.anchor=1; stalkerSay(C().STALKER.anchor,{name:'Stranger_99'}); }
+  if(S.t>(S.tutEnd||0)+10 && !S.tipsDone.anchor){ S.tipsDone.anchor=1; stalkerSay(stalkerPool('anchor'),{name:'Stranger_99'}); }
   /* once a night from Wednesday: the mod panel drops off the mobile network for a moment */
   if(!S.reconDone && S.t>S.len*.42 && NIGHTS.findIndex(n=>n.key===DY().key)>=2){ S.reconDone=true; pushMsg('sys','',T('reconnect')); }
   if(S.stQ&&S.stQ.length&&stalkerIdle()){ const q=S.stQ.shift(); if(S.t-q.t<14) stalkerSay(q.pool,q.opts); }
   st.msgT-=dt;
   if(st.msgT<=0){
     st.msgT=rnd(16,26)*(1-.35*d);
-    if(ev.breakChat && Math.random()<.4) stalkerSay(C().STALKER.broken,{top:true});      // messages that break the order of the chat
-    else if(ev.finale && d>.5 && Math.random()<.4) stalkerSay(C().STALKER.finale);
-    else if(st.stage!=='hidden') stalkerSay(Math.random()<.65?C().STALKER[st.stage]:C().STALKER.general);
-    else if(S.t>40 && Math.random()<.5) stalkerSay(C().STALKER.general);
+    if(ev.breakChat && Math.random()<.4) stalkerSay(stalkerPool('broken'),{top:true});      // messages that break the order of the chat
+    else if(ev.finale && d>.5 && Math.random()<.4) stalkerSay(stalkerPool('finale'));
+    else if(st.stage!=='hidden') stalkerSay(Math.random()<.65?stalkerPool(st.stage):stalkerPool('general'));
+    else if(S.t>40 && Math.random()<.5) stalkerSay(stalkerPool('general'));
   }
   // toxicity: trolls and spam left hanging poison the chat; at 100% viewers mass-report the stream (−1 trust)
   let pend=0; for(let i=S.chat.length-1;i>=0;i--){ const m=S.chat[i], a=S.t-m.t; if(a>24) break; if(!m.banned && a>4 && (m.type==='troll'||m.type==='spam')) pend++; }
@@ -129,7 +125,7 @@ function ban(id){
   if(m.type==='troll'||m.type==='spam'){ S.stats.goodBans++; S.hc+=10; S.tox=Math.max(0,S.tox-TOX.ban); SFX.ban(); if(!S.tut.active) memeSay('ban',.15,900); }
   else if(m.type==='stalker'){
     S.stats.himBans++; SFX.ban(); S.st.aggr=Math.min(2.4,S.st.aggr*1.08);   // +8% advance speed
-    later(()=>{ if(Math.random()<.5) stalkerSay(C().STALKER.angry); }, 1500+Math.random()*2000);
+    later(()=>{ if(Math.random()<.5) stalkerSay(stalkerPool('angry')); }, 1500+Math.random()*2000);
   } else {
     S.stats.wrongBans++; S.trust--; addPanic(15,{force:true}); SFX.wrong(); S.shake=.3; S.trustHit=1;
     say('wrongban',T('m_wrong',{user:m.user}),4);
@@ -166,4 +162,4 @@ list.addEventListener('click',e=>{
 /* quiet trolls (no insult, easy to miss) only from Friday on; early nights get only the obvious ones */
 const QUIET_TROLL=new Set(['отписался','zzzzz','мия, ты серьёзно?','лучше бы спать легла','ни о чём','где контент?','слабенько','выключаю','скилл ишью','ну и скука',
   'unfollowed','mia are you serious?','should have gone to bed','nothing burger',"where's the content?",'weak','closing this','skill issue','so boring']);
-function pickTroll(){ const all=C().TROLL, i=NIGHTS.findIndex(n=>n.key===DY().key); if(i<0||i>=4) return pick(all); return pick(all.filter(t=>!QUIET_TROLL.has(t))); }
+function pickTroll(){ const all=C().TROLL, i=NIGHTS.findIndex(n=>n.key===DY().key); if(i<0||i>=4) return freshLine(all,'troll'); return freshLine(all.filter(t=>!QUIET_TROLL.has(t)),'troll'); }

@@ -1,6 +1,6 @@
 "use strict";
 // ======================= MORE LINES: Mia's small talk, her replies to viewers, reaction variants, a bigger chat =======================
-// talk / night: {t: what Mia says, c: how the chat may answer}. night = topics of that particular night (mon2 replays monday).
+// talk / night: {t: what Mia says, c: how the chat may answer}. night = topics of that particular night (each night has its own topic).
 // reply: Mia answers a real viewer from the chat ({user}). Reaction variants extend STR (T() picks one from an array).
 const LINES={ru:{},en:{}};
 
@@ -299,31 +299,29 @@ CHAT.en.SPAM.push('EARN $500 A DAY >> earn-fast.click','free stream stickers >> 
   'cheap likes, check my profile','free skins >> fr33skins.biz','best chat bots >> chatb0t.store');
 
 // ---------------------------------------------------------------- behaviour
-// Every 16–26 s, when things are calm, Mia talks: replies to a recent viewer, a topic of tonight, or small talk.
+// Every 16–26 s in a quiet moment: a conversation for this night, then fresh small talk.
 // Chat answers 1–2 times. (The second monday used to replay monday as a déjà vu; removed 10.11 — the nights are live now.)
-const MON_TALK=[]; let monTalkIdx=0;
+
 function talkPool(){ const L=LINES[LANG]||LINES.en, k=DY().key; return {talk:L.talk, night:L.night[k]||[], reply:L.reply}; }
 function miaTalkTick(dt){
   if(!S||!S.running||S.over||S.tut.active) return;
-  if(!S.talkUsed){ S.talkUsed={}; if(S.talkT===undefined) S.talkT=rnd(10,15); if(DY().key==='mon2') monTalkIdx=0; }
+  if(!S.talkUsed){ S.talkUsed={}; if(S.talkT===undefined) S.talkT=rnd(10,15);  }
   const st=S.st, calm=S.panic<50 && S.mia.awayT<=0 && !(S.ev.chairShow>0) && captionTimer<=0 && (st.stage==='hidden'||(st.stage==='window'&&st.p<.35));
   if(!calm) return; S.talkT-=dt; if(S.talkT>0) return;
   S.talkT=rnd(16,26);
   const P=talkPool(), k=DY().key; let e=null;
   {
-    const r=Math.random();
-    if(r<.3){ const rec=S.chat.slice(-14).filter(m=>m.type==='normal'&&!m.banned&&S.t-m.t<25); if(rec.length) e={t:pick(P.reply).replace('{user}',pick(rec).user),c:[]}; }
-    if(!e && r<.62){ const free=P.night.filter(x=>!S.talkUsed[x.t]); if(free.length) e=pick(free); }
-    if(!e){ const free=P.talk.filter(x=>!S.talkUsed[x.t]); e=pick(free.length?free:P.talk); }
-    S.talkUsed[e.t]=1; if(k==='mon' && MON_TALK.length<40) MON_TALK.push(e);
+    if(!e){ const free=P.night.filter(x=>!S.talkUsed[x.t]); if(free.length) e=freshLine(free,'talk:'+k); }
+    if(!e){ const free=P.talk.filter(x=>!S.talkUsed[x.t]); e=freshLine(free.length?free:P.talk,'smalltalk'); }
+    S.talkUsed[e.t]=1;
   }
   say('talk',e.t,0);
   if(!(e.c&&e.c.length)) memeSay('mia',.3,2200+Math.random()*1200);
   const g=S, cs=(e.c||[]).slice().sort(()=>Math.random()-.5).slice(0,Math.random()<.5?2:1);
-  cs.forEach((t,i)=>setTimeout(()=>{ if(S===g && S.running) pushMsg('normal',genName(),t); },1700+i*1400+Math.random()*900));
+  cs.forEach((t,i)=>setTimeout(()=>{ if(S===g && S.running) pushMsg('normal',REGULARS[i%REGULARS.length],t); },1700+i*1400+Math.random()*900));
 }
 // regular viewers: now and then something about tonight
-function pickNormal(){ const L=C(), top=L.TOPIC&&L.TOPIC[DY().key]; return (top&&Math.random()<.22)?pick(top):pick(L.NORMAL); }
+function pickNormal(){ const L=C(), top=L.TOPIC&&L.TOPIC[DY().key]; return freshLine(top&&Math.random()<.45?top:L.NORMAL,'normal'); }
 
 // ---------------------------------------------------------------- ways in, habits, hot nights (RU / EN)
 Object.assign(STR.ru,{

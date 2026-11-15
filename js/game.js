@@ -15,7 +15,7 @@ function update(dt){
   lightingTick(dt); economyTick(dt); smartHomeTick(dt);
   S.glitch=Math.max(0,S.glitch-dt); S.shake=Math.max(0,S.shake-dt); S.mia.surpriseT=Math.max(0,S.mia.surpriseT-dt);
   tutTick(dt); dayEventsTick(dt); storyTick(dt);
-  stalkerTick(dt); if(!S.running) return;
+  stalkerTick(dt); if(!S.running||S.guide&&S.guide.active&&S.guide.kind==='red') return;
   chatTick(dt); miaTalkTick(dt);
   panicTick(dt); if(!S.running) return;
   S.vT=(S.vT||0)-dt; if(S.vT<=0){ S.vT=rnd(1.5,3); S.viewers=Math.max(300,S.viewers+Math.round(rnd(-12,14))); }
@@ -28,6 +28,8 @@ function update(dt){
 
 let endlessRun=null;
 function resetScreens(){
+  if(typeof evidenceClose==='function')evidenceClose(false);
+  if(typeof storyClose==='function')storyClose(false);
   FIN.active=false; ['nosignal','playback'].forEach(c=>$('monitor').classList.remove(c));
   ['ovMenu','ovEnd','ovTut','ovPause','ovPhoto','police','epilogue','endcard','archiveWin','playbar','finCard','readDoc','tipToast','desktop','report','flash','mail','fcur'].forEach(id=>$(id).hidden=true);
   $('reflection').classList.remove('show'); $('stage').classList.remove('quake','finban','finauto'); if(S){ S.finReflect=null; S.finLights=null; S.finaleEmpty=false; } SFX.droneOff&&SFX.droneOff(); SFX.sirenOff&&SFX.sirenOff(); $('police').classList.remove('soft'); $('ovPhoto').classList.remove('top'); FIN.wait=false; FIN.q=null; reflCv=null; $('epilogue').classList.remove('slam'); SFX.staticOff();
@@ -39,7 +41,7 @@ function begin(idx,endN,opts){
   audioInit(); if(A.ctx&&A.ctx.state==='suspended'&&!A.muted) A.ctx.resume();
   resetScreens();
   const tut=!!(opts&&opts.tut);
-  S=newState(idx,endN,tut); S.running=true; list.innerHTML=''; nextId=1; monIdx=0; highlight(null); hideCallout(); $('floaty').classList.remove('show'); $('caption').hidden=true; $('cueline').hidden=true;
+  S=newState(idx,endN,tut); S.running=true; list.innerHTML=''; nextId=1; highlight(null); hideCallout(); $('floaty').classList.remove('show'); $('caption').hidden=true; $('cueline').hidden=true;
   if(tut){ S.tut.step=-1; S.st.wait=1e9; }
   $('tip').textContent=T('tip0'); S.tipKey=null; banLegend();
   pushMsg('sys','',T('sysStart')).read=true;
@@ -84,7 +86,9 @@ function showEnd(reason){
   pendingReward={hc:S.hc, bonus:win?nightBonus():0, mult:1, committed:false};
   renderReward();
   $('endArchive').innerHTML = S.clips.length ? S.clips.slice(-4).map(c=>`<div class="clip">${c.img?`<img src="${c.img}" alt="">`:''}<div>${c.clock} · ${c.val?`<b>+${c.val}</b> · ${esc(c.label)}`:esc(T('clipNothing'))}</div></div>`).join('') : `<div class="note">${esc(T('noClips'))}</div>`;
+  if(S.ev.noteRec)$('endArchive').insertAdjacentHTML('beforeend',`<button type="button" class="pbtn evidence-archive" data-read-evidence>${esc(T(N.key==='fri'?'evidence_photo':'evidence_read'))}</button>`);
   if(N.key==='mon' && S.ev.noteRec) $('endArchive').insertAdjacentHTML('beforeend',`<div class="clipnote"><small>${esc(T('noteMonLbl'))}</small>${esc(T('noteMonTxt'))}</div>`);
+  if((S.storyLog||[]).length)$('endArchive').insertAdjacentHTML('beforeend',`<button type="button" class="pbtn story-archive" data-read-story>${esc(T('storyRead'))}</button>`);
   $('endWhisper').textContent = win ? (T('wh_'+N.key)!=='wh_'+N.key?T('wh_'+N.key):T('wh_other')) : (T('wh_'+reason)!=='wh_'+reason ? T('wh_'+reason) : T('wh_other'));
   let note = win ? T('n_win') : T('n_'+reason);
   if((N.key==='fri'||N.key==='mon') && !S.ev.noteRec) note+=' '+T('noteMissed');
@@ -178,7 +182,7 @@ $('actBlinds').onclick=toggleBlinds; $('actRec').onclick=rec; $('actBan').onclic
 $('actDog').onclick=()=>smartHome('dog'); $('actSteps').onclick=()=>smartHome('steps'); $('actAlarm').onclick=()=>smartHome('alarm');
 const KEYZ={Digit1:'window',Digit2:'closet',Digit3:'door',Numpad1:'window',Numpad2:'closet',Numpad3:'door'}; // left → right, as in the room
 document.addEventListener('keydown',e=>{
-  if(!$('readDoc').hidden){ e.preventDefault(); readDoc(false); return; }
+  if(!$('readDoc').hidden){if(['Escape','Enter',' '].includes(e.key)){e.preventDefault();readDoc(false);}else if(e.key==='Tab'){e.preventDefault();$('readDoc').querySelector('.rd-in').focus();}return;}
   if(FIN.active && FIN.phase===6 && e.code==='KeyX'){ e.preventDefault(); finSelfBan(); return; }
   if(FIN.active && (e.code==='Space'||e.code==='Enter')){ e.preventDefault(); if(FIN.phase===5 && performance.now()-(FIN.flAt||0)>900){ flashShow(); return; } if(FIN.wait) finNext(); else if(FIN.phase===7 && !$('protoNext').hidden) finEnter(8); return; }
   if(e.key==='Escape'){ if(!$('ovPhoto').hidden){ $('ovPhoto').hidden=true; return; } if(S&&(S.running||paused)) setPause(!paused); return; }

@@ -21,16 +21,17 @@ function recValue(){
 }
 function finishRec(){
   const found=recValue(); const best=found[0]||{val:0,label:'',kind:''}; best.val=Math.round(best.val*(1+.25*upLv('lens'))/10)*10;
-  if(found.some(f=>f.kind==='note')) S.ev.noteRec=true;
+  const capturedNote=found.some(f=>f.kind==='note')&&!S.ev.noteRec;
   S.hc+=best.val; if(best.val) S.viewers+=Math.round(best.val/4);
   let img=''; try{ const th=document.createElement('canvas'); th.width=320; th.height=160; th.getContext('2d').drawImage(feed,0,0,320,160); img=th.toDataURL('image/jpeg',.8); }catch(e){}
   const clip={img,val:best.val,label:best.label,kind:found.some(f=>f.kind==='note')?'note':best.kind,clock:clockStr(),night:S.night.key};
-  S.clips.push(clip); ARCHIVE.push(clip); if(ARCHIVE.length>24) ARCHIVE.shift();
+  S.clips.push(clip); if(capturedNote)evidenceCaptured(); ARCHIVE.push(clip); if(ARCHIVE.length>24) ARCHIVE.shift();
   pushMsg('sys','',best.val?T('clipSaved',{v:best.val,label:best.label}):T('clipNone')).read=true;
   S.rec.cd=CD.rec; S.rec.flash=.6;
-  if(best.val) tip('recdone',T('tipRec'));
+  if(best.val&&!capturedNote) tip('recdone',T('tipRec'));
 }
 function economyTick(dt){
+  S.ev.noteFly=Math.max(0,(S.ev.noteFly||0)-dt);
   if(S.rec.active>0){ S.rec.active-=dt; if(S.rec.active<=0){ S.rec.active=0; finishRec(); } }
   else S.rec.cd=Math.max(0,S.rec.cd-dt);
   S.rec.flash=Math.max(0,(S.rec.flash||0)-dt);
@@ -40,7 +41,7 @@ function economyTick(dt){
   const inc=S.night.inc||0; if(inc>0){ S.hcf+=inc*dt*(S.tox>TOX.half?.5:1); if(S.hcf>=1){ const k=Math.floor(S.hcf); S.hcf-=k; S.hc+=k; } }
   // comeback: once per night a real viewer donates when Mia is about to break
   if(S.night.rescue && !S.rescued && S.panic>=82 && !S.tut.active){ S.rescued=true; S.panic=Math.max(0,S.panic-24); S.focus=6; SFX.donate();
-    pushMsg('donation',genName(),T('rescueMsg')).read=true; say('force',T('m_rescue')); floaty(T('f_rescue')); }
+    pushMsg('donation',viewerName(),T('rescueMsg')).read=true; say('force',T('m_rescue')); floaty(T('f_rescue')); }
 }
 function donateCost(){ const c=(S&&S.night&&S.night.cost)||COST.donate; return upLv('calm')?Math.max(80,c-30):c; }
 function donate(){

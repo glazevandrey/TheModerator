@@ -18,12 +18,12 @@ function enterStage(stage,p){
   if(stage==='door'){ SFX.door(); floaty(T('f_door')); }
   if(stage==='closet'){ SFX.door(); floaty(T('f_closet')); tip('closet',T('tipCloset')); }
   if(stage==='behind'){ SFX.near(); SFX.thud(); S.shake=.4; floaty(T('f_behind')); addPanic(8); }
-  if(st.red && stage!=='behind') tip('red',T('tipRed'));
+  if(st.red && stage!=='behind'){ tip('red',T('tipRed')); if(typeof redLessonStart==='function')redLessonStart(); }
   if(S.decoy && S.decoy.zone===stage) S.decoy=null;
-  if(!S.tut.active && Math.random()<.45) later(()=>{ if(S.st.stage===stage) stalkerSay(C().STALKER[stage]||C().STALKER.general); }, rnd(1500,4000));
+  if(!S.tut.active && Math.random()<.45) later(()=>{ if(S.st.stage===stage) stalkerSay(stalkerPool(stage)||stalkerPool('general')); }, rnd(1500,4000));
 }
 function beginApproach(){
-  const st=S.st, d=DY(), key=st.next||pickRoute(); st.route=ROUTES[key]; st.next=null; st.cued=false;
+  S.fxPass=0;const st=S.st, d=DY(), key=st.next||pickRoute(); st.route=ROUTES[key]; st.next=null; st.cued=false;
   st.red = !S.tut.active && Math.random()<(d.red||0); st.litSaid=false;
   if(key==='B') tip('routeB',T('tipRouteB'));
   enterStage(st.route[0],.05);
@@ -76,7 +76,7 @@ function stalkerTick(dt){
     st.boostT+=dt; rate = st.boostT<.4 ? 0 : -.12;
     if(st.boostT>adaptAt() && !S.tut.active){   // it adapts to the light and lunges
       st.p+=.28; st.boostT=0; S.glitch=.3; SFX.thud(); S.shake=.25; floaty(T('f_lunge'));
-      stalkerSay(C().STALKER.lunge); tip('adapt',T('tipAdapt'));
+      stalkerSay(stalkerPool('lunge')); tip('adapt',T('tipAdapt'));
     }
     if(rate<0 && !st.backed){ st.backed=true; floaty(T('f_back')); }
   } else {

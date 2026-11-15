@@ -79,7 +79,7 @@ const noteTip=$('tip2');
 function fitNoteText(){
   if(!noteTip.clientHeight) return;
   const maximum=parseInt(getComputedStyle(noteTip).getPropertyValue('--note-type-size'),10);
-  for(let size=maximum;size>=12;size--){
+  for(let size=maximum;size>=22;size--){
     noteTip.style.fontSize=size+'px';
     if(noteTip.scrollHeight<=noteTip.clientHeight && noteTip.scrollWidth<=noteTip.clientWidth) break;
   }

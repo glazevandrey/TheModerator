@@ -1,0 +1,15 @@
+/* Readable paper and explicit evidence access; the rest of the layout stays intact. */
+#stage#stage.notes-pinned .glassnote>b {font-size:17px;line-height:1.2}
+#stage#stage .glassnote>.gn {--note-type-size:30px;font-size:30px;line-height:1.17;overflow-y:auto;overflow-wrap:break-word;scrollbar-width:thin;color:#26190f}
+#stage#stage .glassnote .banleg {flex-shrink:0}
+#stage#stage #evidenceButton {flex-shrink:0;width:100%;padding:8px 5px;border:1px solid #96703c;border-radius:4px;background:#d8b76d;color:#30200f;font:700 15px/1.15 'Segoe UI',Arial,sans-serif;box-shadow:0 2px 0 #92733c;text-shadow:none;cursor:pointer}
+#stage#stage #evidenceButton:focus-visible {outline:3px solid #473419;outline-offset:2px}
+#evidenceViewer {z-index:160;background:#080609d9}
+#stage #evidenceViewer .paper {width:min(680px,90%);max-height:85%;overflow-y:auto;text-align:center;padding:28px;background:linear-gradient(110deg,#e7cf95,#f4e5bb);color:#302219;border:1px solid #b1975f;box-shadow:0 12px 40px #000b}
+#stage #evidenceViewer h2 {font-size:24px;line-height:1.2}
+#stage #evidenceViewer blockquote {font:700 38px/1.35 'Caveat','Comic Sans MS',cursive;margin:22px 0;padding:22px 12px;border-block:1px dashed #94794f}
+#stage #evidenceViewer canvas {width:100%;height:auto;max-height:50vh;object-fit:contain}
+#stage #evidenceViewer p {font:500 17px/1.4 'Segoe UI',Arial,sans-serif;margin:16px 0}
+#stage #evidenceViewer button {min-width:180px;min-height:48px;display:inline-flex;align-items:center;justify-content:center;padding:10px 20px;font:700 18px/1.2 'Segoe UI',Arial,sans-serif;color:#f5e8d1}
+#stage .evidence-archive {margin:10px 0;padding:10px 18px;font-size:16px}
+@media (prefers-reduced-motion:reduce){#stage .guide-target{animation:none!important}}

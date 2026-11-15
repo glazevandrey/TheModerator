@@ -128,7 +128,13 @@ document.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{
   if(!S||!S.guide||!S.guide.active||!S.running||paused||S.t<4.5)return;
   if(e.key==='Escape'||e.key==='Tab'||e.target.closest('#guideCard,.langsw'))return;
-  if((e.key==='Enter'||e.key===' ')&&['intro','done'].includes(S.guide.phase)){e.preventDefault();$('guideNext').click();return;}
+  if((e.key==='Enter'||e.key===' ')&&['intro','done','redIntro','redDone'].includes(S.guide.phase)){e.preventDefault();$('guideNext').click();return;}
+  if(S.guide.kind==='red'){
+    const g=S.guide,z={window:'Digit1',closet:'Digit2',door:'Digit3'}[g.zone];
+    if(g.phase==='redDim'&&e.shiftKey&&(e.code===z||e.code==='Numpad'+z.slice(-1))&&S.lamps[g.zone].mode!=='DIM')return;
+    if(g.phase==='redSound'&&e.code==={dog:'KeyZ',steps:'KeyC',alarm:'KeyF'}[g.action])return;
+    e.preventDefault();e.stopImmediatePropagation();return;
+  }
   const allowed={ban:'KeyX',light:'Digit1',cool:'Digit1',clip:'KeyR',blinds:'KeyB',donate:'KeyG'}[S.guide.phase];if((allowed===e.code||allowed==='Digit1'&&e.code==='Numpad1')&&!e.shiftKey)return;
   e.preventDefault();e.stopImmediatePropagation();
 },true);

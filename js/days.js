@@ -66,15 +66,15 @@ function dayEventsTick(dt){
   if(DY().mod==='surge'){ E.surgeT-=dt; if(E.surgeT<=0){ E.surgeT=rnd(28,42)/(S.night.surge||1); const z=pick(ZONES.filter(z=>!S.lamps[z].burned)); if(z){ S.lamps[z].heat=Math.min(99,S.lamps[z].heat+Math.round(32*(S.night.surge||1))); S.lamps[z].surgeT=1.6; S.glitch=.3; SFX.surge(); floaty(T('f_surge',{z:T('zat_'+z)})); tip('surge',T('tipSurge')); say('surge',T('m_surge'),30); } } }
   if(DY().mod==='cold' && S.t>6) say('cold',T('m_cold'),999);
   if(ev.chair){
-    if(E.chairShow>0){ E.chairShow-=dt; }
+    if(E.chairShow>0){ E.chairShow=lampMode('closet')==='BOOST'?0:Math.max(0,E.chairShow-dt); }
     else { E.chairT-=dt; if(E.chairT<=0 && lampMode('closet')!=='BOOST' && S.st.stage!=='behind'){ E.chairShow=4.5; E.chairT=rnd(35,50); SFX.near(); later(()=>say('chair',T('m_chair'),20),2600); } }
   }
   if(ev.note){
-    const want = S.t>45 && S.t<255;
-    if(want && !E.note){ E.note=true; SFX.thud(); later(()=>say('note',T('m_note'),60),2500); if(DY().key==='mon') later(()=>tip('noteMon',T('tipNoteMon')),4500); }
+    const want = S.t>45 && S.t<255 && !E.noteRec;
+    if(want && !E.note){ E.note=true; SFX.thud(); evidenceAppeared(); later(()=>say('note',T('m_note'),60),2500); if(DY().key==='mon') later(()=>tip('noteMon',T('tipNoteMon')),4500); }
     if(!want) E.note=false;
   }
-  if(ev.loop && S.t>20){ say('loop',T('m_loop'),40); }
+
 }
 function dayIntro(){
   const d=DY(), el=document.getElementById('dayintro'); const [a,b]=TA('di_'+d.key,{n:(d.n||0)+1});
@@ -149,7 +149,7 @@ const FINTX={
 const FX=()=>FINTX[LANG]||FINTX.en;
 function startFinale(){
   stat('finale/start');
-  S.running=false; S.over=true; FIN.active=true; FIN.t=0; FIN.phase=0; FIN.wait=false; FIN.q=null; FIN.tp=0; FIN.sus=null; FIN.ev=null; FIN.bans=0; FIN.knocked=false; pfGameplay(false);
+  S.running=false; S.over=true; FIN.active=true; FIN.t=0; FIN.phase=0; FIN.wait=false; FIN.q=null; FIN.tp=0; FIN.sus=null; FIN.ev=null; FIN.bans=0; FIN.knocked=false;FIN.grabSaid=false;S.storyCaptionUntil=0; pfGameplay(false);
   PROG.bank+=S.hc+300; PROG.done=true; PROG.unlocked=NIGHTS.length-1; saveProg();
   finClock=0; S.finaleEmpty=true; S.cueT=0; S.cueZ=null; $('cueline').hidden=true; FIN.said=false;
 }
@@ -185,14 +185,15 @@ function finEnter(ph){
 function finaleTick(dt){
   if(!FIN.active) return; FIN.t+=dt; const t=FIN.t, since=t-FIN.tp;
   if(FIN.q && t>=FIN.q.at && !FIN.wait){ const k=FIN.q.key; if(k==='finPolice'){ const pk=$('police'); pk.querySelector('b').textContent=''; pk.querySelector('.pk-knock').textContent=''; } finShow(k); }
-  if(FIN.phase===0 && !FIN.said && finClock>3){ FIN.said=true; say('force',T('m_final')); captionTimer=5; }
+  if(FIN.phase===0 && !FIN.said && finClock>3){ FIN.said=true; say('force',T('m_final'),0); captionTimer=5; }
+  if(FIN.phase===0&&!FIN.grabSaid&&finClock>7){FIN.grabSaid=true;say('force',T('m_finalGrab'),0);captionTimer=3;}
   if(FIN.phase===0){ finClock+=dt; if(finClock>FIN_LEN){ FIN.phase=1; $('monitor').classList.add('nosignal'); SFX.staticOn(); S.signalLost=1; finQueue('fin1',1.4); } }
   if(FIN.phase===7 && since>3.2) $('protoNext').hidden=false;
   if(FIN.phase===8 && since>2.4) finEnter(9);
 }
 document.getElementById('finNext').onclick=finNext;
 /* reading the protocol up close (Outlast-style): click the paper, click again (or any key) to put it down */
-function readDoc(v){ $('readDoc').hidden=!v; if(v) SFX.click&&SFX.click(); }
+function readDoc(v){$('readDoc').hidden=!v;if(v){SFX.click&&SFX.click();const body=$('readDoc').querySelector('.rd-in');body.tabIndex=0;body.scrollTop=0;body.focus();}else $('protocol').focus({preventScroll:true});}
 document.getElementById('protocol').onclick=()=>readDoc(true);
 document.getElementById('readDoc').onclick=()=>readDoc(false);
 document.getElementById('protoNext').onclick=()=>{ if(FIN.active && FIN.phase===7) finEnter(8); };

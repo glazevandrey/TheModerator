@@ -189,7 +189,7 @@ ru:{
   legBan:'БАНЬ ИХ:', legTroll:'тролли', legSpam:'спам-боты', legHim:'жуткие', legKeep:'НЕ ТРОГАЙ:', legViewers:'зрители',
   adNA:'Реклама сейчас недоступна', adBlockNote:'Бонусы за рекламу (×2 монеты, продолжить) отключены: включён блокировщик рекламы.',
   rateTxt:'Нравится игра? Оцени её на itch и напиши пару слов — это очень помогает маленькой инди-игре.', rateLink:'Оценить ★',
-  noteMonLbl:'листок на её окне, с твоей записи', noteMonTxt:'Ты же помнишь, что будет дальше?', tipNoteMon:'К её окну что-то приклеили. Запиши это кнопкой ХАЙЛАЙТ, пока жалюзи открыты. Что там написано, увидишь после стрима.',
+  noteMonLbl:'листок на её окне, с твоей записи', noteMonTxt:'Ты уедешь. Я останусь рядом.', tipNoteMon:'К её окну что-то приклеили. Запиши это кнопкой ХАЙЛАЙТ, пока жалюзи открыты. Что там написано, увидишь после стрима.',
   photoTitle:'window_0808.jpg', photoOpen:'Открыть фото',
   photoText:'Фото из записки. Снято снаружи, через её окно, сразу после вчерашнего стрима. Мия за столом, спиной к стеклу, на мониторе — её стрим.\nКто-то стоял у неё под окном. Достаточно близко, чтобы это снять.',
   close:'Закрыть', archiveTitle:'АРХИВ', lastFile:'LAST_STREAM.mp4', police:'ПОЛИЦИЯ! ОТКРЫВАЙ!', finSelfMsg:'спасибо, модер.', finBanAsk:'Stranger_99 всё ещё в чате. Забань его.', finSelfSys:'⚠ Нельзя забанить самого себя.', youTag:'это ты', finSelf:'Stranger_99 — твой аккаунт.\nВсе эти ночи ей писал ты.', photoFile:'окно.jpg', readHint:'нажми на лист, чтобы прочитать', readClose:'нажми в любом месте, чтобы отложить', finNext:'Дальше',
@@ -202,7 +202,8 @@ ru:{
 }};
 function T(k,vars){
   let v=(STR[LANG]&&STR[LANG][k]); if(v===undefined) v=STR.en[k]; if(v===undefined) return k;
-  if(Array.isArray(v) && !/^(e_|di_)/.test(k)) v=pick(v);
+  if(Array.isArray(v) && !/^(e_|di_)/.test(k)) v=typeof freshLine==='function'?freshLine(v,'str:'+k):pick(v);
+  if(typeof narrativeReaction==='function')v=narrativeReaction(k,v);
   if(typeof v==='string' && vars) v=v.replace(/\{(\w+)\}/g,(_,n)=>vars[n]!==undefined?vars[n]:'');
   return v;
 }

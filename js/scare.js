@@ -49,7 +49,7 @@ function scareGlassSlam(){ if(!SCARES) return false; sp('glass_slam',1,-.5); lat
 /* 3 bulb: called from lighting.js when a lamp burns out */
 function scareBulb(z){
   if(!SCARES) return false; sp('bulb_pop',1,ZPAN2[z]||0); S.glitch=.35; S.shake=.25;
-  if(S.st.stage!==z) S.fxEyes={zone:z,t:1.3};
+  /* The pop is electrical; no second pair of eyes appears elsewhere. */
   memeSay('scare',.35,1600,true);
   return true;
 }

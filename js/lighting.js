@@ -43,6 +43,6 @@ function toggleBlinds(){
     S.st.p=.05; S.st.boostT=0; S.st.aggr=Math.min(2.4,S.st.aggr+.05); SFX.thud(); floaty(T('f_frame')); tip('frame',T('tipFrame'));
   } else if(S.st.stage==='window'){
     stalkerRetreat('hidden'); S.st.aggr=Math.min(2.4,S.st.aggr+.05); SFX.thud(); floaty(T('f_gone'));
-    later(()=>stalkerSay(C().STALKER.blinds),1800);
+    later(()=>stalkerSay(stalkerPool('blinds')),1800);
   } else say('blinds',T('m_blinds'),10);
 }

@@ -32,6 +32,12 @@ function seated(c,x,y,s){ // silhouette sitting in the armchair
   c.fillRect(-16*s,28*s,32*s,10*s); c.restore();
 }
 
+/* A hooded jacket on a hook: human-looking in shadow, seams visible under a lamp. */
+function shadowCoat(c,x,y,s){
+  c.save();c.translate(x,y);c.scale(s,s);c.fillStyle='#151219';
+  c.beginPath();c.moveTo(-5,-4);c.lineTo(5,-4);c.lineTo(8,7);c.lineTo(18,12);c.lineTo(23,36);c.lineTo(14,38);c.lineTo(12,24);c.lineTo(12,48);c.lineTo(-12,48);c.lineTo(-12,24);c.lineTo(-14,38);c.lineTo(-23,36);c.lineTo(-18,12);c.lineTo(-8,7);c.closePath();c.fill();
+  c.strokeStyle='#51464d';c.lineWidth=.65;c.beginPath();c.moveTo(0,8);c.lineTo(0,47);c.moveTo(-5,0);c.lineTo(0,6);c.lineTo(5,0);c.stroke();c.restore();
+}
 // ---------- room
 function drawRoom(c){
   const st=S.st; eyes=[];
@@ -64,6 +70,7 @@ function drawRoom(c){
     const p=st.p, s=.55+1.15*p, hx=58+Math.sin(S.t*.7)*2*(1-p), hy=92-38*p;
     if(has('stalker_window')) c.drawImage(IMG.stalker_window,hx-25*s,hy-12*s,50*s,110*s); else figure(c,hx,hy,s);
     eyes.push({x:hx,y:hy-.5*s,s,zone:'window'});
+    if(!S.tut.active&&['fri','sat','sun','mon2'].includes(DY().key)&&p>.45&&p<.72){c.fillStyle='#11141b';c.fillRect(hx+8*s,hy+18*s,3*s,5*s);c.fillStyle='rgba(131,155,180,.24)';c.fillRect(hx+8.4*s,hy+18.5*s,2.2*s,3.7*s);}
     if(p>.72){ // palms pressed flat against the glass, fingers up, a little fog around them
       const a=Math.min(1,(p-.72)/.12);
       for(const sg of [-1,1]){ const px=hx+sg*13*s, py=hy+11*s;
@@ -75,20 +82,22 @@ function drawRoom(c){
   }
   else if(S.fxPass>0){   /* scare 8: Monday hook - something passes behind the glass */
     const k=1-S.fxPass/2.4, hx=20+k*66, hy=84; c.save(); c.beginPath(); c.rect(18,28,70,68); c.clip(); figure(c,hx,hy,.8); c.restore(); eyes.push({x:hx,y:hy-.4,s:.8,zone:'window'}); }
-  if(S.decoy && S.decoy.zone==='window'){ c.globalAlpha=.85; figure(c,60,76,1.25); c.globalAlpha=1; }   // decoy: same shape, no eyes
+  if(S.decoy && S.decoy.zone==='window'){ c.globalAlpha=.85; shadowCoat(c,60,76,1.25); c.globalAlpha=1; }   // decoy: same shape, no eyes
   if(S.winOpen){ // the left sash is open: night air, a draught in the curtains
     const sw=Math.sin(S.t*2.6);   // the left sash swung inwards: a dark gap with night air, the frame turned towards us
     c.fillStyle='#05070d'; c.fillRect(19,29,33,32); c.fillStyle='rgba(120,140,190,.10)'; c.fillRect(19,29,33,32);
     c.strokeStyle='rgba(170,190,230,.18)'; c.lineWidth=.5; for(let i=0;i<3;i++){ const yy=36+i*8+sw*1.5; c.beginPath(); c.moveTo(24,yy); c.quadraticCurveTo(34,yy-2,46,yy+1); c.stroke(); }
     c.fillStyle='#4a4048'; c.beginPath(); c.moveTo(18,28); c.lineTo(31,24); c.lineTo(31,63); c.lineTo(18,62); c.closePath(); c.fill();
     c.fillStyle='rgba(90,110,150,.35)'; c.beginPath(); c.moveTo(20,30); c.lineTo(29,27); c.lineTo(29,60); c.lineTo(20,60); c.closePath(); c.fill(); }
-  if(S.ev.note){ // Monday / Friday: a sheet of paper taped to the glass
+  if(S.ev.note || S.ev.noteFly>0){ /* Captured paper peels away only after its frame has been saved. */
+    c.save(); if(S.ev.noteFly>0){const p=1-S.ev.noteFly/1.4;c.translate(12*p,65*p*p);c.translate(36,72);c.rotate(p*1.1);c.scale(1-p*.2,1-p*.2);c.translate(-36,-72);c.globalAlpha=1-p;}
     const mon=S.night&&S.night.key==='mon';   /* Monday: just a handwritten line; Friday: the one with the photo */
     if(has('window_note')&&!mon) c.drawImage(IMG.window_note,26,58,22,28);
     else { c.save(); c.translate(36,72); c.rotate(-.08); c.fillStyle='#d9d2c0'; c.fillRect(-10,-13,20,26); c.fillStyle='rgba(255,255,255,.5)'; c.fillRect(-3,-15,6,3);
       c.strokeStyle='#3a3030'; c.lineWidth=.6; for(let i=0;i<5;i++){ c.beginPath(); c.moveTo(-7,-8+i*4); c.lineTo(-7+[13,10,14,8,11][i],-8+i*4+(i%2?.4:-.3)); c.stroke(); }
       if(!mon){ c.fillStyle='#2b2224'; c.beginPath(); c.arc(1,7,3,0,7); c.fill(); c.fillRect(-2,9,6,3); } c.restore(); }
   }
+  if(S.ev.note || S.ev.noteFly>0)c.restore();
   if(S.blinds.anim>.01){ const hh=68*S.blinds.anim; c.fillStyle='#8a8070'; c.fillRect(18,28,70,hh); c.fillStyle='#5d564b'; for(let y=28;y<28+hh;y+=3.5) c.fillRect(18,y,70,.8); }
   c.restore();
   c.fillStyle='#4a4048'; c.fillRect(15,25,76,3.5); c.fillRect(15,95,76,4); c.fillRect(15,25,3.5,74); c.fillRect(87.5,25,3.5,74); c.fillRect(52,28,2,68); c.fillRect(18,61,70,1.6);
@@ -120,7 +129,7 @@ function drawRoom(c){
   const gap = 1.2+cp*24;
   c.fillStyle='#3e2e26'; rr(c,120,22,68,118,2); c.fill(); c.fillStyle='#2e221c'; c.fillRect(120,22,68,4);
   c.fillStyle='#030203'; c.fillRect(154,27,gap,110);
-  if((st.stage==='behind' && st.p<.45) || st.stage==='closet' || dzc){ c.save(); c.beginPath(); c.rect(154,27,gap,110); c.clip(); const hx=160+cp*5, hy=56; figure(c,hx,hy,1.1+.2*cp); c.restore();
+  if((st.stage==='behind' && st.p<.45) || st.stage==='closet' || dzc){ c.save(); c.beginPath(); c.rect(154,27,gap,110); c.clip(); const hx=160+cp*5, hy=56; if(dzc&&st.stage!=='closet'&&st.stage!=='behind')shadowCoat(c,hx,hy,1.1+.2*cp);else figure(c,hx,hy,1.1+.2*cp); c.restore();
     if(gap>6 && !(dzc && st.stage!=='closet' && st.stage!=='behind')) eyes.push({x:hx,y:hy-.5,s:1.2,zone:st.stage==='closet'?'closet':'behind'}); }
   for(const [x,w] of [[123,31],[154+gap,Math.max(0,31-gap*.5)]]){ if(w<=0) continue; c.fillStyle=lg(c,x,0,x+w,0,[[0,'#56402f'],[1,'#4a3628']]); c.fillRect(x,27,w,110);
     c.strokeStyle='rgba(0,0,0,.3)'; c.lineWidth=.8; c.strokeRect(x+3,32,w-6,46); c.strokeRect(x+3,84,w-6,48); }
@@ -150,7 +159,7 @@ function drawRoom(c){
   const dzd = S.decoy && S.decoy.zone==='door' && st.stage!=='door';
   const dp = st.stage==='door' ? st.p : dzd ? .45 : 0;
   if(dp>0){ const hx=262+dp*4, hy=58-dp*4, s=1+.35*dp; c.save(); c.beginPath(); c.rect(246,30,46,110); c.clip();
-    if(has('stalker_door')) c.drawImage(IMG.stalker_door,hx-25*s,hy-12*s,50*s,110*s); else figure(c,hx,hy,s); c.restore(); if(!dzd) eyes.push({x:hx,y:hy-.5,s,zone:'door'}); }
+    if(dzd)shadowCoat(c,hx,hy,s);else if(has('stalker_door')) c.drawImage(IMG.stalker_door,hx-25*s,hy-12*s,50*s,110*s); else figure(c,hx,hy,s); c.restore(); if(!dzd) eyes.push({x:hx,y:hy-.5,s,zone:'door'}); }
   const dw=46*(1-dp*.8);
   c.fillStyle=lg(c,292-dw,0,292,0,[[0,'#5a4d55'],[1,'#6a5c64']]); c.fillRect(292-dw,30,dw,110);
   if(dw>12){ c.strokeStyle='rgba(0,0,0,.3)'; c.lineWidth=.8; c.strokeRect(292-dw+4,36,dw-8,40); c.strokeRect(292-dw+4,84,dw-8,50); }
@@ -166,7 +175,7 @@ function drawRoom(c){
   }
   // ARMCHAIR in the corner (Wednesday: someone sits in it)
   c.fillStyle='#3d3040'; rr(c,296,96,30,42,6); c.fill(); c.fillStyle='#4a3a4e'; rr(c,300,112,26,16,4); c.fill(); c.fillStyle='#2e2430'; rr(c,294,110,8,26,3); c.fill();
-  if(S.ev.chairShow>0){ if(has('stalker_chair')) c.drawImage(IMG.stalker_chair,296,84,30,50); else seated(c,312,100,1); eyes.push({x:312,y:99.5,s:1,zone:'chair'}); }
+  if(S.ev.chairShow>0){shadowCoat(c,312,98,.7);}
 
   // BEHIND MIA (out of the closet)
   if(st.stage==='behind' && st.p>=.45){ const k=(st.p-.45)/.55, hx=170+k*6+Math.sin(S.t*2)*1, hy=70-k*6, s=1.8+.8*k;
@@ -287,7 +296,7 @@ function drawMia(c){
     c.fillStyle=LOOK.phones; c.beginPath(); c.moveTo(sgn*12.5,-21.5); c.lineTo(sgn*19.5,-29); c.lineTo(sgn*20,-19.5); c.closePath(); c.fill(); }
   c.strokeStyle='#2a2530'; c.lineWidth=3.4; c.beginPath(); c.arc(0,-3,24,Math.PI*1.08,Math.PI*1.92); c.stroke();
   c.fillStyle='#2a2530'; rr(c,-28,-7,9,16,3.5); c.fill(); rr(c,19,-7,9,16,3.5); c.fill();
-  c.fillStyle=LOOK.phones; rr(c,-26.5,-4,5.5,10,2.5); c.fill(); rr(c,21,-4,5.5,10,2.5); c.fill();
+  c.fillStyle=LOOK.phones; rr(c,-26.5,-4,5.5,10,2.5); c.fill(); rr(c,21,-4,5.5,10,2.5); c.fill();headphoneStar(c,-18,-24,2);
   c.fillStyle='rgba(233,182,94,.9)'; c.beginPath(); c.arc(-23.7,5.4,.8,0,7); c.fill();
   // star hair clip
   c.fillStyle='#e9b65e'; c.beginPath(); for(let i=0;i<10;i++){ const r=i%2?1.2:2.8, a=-Math.PI/2+i*Math.PI/5; c.lineTo(12+Math.cos(a)*r,-14+Math.sin(a)*r); } c.closePath(); c.fill();
@@ -392,7 +401,7 @@ function drawMiaArt(c,ex,jx,br){
   const trem = ex==='panic' ? Math.sin(S.t*29)*.22+Math.sin(S.t*17)*.12 : 0;  /* a fine shiver, no random jumps */
   const [x,y,w,h]=miaArtRect();
   c.drawImage(img,x,y,w,h); if(trem) c.drawImage(cutOf(img),x+trem,y,w,h); S.artRect=[x,y,w,h,img];
-  const k=w/ART_W, P=(px,py)=>[x+px*k,y+py*k];
+  const k=w/ART_W, P=(px,py)=>[x+px*k,y+py*k];headphoneStar(c,x+185*k,y+68*k,6*k);
   if(own) return;
   const mouth=(rx,ry)=>{ const [mx,my]=P(312,247); c.fillStyle='#5e2230'; c.beginPath(); c.ellipse(mx,my,rx*k,ry*k,0,0,7); c.fill(); c.fillStyle='#b8606e'; c.beginPath(); c.ellipse(mx,my+ry*.45*k,rx*.55*k,ry*.3*k,0,0,7); c.fill(); };
   const sweat=()=>{ const [sx,sy]=P(398,166); c.fillStyle='rgba(185,215,240,.9)'; c.beginPath(); c.moveTo(sx,sy-8*k); c.quadraticCurveTo(sx+6*k,sy+3*k,sx,sy+5*k); c.quadraticCurveTo(sx-6*k,sy+3*k,sx,sy-8*k); c.fill(); };
@@ -474,22 +483,26 @@ function drawPhotoBack(cv){
 // ---------- finale footage LAST_STREAM.mp4 (11.08): Mia at her desk, he comes his usual way, she runs,
 // he sits down in her chair and puts on her headphones
 let finClock=0; const FIN_LEN=14;
+function headphoneStar(c,x,y,r){
+  c.save();c.translate(x,y);c.fillStyle='#d9b25f';c.beginPath();
+  for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,k=i%2?r*.43:r;i?c.lineTo(Math.cos(a)*k,Math.sin(a)*k):c.moveTo(Math.cos(a)*k,Math.sin(a)*k);}c.closePath();c.fill();c.restore();
+}
 function catPhones(c,a){ // Mia's cat-ear headphones in local head space (head ≈ r24 at 0,-2)
   c.save(); c.globalAlpha=a;
   for(const sgn of [-1,1]){ c.fillStyle='#2a2530'; c.beginPath(); c.moveTo(sgn*10,-21); c.lineTo(sgn*21,-33); c.lineTo(sgn*22,-17); c.closePath(); c.fill();
     c.fillStyle=LOOK.phones; c.beginPath(); c.moveTo(sgn*12.5,-21.5); c.lineTo(sgn*19.5,-29); c.lineTo(sgn*20,-19.5); c.closePath(); c.fill(); }
   c.strokeStyle='#2a2530'; c.lineWidth=3.4; c.beginPath(); c.arc(0,-3,24,Math.PI*1.08,Math.PI*1.92); c.stroke();
   c.fillStyle='#2a2530'; rr(c,-28,-7,9,16,3.5); c.fill(); rr(c,19,-7,9,16,3.5); c.fill();
-  c.fillStyle=LOOK.phones; rr(c,-26.5,-4,5.5,10,2.5); c.fill(); rr(c,21,-4,5.5,10,2.5); c.fill();
+  c.fillStyle=LOOK.phones; rr(c,-26.5,-4,5.5,10,2.5); c.fill(); rr(c,21,-4,5.5,10,2.5); c.fill();headphoneStar(c,-18,-24,2);
   c.restore();
 }
 function renderFinaleFrame(){
   if(S.finReflect!=null){ renderReflection(); return; }
   // LAST_STREAM.mp4, 11.08: Mia at her desk, a shape at the window, she notices… the feed dies, and comes back on an empty room
   const t=finClock, st=S.st;
-  if(t>=2 && t<8.6){ st.stage='window'; st.p=Math.min(.85,(t-2)/5); st.red=false; } else { st.stage='hidden'; st.p=0; }
-  const miaHere = t<8.6, cut = t>=8.6 && t<10.6;
-  const realPanic=S.panic; S.panic = t<4.5?6 : t<6.5?55 : 92; if(t>4.5&&t<4.7) S.mia.surpriseT=1.2; S.mia.look = t>4.5 ? -1 : 0; S.mia.ex=null; S.mia.exLv=0; captionTimer=0; MOUTH.segs.length=0;   /* the clock is stopped: no sticky faces, no talking */
+  if(t>=2&&t<6.2){st.stage='window';st.p=Math.min(.8,(t-2)/5);}else if(t>=6.2&&t<7.2){st.stage='door';st.p=.65;}else if(t>=7.2&&t<8.6){st.stage='behind';st.p=.8;}else{st.stage='hidden';st.p=0;}st.red=false;
+  const miaHere=t<7.6,cut=t>=8.6&&t<10.6;S.pullK=t>=7.6&&t<8.6?Math.min(1,(t-7.6)/.9):null;
+  const realPanic=S.panic; S.panic = t<4.5?6 : t<6.5?55 : 92; if(t>4.5&&t<4.7) S.mia.surpriseT=1.2; S.mia.look = t>4.5 ? -1 : 0; S.mia.ex=null; S.mia.exLv=0; MOUTH.segs.length=0;   /* the clock is stopped: no sticky faces, no talking */
   S.finaleEmpty=!miaHere; drawRoom(ctx); S.finaleEmpty=true; S.panic=realPanic;
   dctx.globalCompositeOperation='source-over'; dctx.clearRect(0,0,W,H); dctx.fillStyle='rgba(6,4,8,0.72)'; dctx.fillRect(0,0,W,H);
   dctx.globalCompositeOperation='destination-out';
@@ -518,6 +531,8 @@ function renderReflection(){
     const lg2=r.createRadialGradient(252,100,0,252,100,70); lg2.addColorStop(0,'rgba(240,190,120,.25)'); lg2.addColorStop(1,'rgba(240,190,120,0)'); r.fillStyle=lg2; r.fillRect(180,30,140,140);
     r.fillStyle='#3a2f2a'; r.fillRect(40,150,240,30);   // your desk
     r.fillStyle='#4a3a34'; r.fillRect(250,136,12,15); r.strokeStyle='#4a3a34'; r.lineWidth=2.5; r.beginPath(); r.arc(264,143,4,-1.2,1.2); r.stroke();   // mug
+    /* Dark glasses beside the phone: red lenses, the same equipment used outside. */
+    r.strokeStyle='#5e3739';r.lineWidth=1;r.strokeRect(70,146,6,3);r.strokeRect(78,146,6,3);r.beginPath();r.moveTo(76,147);r.lineTo(78,147);r.stroke();r.fillStyle='#6c292b';r.fillRect(71,147,4,1);r.fillRect(79,147,4,1);
     // her cat-ear headphones lying on your desk
     r.fillStyle='rgba(240,190,120,.10)'; r.beginPath(); r.ellipse(212,136,30,8,0,0,7); r.fill(); r.save(); r.translate(212,140); r.scale(1.25,.85); catPhones(r,1); r.restore();   // in the lamp light, by the mug
     r.setTransform(-1,0,0,1,reflCv.width,0); r.drawImage(reflCv,0,0); }   // mirrored, as in glass

@@ -131,7 +131,7 @@ function storyTick(dt){
   B.beats.forEach((b,i)=>{
     if(S.story.done[i]||d<b.at)return;S.story.done[i]=1;
     if(b.mia){S.story.pending.push(b.mia);S.storyLog.push({clock:clockStr(),text:b.mia});}
-    else if(b.stalker)stalkerSay(b.stalker,{name:'Stranger_99'});
+    else if(b.stalker)stalkerSay(b.stalker,{name:'Stranger_99',story:true});
     else if(b.glitch)storyGlitch(b.glitch);
     else if(b.chat)b.chat.forEach((t,j)=>later(()=>pushMsg('normal',REGULARS[j%REGULARS.length],t),j*900));
   });

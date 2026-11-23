@@ -52,13 +52,31 @@ function recentNormalName(){ const n=S.chat.filter(m=>m.type==='normal').slice(-
 let lastAct=-1e9; const markAct=()=>{ lastAct=performance.now(); };
 document.addEventListener('pointerdown',markAct,true); document.addEventListener('keydown',markAct,true);
 function stalkerIdle(){ if(S&&S.guide&&S.guide.active&&S.guide.phase==='ban')return false;return !S||!S.running||S.tut.active||performance.now()-lastAct>2600; }
-function stalkerSay(pool,opts){
-  if(!stalkerIdle()){ (S.stQ=S.stQ||[]).push({pool,opts,t:S.t}); return {}; }
-  const name = opts&&opts.name ? opts.name : Math.random()<.4 ? 'Stranger_99' : (Math.random()<.6 ? disguise(recentNormalName()) : genName());
+/* All aliases share one speaker and one clock. Never drain a backlog frame by frame. */
+const STALKER_SAY_GAP=8;
+function stalkerEmit(pool,opts){
+  const name=opts&&opts.name?opts.name:Math.random()<.4?'Stranger_99':Math.random()<.6?disguise(recentNormalName()):genName();
   const m=pushMsg('stalker',name,typeof pool==='string'?pool:freshLine(pool,'stalker'),opts);
-  if(opts&&opts.read) m.read=true;
-  tip('creepy',T('tipCreepy'));
-  return m;
+  S.stLastSay=S.t;if(opts&&opts.read)m.read=true;tip('creepy',T('tipCreepy'));return m;
+}
+function stalkerPrune(){
+  S.stQ=(S.stQ||[]).filter(q=>(q.opts&&q.opts.story||S.t-q.t<=6&&q.stage===S.st.stage));
+}
+function stalkerFlush(){
+  if(!S||!S.running||!stalkerIdle()||S.t-(S.stLastSay??-1e9)<STALKER_SAY_GAP-1e-6)return {};
+  stalkerPrune();if(!S.stQ.length)return {};
+  const priority=S.stQ.findIndex(q=>q.opts&&q.opts.story),q=S.stQ.splice(priority<0?0:priority,1)[0];
+  return stalkerEmit(q.pool,q.opts);
+}
+function stalkerSay(pool,opts){
+  if(!S||!S.running)return {};
+  if(S.tut.active)return stalkerEmit(pool,opts);
+  stalkerPrune();const important=!!(opts&&opts.story);
+  const signature=typeof pool==='string'?pool:pool.join('\n');
+  const duplicate=S.stQ.find(q=>q.signature===signature);
+  if(duplicate){if(important)duplicate.opts=opts;return stalkerFlush();}
+  if(!important)S.stQ=S.stQ.filter(q=>q.opts&&q.opts.story);
+  S.stQ.push({pool,opts,t:S.t,stage:S.st.stage,signature});return stalkerFlush();
 }
 
 function chatTick(dt){
@@ -91,7 +109,7 @@ function chatTick(dt){
   if(S.t>(S.tutEnd||0)+10 && !S.tipsDone.anchor){ S.tipsDone.anchor=1; stalkerSay(stalkerPool('anchor'),{name:'Stranger_99'}); }
   /* once a night from Wednesday: the mod panel drops off the mobile network for a moment */
   if(!S.reconDone && S.t>S.len*.42 && NIGHTS.findIndex(n=>n.key===DY().key)>=2){ S.reconDone=true; pushMsg('sys','',T('reconnect')); }
-  if(S.stQ&&S.stQ.length&&stalkerIdle()){ const q=S.stQ.shift(); if(S.t-q.t<14) stalkerSay(q.pool,q.opts); }
+  stalkerFlush();
   st.msgT-=dt;
   if(st.msgT<=0){
     st.msgT=rnd(16,26)*(1-.35*d);

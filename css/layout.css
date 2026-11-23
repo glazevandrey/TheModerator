@@ -1,0 +1,557 @@
+/* THE MODERATOR — the desktop screen (layout C, 22.11.2026): grid, the line under the video, chat actions,
+   hints next to their element, subtitles. Built by js/layout.js. Loaded last: it wins over the older theme files.
+   Order kept from the prototype modules it replaced (pass → calm → layout C). */
+
+/* ---- photo evidence panel and the nick card (Friday) */
+#pxCard{position:fixed;z-index:100005;width:280px;background:#17121b;border:1px solid #5b4a66;border-radius:8px;padding:8px 10px;color:#eee6f4;font:13px/1.35 system-ui;box-shadow:0 6px 18px #0009;pointer-events:none}
+#pxCard b{display:block}#pxCard small{display:block;opacity:.6;margin-bottom:4px}#pxCard p{margin:3px 0;padding-left:6px;border-left:2px solid #4b3d56}#pxCard p.e{opacity:.6;border:0}
+.px-ev1{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}.px-evn{font-weight:800;color:#8a4f12}
+.px-evh{font:600 13px system-ui;padding:4px 10px;border-radius:6px;border:1px solid #7a6a4a;background:#3a3020;color:#f0d9a6;cursor:pointer}
+.px-ev2{margin-top:6px;padding-top:6px;border-top:1px solid #0002}.px-evb{display:flex;gap:10px;margin-top:5px}
+.px-evb button{flex:1;display:block!important;font:700 15px system-ui;padding:8px 12px;min-height:0!important;border-radius:8px;border:2px solid #c98fb0;background:#3a2236;color:#fff;cursor:pointer;text-align:left}
+.px-evb button+button{border-color:#8fb0d6;background:#22303e}
+.px-evb button small{display:block!important;font:500 12px system-ui;opacity:.8;margin-top:3px}.px-evb button:hover{filter:brightness(1.25)}
+.px-evu{margin:4px 0 0;font-size:12px;opacity:.7}
+#evidenceViewer.fph-on .paper{max-height:96vh;overflow-y:auto}
+#evidenceViewer.fph-on .fph-finds{font-size:13px;margin:4px 0}
+
+/* ---- chat lines, hints, subtitles */
+
+  /* chat a bit narrower, the note on its right */
+  html.clm #stage #chat{padding-right:200px;position:relative}
+  /* gone: big ban, big pin/hide, the permanent Q/E/X line, header key hint, Mia line above chat */
+  html.clm #chat .ux-moderation,html.clm #m2acts,html.clm #actBan,html.clm #chat .chathead .hint,html.clm #pxMia,html.clm #friBox{display:none!important}
+  /* plain lines */
+  html.clm #stage#stage#stage .msg{padding-right:78px!important;box-shadow:none!important;border:0!important;background:none}
+  html.clm #stage#stage#stage .msg.sel{background:#ffffff0d;padding-right:78px!important}
+  html.clm #stage#stage#stage .msg.sel:has(.cl-show){padding-right:78px!important}
+  html.clm #stage#stage#stage.mod2 .msg:hover:not(.sys):not(.donation):not(.deleted) .msgban,html.clm #stage#stage#stage.mod2 .msg.sel:not(.sys):not(.donation):not(.deleted) .msgban{display:inline-flex!important}   /* the ban button on Friday too */
+  html.clm .msg .m2eye,html.clm .msg .m2bar,html.clm .px-act,html.clm .px-nb,html.clm .px-nl{display:none!important}
+  html.clm .msg.m2-held .t{opacity:.55}
+  html.clm .msg.m2-held .t::after{content:" ⏳";opacity:.8;font-size:.85em}
+  html.clm .msg.fri-hl{box-shadow:inset 3px 0 #e9b65e!important}
+  html.clm .msg.cl-next .u::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#9fd39a;margin:0 6px 2px 0;vertical-align:middle;opacity:.85}
+  /* one ban on hover; on select: show + ban (absolute, the text never moves) */
+  html.clm .cl-act{position:absolute;right:76px;top:50%;transform:translateY(-50%);display:flex;gap:4px;visibility:hidden}
+  html.clm #stage .msg.sel:not(.deleted) .cl-act{visibility:visible}
+  html.clm .cl-act button{font:700 12px/1 "Rubik",system-ui;padding:6px 9px;border-radius:6px;border:1px solid #7a3a3a;background:#3a1f22;color:#ffd9d9;cursor:pointer;white-space:nowrap}
+  html.clm .cl-act button:hover{background:#6a2a2a}
+  html.clm .cl-act .cl-show{display:none;border-color:#8a6a32;background:#3a3020;color:#f3dfae}
+  html.clm .cl-act .cl-show:hover{background:#5a4828}
+  html.clm #stage .msg.sel:not(.deleted) .cl-show{display:inline-block}
+  html.clm:not(.clm-m2) .cl-act .cl-show{display:none!important}
+  html.clm #stage .msg.sel:not(.deleted) .cl-act{background:linear-gradient(90deg,transparent,#1d1722 18px);padding-left:22px}
+
+  /* subtitles: a fixed band over the desk, not over the face or the window/closet/door */
+  html.clm #stage#stage#stage #streamPanel{position:relative}
+  html.clm #stage#stage#stage #prsCap{position:absolute;height:52px;background:none;border:0;z-index:6;pointer-events:none;padding:0 70px}
+  html.clm #stage#stage#stage #prsCap .caption{max-width:560px;padding:5px 14px;border-radius:8px;background:#0d0a10cc;font-size:18px;line-height:1.25;text-align:center;box-shadow:0 2px 8px #0008}
+  html.clm #stage#stage#stage #prsCap .caption b{color:#e9a0bf}
+  /* the hint by its element */
+  #clTip{position:absolute;z-index:9000;max-width:300px;padding:9px 12px;border-radius:9px;background:#f3e6bd;color:#2b2218;font:700 14px/1.3 "Nunito",system-ui;box-shadow:0 4px 14px #000a;pointer-events:none}
+  #clTip small{display:block;font:800 10px/1 "Rubik",system-ui;letter-spacing:.1em;color:#8a6a32;margin-bottom:4px}
+  #clTip::after{content:"";position:absolute;left:calc(var(--ax,50%) - 7px);bottom:-7px;border:7px solid transparent;border-bottom:0;border-top-color:#f3e6bd}
+  #clTip.below::after{bottom:auto;top:-7px;border:7px solid transparent;border-top:0;border-bottom-color:#f3e6bd}
+  #clTip[hidden]{display:none}
+
+/* ---- layout C */
+
+  /* grid: stream | chat over lights | home */
+  html.lvC #stage#stage#stage #screen{display:grid;grid-template-columns:1062px minmax(0,1fr);grid-template-rows:minmax(0,1fr) 126px;gap:10px;padding:10px}
+  html.lvC #stage#stage#stage .ux-upper,html.lvC #stage#stage#stage .ux-lower{display:contents}
+  html.lvC #stage#stage#stage #streamPanel{grid-column:1;grid-row:1;min-height:0}
+  html.lvC #stage#stage#stage #chat{grid-column:2;grid-row:1;min-height:0}
+  html.lvC #stage#stage#stage .mod.lighting{grid-column:1;grid-row:2;min-height:0}
+  html.lvC #stage#stage#stage .mod.smarthome{grid-column:2;grid-row:2;min-height:0}
+  html.lvC #stage#stage#stage .mod.actions,html.lvC #stage#stage#stage .glassnote{display:none!important}
+  html.lvC #stage#stage#stage .screenfx{position:absolute;inset:0;pointer-events:none}
+  /* stream: header, big video, the line */
+  html.lvC #stage#stage#stage #streamPanel{display:flex;flex-direction:column}
+  html.lvC #stage#stage#stage #video{flex:0 0 auto;width:100%;aspect-ratio:2/1;height:auto;position:relative}
+  html.lvC #stage#stage#stage .streambar{display:none}
+  html.lvC #stage#stage#stage .streamhead .tech,html.lvC #stage#stage#stage .streamhead .netbat{display:none}
+  /* record + clips in the video corner, viewers top-left */
+  html.lvC #stage#stage#stage #video #actRec{position:absolute;right:12px;top:12px;z-index:7;width:auto;height:auto;min-height:0;padding:7px 12px;gap:8px;border-radius:9px;
+    background:#120d16cc;border:1px solid #ffffff22;box-shadow:none;display:flex;align-items:center}
+  html.lvC #stage#stage#stage #video #actRec b,html.lvC #stage#stage#stage #video #actRec .tx b{font:600 15px/1 "Nunito",system-ui;letter-spacing:0;text-transform:none;color:#f1e6f3}
+  html.lvC #stage#stage#stage #video #actRec small{font:700 11px/1 "Rubik",system-ui;padding:3px 6px;border-radius:5px;background:#ffffff1a;color:#e8dcef;margin:0}
+  html.lvC #stage#stage#stage #video #actRec .i,html.lvC #stage#stage#stage #video #actRec svg{width:20px;height:20px}
+  html.lvC #stage#stage#stage #video #actRec>*:not(.tx):not(svg):not(small):not(b){display:none}
+  html.lvC #stage#stage#stage #video #actRec.rec,html.lvC #stage#stage#stage #video #actRec.on{border-color:#e05a5a;background:#3a1418dd}
+  #lcClips{position:absolute;right:12px;bottom:12px;z-index:7;display:flex;align-items:center;gap:6px;padding:6px 9px;border-radius:9px;background:#120d16bb;border:1px solid #ffffff1f;color:#e8dcef;font:700 13px "Rubik",system-ui;cursor:pointer}
+  #lcClips .i{width:18px;height:18px}#lcClips.has{border-color:#e9b65e;color:#f3dfae}
+  #lcViewers{position:absolute;left:12px;top:12px;z-index:7;display:flex;align-items:center;gap:7px;padding:5px 10px;border-radius:9px;background:#120d16aa;color:#f3dfae;font:700 15px "Rubik",system-ui;pointer-events:none}
+  #lcViewers .i{width:18px;height:18px;color:#e9b65e}
+  /* the line under the video */
+  #lcBar{display:flex;align-items:center;gap:16px;min-height:40px;padding:6px 6px 0;flex:1 1 auto}
+  #lcMia{display:flex;align-items:center;flex-wrap:wrap;gap:4px 7px;min-width:360px;font:600 15px/1.2 "Nunito",system-ui;color:#e9dff0}
+  #lcMia .lc-who{font-weight:800;color:#f3c6da}#lcMia .lc-sep{opacity:.5}
+  #lcMia .lc-dot{width:9px;height:9px;border-radius:50%;background:#9fd39a;box-shadow:0 0 8px currentColor}
+  #lcMia.tense .lc-dot{background:#e9b65e}#lcMia.edge .lc-dot{background:#e05a5a}
+  #lcMia.edge .lc-st{color:#ff9d94}#lcMia.doubt .lc-tr{color:#e9b65e}#lcMia.lost .lc-tr{color:#ff9d94}
+  #lcMia .lc-pan{flex:0 0 100%;position:relative;display:flex;gap:3px;height:5px;margin-top:3px;max-width:340px}
+  #lcMia .lc-pan i{flex:1;border-radius:3px;background:#ffffff14}
+  #lcMia .lc-pan em{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:linear-gradient(90deg,#9fd39a,#e9b65e 55%,#e05a5a);opacity:.9;transition:width .4s}
+  #lcTask{margin-left:auto;display:flex;align-items:baseline;gap:8px;max-width:600px;min-width:0;justify-content:flex-end;text-align:right}
+  #lcTask small{font:800 10px "Rubik",system-ui;letter-spacing:.12em;color:#b39466}
+  #lcTask .lc-t{font:700 16px "Nunito",system-ui;color:#f3dfae;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #lcTask .lc-s{font:600 13px "Nunito",system-ui;color:#bcaec4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #lcTask .lc-ev{align-self:center;font:700 13px "Nunito",system-ui;padding:5px 10px;border-radius:7px;border:1px solid #8a6a32;background:#3a3020;color:#f3dfae;cursor:pointer}
+  #lcTask .lc-ev[hidden]{display:none}
+  #lcTask.new .lc-t{animation:lcNew 1.2s ease-out}@keyframes lcNew{0%{color:#fff;text-shadow:0 0 12px #e9b65e}100%{text-shadow:none}}
+  /* the old note card, the trust row and the chat foot text are replaced */
+  html.lvC #stage#stage#stage .cl-note,html.lvC #stage#stage#stage .trustrow,html.lvC #stage#stage#stage #chatfoot{display:none!important}
+  html.lvC #stage#stage#stage #chat{padding-right:0!important}
+  /* chat */
+  html.lvC #stage#stage#stage .chathead .activity,html.lvC #stage#stage#stage .chathead .newcount{display:none}
+  #lcChatFoot{display:flex;align-items:center;gap:10px;padding:8px 12px;border-top:1px solid #ffffff14;font:600 13px "Nunito",system-ui;color:#cbbfd2}
+  #lcChatFoot .sp{flex:1}#lcChatFoot .toxbar{display:flex;align-items:center;gap:8px;margin:0}
+  html.lvC #stage#stage#stage #chatlist{flex:1 1 auto;min-height:0}
+  /* chat actions (22.11, analyst's scheme): hover → a small calm «Бан» at the right; click → the line stays selected and
+     «Показать Мие» appears to the LEFT of «Бан». «Бан» never moves: the same corner in both states. Hover changes no heights:
+     the right edge of every line is reserved for it; only a click (a deliberate choice) widens the reserve */
+  html.lvC #stage#stage#stage .msg{position:relative;padding-right:64px!important}
+  html.lvC #stage#stage#stage .msg.sel:not(.deleted):not(.banned){padding-right:64px!important}
+  html.lvC.clm-m2 #stage#stage#stage .msg.sel:not(.deleted):not(.banned){padding-right:200px!important}
+  /* Stranger_99 once unmasked: the old theme gave him a yellow plate with dark text; the plate is gone in C, the text stayed dark */
+  html.lvC #stage#stage#stage .chat .msg.unmasked:not(.isyou){background:linear-gradient(90deg,#5a1c1c66,#2a121433)!important;box-shadow:inset 2px 0 0 #c4473d;color:#efdcd4!important}
+  html.lvC #stage#stage#stage .chat .msg.unmasked:not(.isyou) .u{color:#ff8f7a!important}
+  html.lvC #stage#stage#stage .chat .msg.unmasked:not(.isyou) .t,html.lvC #stage#stage#stage .chat .msg.unmasked:not(.isyou) .body{color:#efdcd4!important}
+  html.lvC #stage#stage#stage .msg .cl-act{position:absolute!important;top:6px!important;right:8px!important;left:auto!important;transform:none!important;display:flex;flex-direction:row;align-items:center;gap:6px;width:auto;margin:0;padding:0!important;background:none!important;visibility:hidden;z-index:2}
+  html.lvC #stage#stage#stage .msg:hover:not(.deleted):not(.banned) .cl-act,html.lvC #stage#stage#stage .msg.sel:not(.deleted):not(.banned) .cl-act{visibility:visible}
+  html.lvC #stage#stage#stage .msg.deleted .cl-act,html.lvC #stage#stage#stage .msg.banned .cl-act{display:none}
+  html.lvC #stage#stage#stage .msg.sel{background:#ffffff0f;border-radius:10px}
+  html.lvC #stage#stage#stage .msg .cl-act button{flex:0 0 auto;font:700 12px/1 "Nunito",system-ui;padding:6px 10px;border-radius:7px;white-space:nowrap}
+  /* «Показать Мие» is the main action: filled; «Бан» is secondary: a quiet outline */
+  html.lvC #stage#stage#stage .msg .cl-act .cl-show{display:none;font-size:13px;padding:7px 14px;background:#6a5784;border:1px solid #8d79a8;color:#f6eefc}
+  html.lvC.clm-m2 #stage#stage#stage .msg.sel .cl-act .cl-show{display:block}
+  html.lvC #stage#stage#stage .msg .cl-act .cl-show.lc-off{opacity:.6;cursor:default;background:#3a3346;border-color:#5a4d68}
+  /* ban: compact, right-aligned; it does not stretch when it is alone */
+  html.lvC #stage#stage#stage .msg .cl-act{justify-content:flex-end}
+  html.lvC #stage#stage#stage .msg .cl-act button.cl-ban{flex:0 0 auto;padding:6px 12px;font-size:13px}
+  html.lvC #stage#stage#stage .msg .cl-act .cl-ban{background:#3a1f24;border:1px solid #c4665a;color:#ffc9bd;box-shadow:0 1px 6px #0006}
+  html.lvC #stage#stage#stage .msg .cl-act .cl-ban:hover{background:#d9674f33;border-color:#d9674f;color:#ffb3a3}
+  /* room: three zones in a strip */
+  html.lvC #stage#stage#stage .mod.lighting .modhead,html.lvC #stage#stage#stage .mod.smarthome .modhead,html.lvC #stage#stage#stage .shhint{display:none}
+  html.lvC #stage#stage#stage .lamp #actBlinds{display:none}
+  html.lvC #stage#stage#stage .mod.smarthome .shbtns>[hidden]{display:none!important}
+  /* the donation on Mia's screen (endless shift) */
+  html.lvC #stage#stage#stage #video #actDonate{position:absolute;left:12px;top:46px;max-width:220px;overflow:hidden;white-space:nowrap;z-index:7;width:auto;height:auto;min-height:0;margin:0;padding:6px 10px;gap:6px;border-radius:9px;font:700 13px "Nunito",system-ui;text-transform:none;letter-spacing:0;display:flex;align-items:center}
+  html.lvC #stage#stage#stage #video #actDonate[hidden]{display:none!important}
+  html.lvC #stage#stage#stage #video #actDonate .i{width:16px;height:16px}
+  html.lvC #stage#stage#stage #video #actDonate small,html.lvC #stage#stage#stage #video #actDonate .hcbar{display:none}
+  /* subtitles: no «Мия:» before every line, two lines at most */
+  html.lvC #stage#stage#stage #prsCap .caption b{display:none}
+  html.lvC #stage#stage#stage #prsCap .caption{max-width:620px;font-size:17px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  /* the endless shift: heat lines and five tools need a taller bottom row */
+  html.lvC #stage#stage#stage #screen{grid-template-rows:minmax(0,1fr) 172px;grid-template-columns:958px minmax(0,1fr)}   /* 23.11: the heat line is back in the campaign too */
+  html.lvC #stage#stage#stage:not(.camp) .mod.smarthome .shbtns>*{font-size:13px;padding:6px 8px;gap:6px}
+  html.lvC #stage#stage#stage:not(.camp) .mod.smarthome .shbtns>* .i{width:20px;height:20px}
+  html.lvC #stage#stage#stage:not(.camp) .lamp .modes .mk{min-height:30px}
+  /* the endless shift keeps HC next to toxicity */
+  html.lvC #stage#stage#stage.camp #lcChatFoot .coin,html.lvC #stage#stage#stage.camp #lcChatFoot #hcval{display:none!important}
+  html.lvC #stage#stage#stage:not(.camp) #lcChatFoot .coin,html.lvC #stage#stage#stage:not(.camp) #lcChatFoot #hcval{display:inline-flex!important}
+  #lcChatFoot .coin{font:800 11px 'Rubik',system-ui;color:#e9b65e}
+  #lcChatFoot .coin:empty::before{content:'HC'}
+  
+
+/* ---- the night's clips (js/layout.js clipsOpen) */
+#clipsView{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9500;width:min(720px,90%);max-height:90%;overflow:auto;padding:16px 18px;border-radius:14px;background:#17121bf2;border:1px solid #ffffff22;box-shadow:0 12px 40px #000c;color:#eee6f4;font:600 15px/1.35 "Nunito",system-ui}
+#clipsView[hidden]{display:none}
+#clipsView .cv-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+#clipsView .cv-head b{font:800 18px "Rubik",system-ui;color:#f3dfae}
+#clipsView .cv-x,#clipsView .cv-back{font:700 13px "Nunito",system-ui;padding:6px 12px;border-radius:8px;border:1px solid #ffffff2a;background:#241c2b;color:#e8dcef;cursor:pointer}
+#clipsView .cv-none{opacity:.75;margin:10px 0}
+#clipsView .cv-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#clipsView .cv-item{display:flex;gap:10px;align-items:center;text-align:left;padding:8px;border-radius:10px;border:1px solid #ffffff1a;background:#ffffff08;color:inherit;cursor:pointer;font:inherit}
+#clipsView .cv-item:hover{border-color:#e9b65e;background:#e9b65e14}
+#clipsView .cv-item img,#clipsView .cv-item i{width:128px;height:64px;object-fit:cover;border-radius:6px;background:#000;flex:0 0 auto}
+#clipsView .cv-item span{display:flex;flex-direction:column;gap:3px}#clipsView .cv-item small{opacity:.75;font-size:13px}
+#clipsView .cv-big img{display:block;width:100%;border-radius:8px;background:#000}
+#clipsView .cv-big p{margin:10px 0}
+#clipsView .cv-big .pbtn{margin-right:10px}
+
+
+/* ---- the new Monday (js/monday.js) */
+#monCold{position:absolute;inset:0;z-index:99990;background:#050407;display:grid;place-items:center;cursor:pointer}
+#monCold[hidden]{display:none}
+#monCold p{margin:0;max-width:900px;text-align:center;font:600 34px/1.45 "Nunito",system-ui;color:#e9dff0;letter-spacing:.01em;opacity:0}
+#monCold.go p{animation:monColdIn 3.9s ease forwards}
+@keyframes monColdIn{0%{opacity:0;transform:translateY(6px)}18%{opacity:1;transform:none}82%{opacity:1}100%{opacity:0}}
+#monPeonies{position:absolute;left:65%;bottom:2.5%;height:27%;pointer-events:none;filter:brightness(.78) saturate(.92) drop-shadow(0 6px 8px #0009)}
+#monPeonies[hidden]{display:none}
+html.lvC #stage#stage#stage .chat .msg.sys.modwhisper{margin:6px 0;padding:7px 10px;border-radius:6px;background:linear-gradient(90deg,#5a1c1c88,#2a121433);box-shadow:inset 3px 0 0 #c4473d}
+html.lvC #stage#stage#stage .chat .msg.sys.modwhisper .t{font:700 14px "Nunito",system-ui;font-style:normal;color:#ff9d8f}
+#video.mon-dark canvas,#video.mon-dark #monPeonies{filter:brightness(.28) saturate(.7);transition:filter 1.2s}
+
+/* ---- private messages with Mia between nights (js/dm.js) */
+#dmWin{position:absolute;inset:0;z-index:99980;display:grid;place-items:center;background:#07050acc;backdrop-filter:blur(3px)}
+#dmWin[hidden]{display:none}
+#dmWin .dm-box{width:560px;height:640px;display:flex;flex-direction:column;border-radius:16px;background:#17121b;border:1px solid #ffffff1f;box-shadow:0 20px 60px #000c;overflow:hidden;font:600 16px/1.4 "Nunito",system-ui;color:#eee6f4}
+#dmWin .dm-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid #ffffff14;background:#1e1724}
+#dmWin .dm-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#f3a6c8,#9b6fd1)}
+#dmWin .dm-head b{font:800 16px "Rubik",system-ui}#dmWin .dm-head small{margin-left:auto;opacity:.55;font-size:12px}
+#dmWin .dm-log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px}
+#dmWin .dm-b{max-width:78%;padding:9px 13px;border-radius:14px;animation:dmIn .25s ease}
+#dmWin .dm-b.mia{align-self:flex-start;background:#2c2234;border-bottom-left-radius:4px}
+#dmWin .dm-b.me{align-self:flex-end;background:#5a4a6e;border-bottom-right-radius:4px}
+#dmWin .dm-b.dm-typing{opacity:.6;font-style:italic}
+@keyframes dmIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#dmWin .dm-picks{display:flex;flex-direction:column;gap:8px;padding:12px 16px 16px;border-top:1px solid #ffffff14;min-height:60px}
+#dmWin .dm-pick{text-align:left;font:700 15px "Nunito",system-ui;padding:10px 14px;border-radius:10px;border:1px solid #8d79a8;background:#2a2133;color:#f6eefc;cursor:pointer}
+#dmWin .dm-pick:hover{background:#3a2d46}
+#dmWin .dm-next{align-self:flex-end}
+#clipsView .cv-imgw{overflow:hidden;border-radius:8px}
+#clipsView .cv-zoomable img{cursor:zoom-in;transition:transform .35s ease}
+#clipsView .cv-zoomable img.zoom{transform:scale(2.6);cursor:zoom-out}
+#clipsView .cv-find{margin:8px 0 0;font-size:14px;opacity:.85}#clipsView .cv-find.ok{color:#f3dfae;opacity:1;font-weight:800}
+#monCold p.red{color:#ff9d8f;font-size:30px}
+#clipsView .cv-imgw{max-width:480px;margin:0 auto}#clipsView .cv-imgw img{display:block;width:100%;height:auto}
+
+/* 23.11: the stream panel must not depend on font metrics. The header and the Mia/task bar get fixed heights,
+   the left column is a bit narrower so the 2:1 video leaves ~12px of slack (real Nunito/Rubik are taller than the fallback). */
+html.lvC #stage#stage#stage #streamPanel>.streamhead{flex:0 0 43px;height:43px;min-height:0;overflow:hidden}
+html.lvC #stage#stage#stage #lcBar{flex:0 0 40px;height:40px;min-height:0;overflow:hidden}
+html.lvC #stage#stage#stage #lcTask small,html.lvC #stage#stage#stage #lcTask .lc-t,html.lvC #stage#stage#stage #lcTask .lc-s{line-height:1.2}
+
+/* ==== the rest of the in-game screen in the bottom panel's plum palette (23.11). Colours only: no sizes, paddings
+   or borders change, so the layout stays exactly where it was. Overlays on «paper» (menu, pause, ends) are not touched. ==== */
+html.lvC #viewport{background:radial-gradient(ellipse at 70% 40%,#1d1522,#0c090e 70%)}
+/* the monitor shell: dark plum instead of grey-brown plastic */
+html.lvC #stage#stage#stage .monitor{background:linear-gradient(180deg,#2a2030,#1f1824 30%,#1a141e)!important;background-blend-mode:normal!important;
+  box-shadow:inset 0 1px 0 #ffffff12,inset 0 -6px 14px #0008,0 0 0 1px #0d0a10,0 14px 0 #110d14,0 40px 80px #000b!important}
+html.lvC #stage#stage#stage .monitor::after{display:none}
+html.lvC #stage#stage#stage .screen{background:var(--ui-bg)!important;box-shadow:inset 0 0 0 2px #0c090e,0 0 0 1px #ffffff10!important}
+/* panels: camera and chat get the same plum card as the bottom row */
+html.lvC #stage#stage#stage .mod.stream,html.lvC #stage#stage#stage .mod.chat{background:linear-gradient(180deg,var(--ui-panel-top),var(--ui-panel-bottom))!important;background-blend-mode:normal!important;
+  border-color:var(--cp-line)!important;box-shadow:inset 0 1px 0 #ffffff0a!important}
+html.lvC #stage#stage#stage .streamhead,html.lvC #stage#stage#stage .chathead{background:transparent!important;box-shadow:inset 0 -1px 0 var(--cp-line)!important}
+html.lvC #stage#stage#stage .streamhead .chan,html.lvC #stage#stage#stage .chathead b{color:var(--cp-text)!important}
+html.lvC #stage#stage#stage .chathead .i{color:var(--cp-icon)}
+html.lvC #stage#stage#stage .streamhead .daylbl{color:var(--cp-text2)!important}
+html.lvC #stage#stage#stage .live{background:#c2464b!important;box-shadow:none!important;color:#fff3f3!important}
+html.lvC #stage#stage#stage .clock{background:var(--cp-panel-bg)!important;box-shadow:inset 0 0 0 1px var(--cp-line)!important;color:var(--cp-amber)!important}
+html.lvC #stage#stage#stage .streamhead .iconkey{background:var(--cp-surface)!important;border-color:var(--cp-line)!important;color:var(--cp-text)!important;box-shadow:none!important}
+html.lvC #stage#stage#stage .streamhead .iconkey:hover{background:var(--cp-surface-h)!important}
+html.lvC #stage#stage#stage #video{box-shadow:0 0 0 1px var(--cp-line)!important}
+/* chat: a slightly deeper plum well, light text */
+html.lvC #stage#stage#stage .chat #chatlist{background:#160f1a!important;box-shadow:inset 0 0 0 1px #ffffff0d!important;scrollbar-color:#4a3a55 transparent}
+html.lvC #stage#stage#stage .chat #chatlist .msg{font-size:19px;line-height:1.4}
+html.lvC #stage#stage#stage .chat #chatlist .msg .body{color:var(--ui-text);font-weight:400;font-size:inherit;line-height:inherit}
+html.lvC #stage#stage#stage .chat #chatlist .msg .u{font-weight:600;font-size:inherit}
+html.lvC #stage#stage#stage .chat #chatlist .msg.sys,html.lvC #stage#stage#stage .chat #chatlist .sysline{color:var(--cp-text2)}
+html.lvC #stage#stage#stage .toxbar span{color:var(--cp-text2)!important}
+html.lvC #stage#stage#stage .toxbar .tb{background:#ffffff12!important;box-shadow:none!important}
+html.lvC #stage#stage#stage .toxbar strong{color:var(--cp-text)!important}
+/* Mia / task bar under the camera */
+html.lvC #stage#stage#stage #lcMia .lc-pan i{background:#ffffff12}
+html.lvC #stage#stage#stage #lcTask small{color:#c09a62}
+/* overlay buttons on the camera */
+html.lvC #stage#stage#stage #video #actRec{background:#221a26e6!important;border-color:var(--cp-line)!important}
+html.lvC #stage#stage#stage #video #actRec:hover{background:#30243ae6!important}
+/* bezel under the screen */
+html.lvC #stage#stage#stage .brandplate{background:var(--cp-surface)!important;box-shadow:inset 0 0 0 1px var(--cp-line)!important;color:#9b8ea8!important;text-shadow:none!important}
+html.lvC #stage#stage#stage .brandplate i{color:var(--cp-text2)!important}
+html.lvC #stage#stage#stage .bzb{background:var(--cp-surface)!important;border:1px solid var(--cp-line)!important;box-shadow:none!important;color:var(--cp-text)!important}
+html.lvC #stage#stage#stage .bzb:hover{background:var(--cp-surface-h)!important}
+html.lvC #stage#stage#stage .bzb:focus-visible,html.lvC #stage#stage#stage .langsw button:focus-visible{outline:2px solid var(--cp-amber);outline-offset:1px}
+html.lvC #stage#stage#stage .bezel-bottom .langsw{box-shadow:inset 0 0 0 1px var(--cp-line)!important}
+html.lvC #stage#stage#stage .bezel-bottom .langsw button{background:var(--cp-surface)!important;color:var(--cp-text2)!important;box-shadow:none!important}
+html.lvC #stage#stage#stage .bezel-bottom .langsw button.on{background:linear-gradient(var(--cp-amber),var(--cp-amber-d))!important;color:#2a1c0b!important}
+html.lvC #stage#stage#stage #systemPanel{background:var(--cp-panel-bg-top)!important;background-blend-mode:normal!important;border-color:var(--cp-line)!important;box-shadow:inset 0 1px 0 #ffffff08!important}
+
+/* ==================== BOTTOM CONTROL PANEL (lamps + actions), 23.11 ====================
+   One block, one set of variables. Everything for .mod.lighting / .mod.smarthome lives here; the upper screen
+   uses the same palette through --cp-*. Base styles from styles.css / visual-polish.css are overridden only here. */
+html.lvC #stage#stage#stage{
+  /* working palette (author's brief 23.11, not measured from the reference) */
+  --ui-bg:#130e17; --ui-panel-top:#241a29; --ui-panel-bottom:#1a131f; --ui-border:#49344c; --ui-divider:#50394f;
+  --ui-button-top:#443249; --ui-button-bottom:#322438; --ui-button-border:#654b69; --ui-button-hover-top:#523c58; --ui-button-hover-bottom:#3e2d44;
+  --ui-text:#f5e9df; --ui-text-secondary:#d0b5ca; --ui-text-muted:#a48ca8; --ui-icon:#e2a1c4;
+  --ui-gold-top:#f8cf79; --ui-gold-bottom:#eab047; --ui-gold-border:#ffdc91; --ui-gold-text:#291b11;
+  --ui-heat-track:#503d50; --ui-heat-normal:#cf8fb9; --ui-heat-hot:#f3bd52; --ui-danger:#f07973; --ui-success:#a8cd83;
+  /* the names the rest of this file uses, mapped onto the palette */
+  --cp-panel-bg:var(--ui-panel-bottom); --cp-panel-bg-top:var(--ui-panel-top); --cp-line:var(--ui-border); --cp-divider:var(--ui-divider);
+  --cp-surface:var(--ui-button-bottom); --cp-surface-top:var(--ui-button-top); --cp-surface-h:var(--ui-button-hover-bottom); --cp-border:var(--ui-button-border); --cp-border-h:#7a5d7e;
+  --cp-text:var(--ui-text); --cp-text2:var(--ui-text-secondary); --cp-icon:var(--ui-icon); --cp-coral:var(--ui-danger);
+  --cp-amber:var(--ui-heat-hot); --cp-amber-l:var(--ui-gold-top); --cp-amber-d:var(--ui-gold-bottom); --cp-on-amber:var(--ui-gold-text);
+  --cp-danger:var(--ui-danger); --cp-heat:var(--ui-heat-normal); --cp-heat-track:var(--ui-heat-track);
+  --cp-lock-bg:#1c1520; --cp-lock-line:#ffffff17; }
+
+/* panel surface: very dark plum, no noise, no corner rivets, no CRT lines on top */
+html.lvC #stage#stage#stage .mod.lighting,html.lvC #stage#stage#stage .mod.smarthome{
+  background:linear-gradient(180deg,var(--cp-panel-bg-top),var(--cp-panel-bg))!important;background-blend-mode:normal!important;
+  border:1px solid var(--cp-line)!important;border-radius:12px!important;box-shadow:inset 0 1px 0 #ffffff08!important}
+html.lvC #stage#stage#stage .mod.lighting{padding:8px 6px}
+html.lvC #stage#stage#stage .mod.lighting::before,html.lvC #stage#stage#stage .mod.smarthome::before{display:none}
+
+/* ---- lamps: one surface, three zones split by two thin lines */
+html.lvC #stage#stage#stage .mod.lighting .lamps{height:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:0;padding:0 6px}
+html.lvC #stage#stage#stage .lamp{display:flex;flex-direction:column;justify-content:flex-start;gap:0;padding:6px 18px;background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important}
+html.lvC #stage#stage#stage .lamp+.lamp{border-left:1px solid var(--cp-divider)!important}
+html.lvC #stage#stage#stage .lamp .lamptop{order:1;display:flex;align-items:center;gap:10px;margin:0;padding:0}
+html.lvC #stage#stage#stage .lamp .lamptop .bulb{display:none}
+html.lvC #stage#stage#stage .lamp .lamptop .zi{flex:0 0 28px;width:28px;height:28px;color:var(--cp-text);stroke-width:1.5}
+html.lvC #stage#stage#stage .lamp .lamptop b{font:600 21px/1.1 "Nunito",system-ui;letter-spacing:0;text-transform:lowercase;color:var(--cp-text)}
+html.lvC #stage#stage#stage .lamp .lamptop b::first-letter{text-transform:uppercase}
+html.lvC #stage#stage#stage .lamp .lamptop .k{margin-left:auto;min-width:26px;height:26px;display:grid;place-items:center;border-radius:6px;
+  background:linear-gradient(180deg,var(--cp-surface-top),var(--cp-surface));border:1px solid var(--cp-border);box-shadow:inset 0 1px 0 #ffe6f50f;
+  font:600 13px "Rubik",system-ui;color:var(--cp-text)}
+/* sensor status */
+html.lvC #stage#stage#stage .lamp .lstatus{order:2;display:flex;align-items:center;justify-content:flex-start;align-self:stretch;width:auto;text-align:left;gap:8px;margin:4px 0 0 38px;padding:0;min-height:0;background:none!important;border:0!important;box-shadow:none!important;
+  font:400 16px/1.2 "Nunito",system-ui;letter-spacing:0;text-transform:none;color:var(--cp-text2)!important}
+html.lvC #stage#stage#stage .lamp .lstatus .i{display:none}
+html.lvC #stage#stage#stage .lamp .lstatus span{text-transform:lowercase}
+html.lvC #stage#stage#stage .lamp .lstatus span::first-letter{text-transform:uppercase}
+html.lvC #stage#stage#stage .lamp .lstatus::before{content:"";flex:0 0 9px;width:9px;height:9px;border-radius:50%;background:#7e6f86}
+html.lvC #stage#stage#stage .lamp .lstatus[data-type=alert]{color:#f4b3ad!important}
+html.lvC #stage#stage#stage .lamp .lstatus[data-type=alert]::before{background:var(--cp-danger)}
+html.lvC #stage#stage#stage .lamp .lstatus[data-type=cooling]::before{background:#7fa9e0}
+html.lvC #stage#stage#stage .lamp .mline:not(.heatline){display:none}
+/* NORMAL / BRIGHT: two equal joined halves; the chosen one warm amber, the other a visible plum button */
+html.lvC #stage#stage#stage .lamp .modes{order:4;margin:12px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0;border-radius:9px;overflow:hidden;
+  background:linear-gradient(180deg,#3c2d43,#302436);border:1px solid var(--cp-border);box-shadow:0 2px 4px #0000002e}
+html.lvC #stage#stage#stage .lamp .modes .mk{height:44px;min-height:0;margin:0;border:1px solid transparent!important;border-radius:8px!important;
+  background:transparent!important;box-shadow:inset 0 1px 0 #ffdef40f!important;
+  font:500 18px/1 "Nunito",system-ui;letter-spacing:0;text-transform:lowercase;color:#e0bfd5;transition:background .15s,filter .15s,transform .05s}
+html.lvC #stage#stage#stage .lamp .modes .mk::first-letter{text-transform:uppercase}
+html.lvC #stage#stage#stage .lamp .modes .mk::after{display:none}
+html.lvC #stage#stage#stage .lamp .modes .mk.on{background:linear-gradient(180deg,var(--ui-gold-top),var(--ui-gold-bottom))!important;color:var(--ui-gold-text);font-weight:600;
+  border-color:var(--ui-gold-border)!important;box-shadow:inset 0 1px 0 #fff8db73,0 1px 3px #00000040!important}
+html.lvC #stage#stage#stage .lamp .modes .mk:not(.on):not(:disabled):hover{background:linear-gradient(180deg,var(--ui-button-hover-top),var(--ui-button-hover-bottom))!important;color:var(--ui-text)}
+html.lvC #stage#stage#stage .lamp .modes .mk.on[data-m=STABLE]{background:linear-gradient(180deg,#4d3a57,#3d2e46)!important;color:var(--ui-text);font-weight:600;
+  border-color:#8c7396!important;box-shadow:inset 0 1px 0 #ffe6f514!important}
+html.lvC #stage#stage#stage .lamp .modes .mk.on:not(:disabled):hover{filter:brightness(1.05)}
+html.lvC #stage#stage#stage .lamp .modes .mk:not(:disabled):active{transform:translateY(1px);box-shadow:inset 0 2px 3px #00000040!important}
+html.lvC #stage#stage#stage .lamp .modes .mk:focus-visible{outline:2px solid var(--cp-amber-l);outline-offset:-2px}
+html.lvC #stage#stage#stage .lamp .modes .mk:disabled{cursor:not-allowed;color:var(--ui-text-muted);opacity:1}
+html.lvC #stage#stage#stage .lamp .modes .mk.on:disabled{background:linear-gradient(180deg,#8f7a52,#7d6a46)!important;color:#2a2018}
+/* heat: track lighter than the panel, fill lilac → amber over 60 → coral over 80 (the game's own thresholds) */
+html.lvC #stage#stage#stage .lamp .heatline{order:5;display:flex!important;align-items:center;gap:8px;margin:11px 0 0}
+html.lvC #stage#stage#stage .lamp .heatline .ti{flex:0 0 20px;width:20px;height:20px;color:var(--cp-icon);stroke-width:1.5}
+html.lvC #stage#stage#stage .lamp .heatline span{flex:0 0 auto;font:400 16px/1.2 "Nunito",system-ui;letter-spacing:0;text-transform:lowercase;color:var(--cp-text2)}
+html.lvC #stage#stage#stage .lamp .heatline span::first-letter{text-transform:uppercase}
+html.lvC #stage#stage#stage .lamp .heatline .seg{flex:1;min-width:40px;height:6px;padding:0!important;border-radius:3px;background:var(--cp-heat-track)!important;box-shadow:none!important;overflow:hidden}
+html.lvC #stage#stage#stage .lamp .heatline .seg i{display:block;height:100%!important;width:var(--v,0%);border-radius:3px;clip-path:none!important;-webkit-mask:none!important;mask:none!important;
+  background:var(--cp-heat)!important;transition:width .15s linear}
+html.lvC #stage#stage#stage .lamp.bp-hot .heatline .seg i{background:var(--cp-amber)!important}
+html.lvC #stage#stage#stage .lamp.hot .heatline .seg i{background:var(--cp-danger)!important}
+html.lvC #stage#stage#stage .lamp.hot{background:linear-gradient(180deg,#f0797312,#f0797305 70%,transparent)!important;transition:background .3s}
+html.lvC #stage#stage#stage .lamp.hot .heatline .hv{color:#ffb3ad}
+html.lvC #stage#stage#stage .lamp.h0 .heatline .hv{visibility:hidden}
+html.lvC #stage#stage#stage .lamp .heatline .hv{flex:0 0 auto;min-width:44px;text-align:right;font:600 17px/1.2 "Nunito",system-ui;color:var(--cp-text)}
+
+/* ---- actions 2×2 */
+html.lvC #stage#stage#stage .mod.smarthome .shbtns{height:100%;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:8px;padding:8px}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>*{position:relative;margin:0;min-height:0;height:auto;width:auto;
+  display:grid!important;grid-template-columns:38px 1fr;grid-template-rows:auto auto;column-gap:12px;row-gap:2px;align-items:center;align-content:center;justify-content:start!important;padding:8px 14px!important;text-align:left;
+  background:linear-gradient(180deg,var(--ui-button-top),var(--ui-button-bottom))!important;border:1px solid var(--ui-button-border)!important;border-radius:10px!important;
+  box-shadow:inset 0 1px 0 #ffdef417,0 2px 4px #0000002e!important;text-transform:none;letter-spacing:0;transition:background .15s,border-color .15s,transform .05s}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>* .i{grid-row:1/3;grid-column:1;width:36px!important;height:36px!important;color:var(--cp-icon)!important;stroke-width:1.4;fill:none}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>#actAlarm .i{color:var(--cp-coral)!important}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>*>span:not(.cd):not(.shs){grid-column:2;grid-row:1;display:block!important;position:static!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;
+  font:600 20px/1.15 "Nunito",system-ui!important;text-transform:lowercase!important;letter-spacing:0;color:var(--cp-text)}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>*>span:not(.cd):not(.shs)::first-letter{text-transform:uppercase}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>*>span.shs{grid-column:2;grid-row:2;display:flex!important;align-items:center;gap:6px;position:static!important;white-space:nowrap;overflow:hidden;
+  font:400 16px/1.2 "Nunito",system-ui;color:var(--cp-text2)}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>*>span.shs::before{content:"";flex:0 0 8px;width:8px;height:8px;border-radius:50%;background:#7e6f86}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.sh-cd>span.shs::before{background:var(--cp-amber)}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.sh-jam>span.shs{color:#f4b3ad}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.sh-jam>span.shs::before{background:var(--cp-danger)}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>* small{position:absolute!important;right:10px!important;left:auto!important;top:10px!important;bottom:auto!important;transform:none;margin:0;
+  min-width:22px;height:22px;display:grid;place-items:center;border-radius:5px;background:#00000026;border:1px solid var(--cp-border);font:600 12px "Rubik",system-ui;color:var(--cp-text2)}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>* em,html.lvC #stage#stage#stage .mod.smarthome .shbtns>* #blindsT{display:none!important}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>* .cd{opacity:.35}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>*:not(.lc-locked):not(:disabled):hover{background:linear-gradient(180deg,var(--ui-button-hover-top),var(--ui-button-hover-bottom))!important;border-color:var(--cp-border-h)!important}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>*:not(.lc-locked):not(:disabled):active{transform:translateY(1px);box-shadow:inset 0 2px 4px #00000047!important}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>*:focus-visible{outline:2px solid var(--cp-amber-l);outline-offset:1px}
+/* recharging: name and icon dim by colour, not by opacity of the whole button */
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.sh-cd .i{color:#a17e95!important}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.sh-cd>span:not(.cd):not(.shs){color:var(--ui-text-secondary)}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>*:disabled:not(.lc-locked){cursor:not-allowed;background:var(--cp-surface)!important}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>*:disabled:not(.lc-locked)>span:not(.cd):not(.shs){color:var(--ui-text-muted)}
+/* a slot this night has not opened: stays a quiet dashed «?» */
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.lc-locked{cursor:default;background:var(--cp-lock-bg)!important;border:1px dashed #ffffff1f!important;box-shadow:none!important}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.lc-locked .i{color:#6f5a6c!important}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.lc-locked>span:not(.cd):not(.shs){color:#9c8a9e!important}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.lc-locked>span.shs{color:#7f6d82;font-size:14px;gap:0}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.lc-locked>span.shs::before{display:none}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.lc-locked small,html.lvC #stage#stage#stage .mod.smarthome .shbtns>.lc-locked .cd{display:none!important}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.lc-locked::after{content:"";position:absolute;right:11px;top:10px;width:13px;height:15px;opacity:.55;
+  background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 15' fill='none' stroke='%23d0b5ca' stroke-width='1.4'%3E%3Crect x='1.2' y='6.5' width='10.6' height='7.6' rx='1.6'/%3E%3Cpath d='M3.6 6.5V4.3a2.9 2.9 0 0 1 5.8 0v2.2'/%3E%3C/svg%3E")}
+/* endless shift (five tools, smaller row): a bit tighter */
+html.lvC #stage#stage#stage:not(.camp) .mod.smarthome .shbtns>*{padding:6px 10px!important;column-gap:8px}
+html.lvC #stage#stage#stage:not(.camp) .mod.smarthome .shbtns>*>span:not(.cd):not(.shs){font-size:15px!important}
+html.lvC #stage#stage#stage:not(.camp) .mod.smarthome .shbtns>* .i{width:24px!important;height:24px!important}
+
+/* ==== no bezel under the screen (23.11, reference): pause and sound are icon buttons in the stream header,
+   the language switch lives in the pause card. The freed height goes to the bottom control row. Desktop only. ==== */
+html.lvC.noBezel #stage#stage#stage:not(.mobile) .bezel-bottom{display:none!important}
+html.lvC.noBezel #stage#stage#stage:not(.mobile) .monitor{top:14px;height:calc(100% - 28px)}
+html.lvC.noBezel #stage#stage#stage:not(.mobile) .screen{height:calc(100% - 36px)}
+html.lvC.noBezel #stage#stage#stage:not(.mobile) #screen{grid-template-rows:minmax(0,1fr) 190px}
+/* header icon buttons: pause + sound, same plum key */
+html.lvC #stage#stage#stage .streamhead .iconkey{width:34px;height:30px;border:1px solid var(--cp-border)!important;border-radius:8px;
+  background:linear-gradient(180deg,var(--cp-surface-top),var(--cp-surface))!important;box-shadow:inset 0 1px 0 #ffe6f50f!important}
+html.lvC #stage#stage#stage .streamhead .iconkey .i{width:16px;height:16px}
+html.lvC #stage#stage#stage .streamhead .iconkey:focus-visible{outline:2px solid var(--cp-amber-l);outline-offset:1px}
+html.lvC #stage#stage#stage .streamhead #muteBtn{display:grid;place-items:center;padding:0;gap:0;position:relative;margin:0}
+html.lvC #stage#stage#stage .streamhead #muteBtn #muteLbl{display:none}
+html.lvC #stage#stage#stage .streamhead #muteBtn.muted{color:var(--cp-text2)!important}
+html.lvC #stage#stage#stage .streamhead #muteBtn.muted::after{content:"";position:absolute;left:8px;right:8px;top:50%;height:2px;border-radius:1px;background:var(--cp-danger);transform:rotate(-40deg)}
+/* the freed height goes to the camera: a wider left column (≈69 / 31 like the reference) keeps the 2:1 video filling its panel */
+html.lvC.noBezel #stage#stage#stage:not(.mobile) #screen{grid-template-columns:1100px minmax(0,1fr)}
+
+/* ---- what was dimming the UI (23.11 diagnosis): three full-screen layers on top of everything -
+   .vignette (z 91, up to 60% black at the edges, where the chat and the bottom panels are), .grain (z 90) and the
+   CRT .screenfx (scanlines + roll over the header and chat). The camera keeps its own .scan and .vvign inside #video,
+   so the in-game desktop screen drops the three global ones. Menus and the mobile layout keep them. */
+html.lvC.noBezel #stage#stage#stage:not(.mobile) .screenfx,
+html.lvC.noBezel #stage#stage#stage:not(.mobile).ingame>.vignette,html.lvC.noBezel #stage#stage#stage:not(.mobile).ingame>.grain{display:none}
+
+/* ==================== REFERENCE PASS 3 (23.11): Mia pill, trust + toxicity row, chat, record / clips, lighter frame ==================== */
+/* no line under the video any more: the stream panel is header + camera, the bottom row takes the rest */
+html.lvC.noBezel #stage#stage#stage:not(.mobile) #screen{grid-template-rows:auto minmax(190px,1fr)}
+html.lvC #stage#stage#stage #lcBar{display:none}
+/* the frame: one quiet dark surface instead of a thick monitor rim with inner shadows */
+html.lvC.noBezel #stage#stage#stage:not(.mobile) .monitor{background:var(--ui-bg)!important;box-shadow:none!important;border-radius:20px}
+html.lvC.noBezel #stage#stage#stage:not(.mobile) .screen{box-shadow:none!important}
+html.lvC #viewport{background:var(--ui-bg)}
+
+/* Mia: a small pill in the camera, bottom-left (subtitles are centred and narrower, the clips button is bottom-right) */
+html.lvC #stage#stage#stage #video #lcMia{position:absolute;left:14px;bottom:14px;z-index:7;display:flex;align-items:center;gap:8px;flex-wrap:nowrap;min-width:0;max-width:40%;
+  padding:7px 14px 7px 12px;border-radius:999px;background:#140e18c7;border:1px solid #ffffff17;font:500 17px/1.2 "Nunito",system-ui;color:var(--ui-text);pointer-events:none}
+html.lvC #stage#stage#stage #video #lcMia .lc-who{font-weight:500;color:var(--ui-text)}
+html.lvC #stage#stage#stage #video #lcMia .lc-st{color:var(--ui-text)}
+html.lvC #stage#stage#stage #video #lcMia .lc-sep,html.lvC #stage#stage#stage #video #lcMia .lc-tr,html.lvC #stage#stage#stage #video #lcMia .lc-pan{display:none}
+html.lvC #stage#stage#stage #video #lcMia .lc-dot{width:11px;height:11px;flex:0 0 11px;box-shadow:none;background:var(--ui-success)}
+html.lvC #stage#stage#stage #video #lcMia.tense .lc-dot{background:var(--ui-heat-hot)}
+html.lvC #stage#stage#stage #video #lcMia.edge .lc-dot{background:var(--ui-danger)}
+html.lvC #stage#stage#stage #video #lcMia.edge .lc-st{color:#ffc2bd}
+/* the task: shows for a few seconds when it changes (and while there is evidence), under the viewer count */
+html.lvC #stage#stage#stage #video #lcTask{position:absolute;left:14px;top:56px;z-index:7;margin:0;display:none;align-items:baseline;gap:8px;max-width:46%;
+  padding:7px 14px;border-radius:10px;background:#140e18d9;border:1px solid #ffffff1c;text-align:left;justify-content:flex-start}
+html.lvC #stage#stage#stage #video #lcTask.on{display:flex}
+html.lvC #stage#stage#stage #video #lcTask small{font:600 12px/1.2 "Nunito",system-ui;letter-spacing:.08em;color:var(--ui-heat-hot)}
+html.lvC #stage#stage#stage #video #lcTask .lc-t{font:600 17px/1.2 "Nunito",system-ui;color:var(--ui-text)}
+html.lvC #stage#stage#stage #video #lcTask .lc-s{font:400 15px/1.2 "Nunito",system-ui;color:var(--ui-text-secondary)}
+html.lvC #stage#stage#stage #video #lcTask .lc-ev{align-self:center;font:600 14px "Nunito",system-ui;padding:5px 10px;border-radius:7px;border:1px solid var(--ui-gold-border);background:linear-gradient(180deg,var(--ui-gold-top),var(--ui-gold-bottom));color:var(--ui-gold-text);cursor:pointer;pointer-events:auto}
+/* pause card: the current task (only when there is a real one) */
+#ovPause .pctask{margin:-4px 0 8px;font-weight:700;font-size:15px;color:#6a4c2a;text-align:center}
+
+/* record: outline camera, «Записать», a small R badge; no REC line */
+html.lvC #stage#stage#stage #video #actRec{padding:8px 10px 8px 12px;gap:10px;border-radius:10px;background:#140e18c7!important;border:1px solid #ffffff1c!important}
+html.lvC #stage#stage#stage #video #actRec .tx{display:flex;flex-direction:row;align-items:center;gap:12px}
+html.lvC #stage#stage#stage #video #actRec .i.st{width:22px;height:22px;color:var(--ui-text);fill:none}
+html.lvC #stage#stage#stage #video #actRec .tx b{font:500 17px/1 "Nunito",system-ui!important;color:var(--ui-text)}
+html.lvC #stage#stage#stage #video #actRec small{min-width:24px;height:24px;display:grid;place-items:center;padding:0 6px;border-radius:6px;background:#ffffff14;border:1px solid #ffffff22;font:600 13px/1 "Rubik",system-ui;color:var(--ui-text);letter-spacing:0}
+html.lvC #stage#stage#stage #video #actRec .cambadge{display:none}
+html.lvC #stage#stage#stage #video #actRec:hover{background:#30243ad9!important}
+/* night clips: clapperboard + a count badge (hidden at zero, the archive still opens) */
+html.lvC #stage#stage#stage #lcClips{right:14px;bottom:14px;width:44px;height:40px;padding:0;justify-content:center;border-radius:10px;background:#140e18c7;border:1px solid #ffffff1c;color:var(--ui-text)}
+html.lvC #stage#stage#stage #lcClips .i{width:24px;height:24px;fill:none}
+html.lvC #stage#stage#stage #lcClips b{position:absolute;right:-7px;top:-8px;min-width:20px;height:20px;padding:0 5px;display:grid;place-items:center;border-radius:10px;background:var(--ui-gold-bottom);color:var(--ui-gold-text);font:700 12px/1 "Rubik",system-ui}
+html.lvC #stage#stage#stage #lcClips[data-n="0"] b{display:none}
+html.lvC #stage#stage#stage #lcClips:hover{background:#30243ad9}
+html.lvC #stage#stage#stage #lcViewers{left:14px;top:14px;padding:6px 12px;background:#140e18b3;color:var(--ui-text);font:500 17px "Nunito",system-ui}
+html.lvC #stage#stage#stage #lcViewers .i{color:var(--ui-gold-top)}
+
+/* header: readable, not heavy */
+html.lvC #stage#stage#stage .streamhead .chan{font:600 19px "Nunito",system-ui!important;letter-spacing:0}
+html.lvC #stage#stage#stage .streamhead .daylbl{font:500 14px "Nunito",system-ui!important;letter-spacing:.04em;color:var(--ui-text-secondary)!important}
+html.lvC #stage#stage#stage .live{font:700 12px/1 "Rubik",system-ui!important;letter-spacing:.08em}
+
+/* chat: bigger head, no inner box, freer lines, one avatar size */
+html.lvC #stage#stage#stage .chathead{height:52px;padding:0 16px;gap:12px}
+html.lvC #stage#stage#stage .chathead b{font:600 21px "Nunito",system-ui!important;letter-spacing:0!important;text-transform:none!important}
+html.lvC #stage#stage#stage .chathead .i{width:24px;height:24px;color:var(--ui-text)!important;fill:none;stroke-width:1.6}
+html.lvC #stage#stage#stage .chat #chatlist{background:transparent!important;box-shadow:none!important;border:0!important;margin:4px 8px 0;padding:6px 4px}
+html.lvC #stage#stage#stage .chat #chatlist .msg{gap:11px;padding-top:7px;padding-bottom:7px;margin-bottom:3px;border-radius:10px}
+html.lvC #stage#stage#stage .chat #chatlist .msg .av{width:30px;height:30px;flex:0 0 30px;margin-top:1px}
+html.lvC #stage#stage#stage .chat #chatlist .msg.sel{background:#3a2a42!important;box-shadow:inset 0 0 0 1px #5a4460!important}
+html.lvC #stage#stage#stage .chat #chatlist .cl-show{background:linear-gradient(180deg,#6a5378,#5a4568)!important;border:1px solid #7d6690!important;color:var(--ui-text)!important}
+html.lvC #stage#stage#stage .chat #chatlist .cl-ban{background:transparent!important;border:1px solid var(--ui-danger)!important;color:#ffb3ad!important}
+
+/* trust + toxicity: one row at the bottom of the chat, a thin line above it */
+html.lvC #stage#stage#stage #lcChatFoot{border-top:1px solid var(--ui-border);margin:0 14px;padding:12px 2px 12px;display:flex;align-items:center;gap:14px;background:none}
+html.lvC #stage#stage#stage #lcStats{display:flex;align-items:center;gap:16px;flex:1 1 auto;min-width:0}
+html.lvC #stage#stage#stage #lcTrust{display:flex;align-items:center;gap:10px;font:400 17px/1.2 "Nunito",system-ui;color:var(--ui-text);outline:none;cursor:help}
+html.lvC #stage#stage#stage #lcTrust:focus-visible{outline:2px solid var(--ui-gold-top);outline-offset:3px;border-radius:6px}
+html.lvC #stage#stage#stage #lcTrust .i{width:20px;height:20px;color:#8fbf7a;fill:none;stroke-width:1.6}
+html.lvC #stage#stage#stage #lcTrust .segs{display:flex;gap:4px}
+html.lvC #stage#stage#stage #lcTrust .segs i{width:24px;height:12px;border-radius:3px;background:#ffffff14}
+html.lvC #stage#stage#stage #lcTrust .segs i.on{background:var(--ui-success)}
+html.lvC #stage#stage#stage #lcTrust.t1 .segs i.on,html.lvC #stage#stage#stage #lcTrust.t2 .segs i.on{background:var(--ui-heat-hot)}
+html.lvC #stage#stage#stage #lcTrust.t1 .segs i.on{background:var(--ui-danger)}
+html.lvC #stage#stage#stage #lcStats .dv{width:1px;height:20px;background:var(--ui-border);margin-left:auto}
+html.lvC #stage#stage#stage #lcTox{display:flex;align-items:baseline;gap:10px;font:400 16px/1.2 "Nunito",system-ui;color:var(--ui-text-secondary)}
+html.lvC #stage#stage#stage #lcTox b{font:600 19px/1.2 "Nunito",system-ui;color:var(--ui-text)}
+html.lvC #stage#stage#stage #lcTox.hot b{color:var(--ui-heat-hot)}
+html.lvC #stage#stage#stage #lcTox.crit b{color:var(--ui-danger)}
+html.lvC #stage#stage#stage #lcChatFoot>.sp{display:none}
+/* the top row is sized by the camera only: the chat must not push it as messages arrive (its own list scrolls) */
+html.lvC.noBezel #stage#stage#stage:not(.mobile) .mod.chat{contain:size;min-height:0;align-self:stretch}
+
+/* ==== Mia's subtitle strip (23.11): its own cell under the camera, above the lamps; the actions span both rows.
+   Same #prsCap / #caption the game already writes to (say(), timings, RU/EN) - only moved and restyled. Fixed height,
+   two lines; empty while Mia is silent. The height comes out of the bottom row, the screen total does not change. ==== */
+html.lvC.noBezel #stage#stage#stage:not(.mobile) #screen{grid-template-rows:auto 64px minmax(0,1fr)}
+html.lvC.noBezel #stage#stage#stage:not(.mobile) .mod.lighting{grid-column:1;grid-row:3}
+html.lvC.noBezel #stage#stage#stage:not(.mobile) .mod.smarthome{grid-column:2;grid-row:3}
+/* the chat spans the camera row and the subtitle row (contain:size keeps its messages from sizing the rows; the list scrolls) */
+html.lvC.noBezel #stage#stage#stage:not(.mobile) #chat{grid-column:2;grid-row:1/3}
+html.lvC.noBezel #stage#stage#stage:not(.mobile) #screen>#prsCap{grid-column:1;grid-row:2;position:relative;inset:auto;z-index:auto;width:auto;height:64px;min-height:0;
+  display:flex;align-items:center;justify-content:flex-start;padding:0 22px;margin:0;pointer-events:none;overflow:hidden;
+  background:none!important;border:0!important;border-radius:0;box-shadow:none!important;outline:0}
+html.lvC.noBezel #stage#stage#stage:not(.mobile) #screen>#prsCap::before,html.lvC.noBezel #stage#stage#stage:not(.mobile) #screen>#prsCap::after{display:none!important}
+html.lvC.noBezel #stage#stage#stage:not(.mobile) #screen>#prsCap .caption{position:static;transform:none;max-width:100%;width:auto;margin:0;padding:0;background:none!important;box-shadow:none!important;border:0;
+  text-align:left;font:400 18px/1.3 "Nunito",system-ui;color:var(--ui-text);display:-webkit-box;font-weight:400;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-shadow:none}
+html.lvC.noBezel #stage#stage#stage:not(.mobile) #screen>#prsCap .caption{opacity:1;visibility:visible;transition:opacity .15s ease,visibility 0s}
+/* hidden = transparent, not removed: the strip keeps its size and the line fades out in .15s */
+html.lvC.noBezel #stage#stage#stage:not(.mobile) #screen>#prsCap .caption[hidden]{display:-webkit-box!important;opacity:0;visibility:hidden;transition:opacity .15s ease,visibility 0s .15s}
+html.lvC.noBezel #stage#stage#stage:not(.mobile) #screen>#prsCap .caption b{display:inline;margin-right:6px;font-weight:600;color:var(--ui-icon)}
+html.lvC.noBezel #stage#stage#stage:not(.mobile) #screen>#prsCap .caption.story-key{color:#f6dcae}
+
+/* 23.11 clarity pass: a locked «?» slot says «unlocks later» on hover (a CSS tip: a disabled button may not show its title) */
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.lc-locked{pointer-events:auto;cursor:help}
+html.lvC #stage#stage#stage .mod.smarthome .shbtns>.lc-locked[data-tip]:hover::before{content:attr(data-tip);position:absolute;left:50%;bottom:calc(100% + 6px);transform:translateX(-50%);z-index:20;visibility:visible;
+  white-space:nowrap;padding:5px 10px;border-radius:7px;background:#0f0b12f2;border:1px solid var(--ui-border);font:500 14px/1.2 "Nunito",system-ui;color:var(--ui-text);pointer-events:none}
+/* chat moderation is discoverable: «Бан» always sits dimmed on every live message, full on hover / selection */
+html.lvC #stage#stage#stage .msg:not(.deleted):not(.banned):not(.sys) .cl-act{visibility:visible}
+html.lvC #stage#stage#stage .msg:not(.deleted):not(.banned) .cl-act .cl-ban{opacity:.42;transition:opacity .12s}
+html.lvC #stage#stage#stage .msg:hover:not(.deleted):not(.banned) .cl-act .cl-ban,html.lvC #stage#stage#stage .msg.sel:not(.deleted):not(.banned) .cl-act .cl-ban,
+html.lvC #stage#stage#stage .msg .cl-act .cl-ban:focus-visible{opacity:1}
+/* Monday's last line from Stranger_99: a private message only the mod sees - readable size, a «private message» tag */
+html.lvC #stage#stage#stage .chat .msg.sys.modwhisper{display:block;padding:10px 14px;cursor:pointer}
+html.lvC #stage#stage#stage .chat .msg.sys.modwhisper::before{content:attr(data-dm);display:block;margin-bottom:3px;font:600 12px/1.2 "Nunito",system-ui;letter-spacing:.06em;text-transform:uppercase;color:#e58f87}
+html.lvC #stage#stage#stage .chat .msg.sys.modwhisper .t{font:600 19px/1.35 "Nunito",system-ui!important;font-style:normal!important;color:#ffb1a6!important}
+/* 23.11: a soft pulse on the button the current task needs (Tuesday's yard: Record) and on the clips button after a new clip */
+@keyframes lcPulse{0%,100%{box-shadow:0 0 0 0 #f8cf7900}50%{box-shadow:0 0 0 4px #f8cf7955}}
+html.lvC #stage#stage#stage #video #actRec.lc-pulse{border-color:var(--ui-gold-border)!important;animation:lcPulse 1.6s ease-in-out infinite}
+html.lvC #stage#stage#stage #video #actRec.lc-pulse .tx b{color:var(--ui-gold-top)}
+html.lvC #stage#stage#stage #lcClips.lc-new{border-color:var(--ui-gold-border);animation:lcPulse 1.6s ease-in-out infinite}
+
+/* 23.11 Tuesday: the mod answers Mia's «what do I do?» - two buttons above the trust row; the answer goes out as the mod's chat line */
+html.lvC #stage#stage#stage #tueAsk{display:flex;align-items:center;gap:10px;margin:0 14px;padding:10px 2px;border-top:1px solid var(--ui-border)}
+html.lvC #stage#stage#stage #tueAsk[hidden]{display:none}
+html.lvC #stage#stage#stage #tueAsk span{font:600 16px "Nunito",system-ui;color:var(--ui-gold-top);margin-right:auto}
+html.lvC #stage#stage#stage #tueAsk .pbtn{padding:8px 14px;border-radius:9px;font:600 15px "Nunito",system-ui;color:var(--ui-text);
+  background:linear-gradient(180deg,var(--ui-button-top),var(--ui-button-bottom));border:1px solid var(--ui-button-border);box-shadow:inset 0 1px 0 #ffdef417}
+html.lvC #stage#stage#stage #tueAsk .pbtn:hover{background:linear-gradient(180deg,var(--ui-button-hover-top),var(--ui-button-hover-bottom))}
+html.lvC #stage#stage#stage .chat .msg.modmsg{background:#2c2236;border-radius:10px}
+html.lvC #stage#stage#stage .chat .msg.modmsg .u{color:var(--ui-gold-top)!important}
+html.lvC #stage#stage#stage .chat .msg.modmsg .cl-act{display:none!important}
+/* the last message: a new private dialog from Stranger_99 (the window keeps Mia's dialog until it is opened) */
+#dmWin .dm-note{position:absolute;left:50%;top:18px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:10px 12px 10px 14px;border-radius:12px;
+  background:#1d1418;border:1px solid #7a2e33;box-shadow:0 10px 30px #000a;animation:dmNote .35s ease-out}
+#dmWin .dm-note[hidden]{display:none}
+#dmWin .dm-box{position:relative}
+#dmWin .dm-note-av{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#3a1a1e,#0b0809)}
+#dmWin .dm-note-t{display:flex;flex-direction:column;gap:2px}#dmWin .dm-note-t b{font:700 15px "Nunito",system-ui;color:#ffb1a6}#dmWin .dm-note-t small{font:500 13px "Nunito",system-ui;color:#c7a7ad}
+#dmWin .dm-note .pbtn{padding:6px 12px;border-radius:8px;font:600 14px "Nunito",system-ui}
+@keyframes dmNote{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}
+#dmWin[data-who=stranger] .dm-av{background:radial-gradient(circle at 50% 40%,#3a1a1e,#0b0809)}
+#dmWin[data-who=stranger] .dm-head b{color:#ffb1a6}
+#dmWin .dm-b.stranger{background:#2a1114;border:1px solid #6e262c;color:#ffd0c9}
+#dmWin .dm-b.stranger{align-self:flex-start;border-bottom-left-radius:4px}
+html.lvC #stage#stage#stage #video:has(#awaybadge:not([hidden])) #lcTask{top:98px}   /* 23.11: the «away» badge sits where the task pill is */

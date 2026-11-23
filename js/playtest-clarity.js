@@ -1,27 +1,27 @@
 "use strict";
 /* First red-eyes lesson, readable window evidence, and distinct action sounds. */
 Object.assign(STR.ru,{
-  tipRed:'КРАСНЫЕ ГЛАЗА: ЯРЧЕ ускоряет. ТЕМНЕЕ замедляет. Отгоняй умным домом, у окна помогут жалюзи.',
-  red_title:'НОВАЯ УГРОЗА · КРАСНЫЕ ГЛАЗА',red_intro:'У него красные глаза. Правило изменилось: ЯРЧЕ ускоряет его. ТЕМНЕЕ замедляет, но не прогоняет. Сейчас попробуем другой способ защиты.',
-  red_dim:'Нажми ТЕМНЕЕ у выделенной лампы. Это замедлит его. У обычного сталкера правило прежнее: его отталкивает ЯРЧЕ.',
+  tipRed:'КРАСНЫЕ ГЛАЗА: свет помогает его увидеть, но не останавливает. Отгоняй умным домом, у окна помогут жалюзи.',
+  red_title:'НОВАЯ УГРОЗА · КРАСНЫЕ ГЛАЗА',red_intro:'У него красные глаза. Правило изменилось: свет помогает его увидеть, но не прогоняет. Нужен другой способ.',
+  red_dim:'Нажми ТЕМНЕЕ у выделенной лампы. Это замедлит его. У обычного сталкера правило прежнее: его отталкивает ЯРКИЙ.',
   red_sound:'Теперь нажми выделенную кнопку умного дома. ЛАЙ задерживает его на 6 секунд, ШАГИ отбрасывают на один этап, ТРЕВОГА прогоняет совсем. Звуки могут напугать Мию — следи за паникой.',
-  red_done:'Запомни: красные глаза — ТЕМНЕЕ и умный дом. У окна помогают и ЖАЛЮЗИ, пока он не подошёл вплотную. Если устройства перезаряжаются, не ускоряй его ярким светом.',
-  red_step:'КРАСНЫЕ ГЛАЗА · {n}/3',red_resume:'Вернуться к эфиру',
-  evidence_new:'ЗАПИСКА НА ОКНЕ',evidence_hint:'Открой жалюзи → ЗАПИСАТЬ МОМЕНТ → прочитай здесь.',
+  red_done:'Запомни: красные глаза — звуки умного дома. У окна помогают и ЖАЛЮЗИ, пока он не подошёл вплотную.',
+  red_step:'КРАСНЫЕ ГЛАЗА · {n}/2',red_resume:'Вернуться к эфиру',
+  evidence_new:'ЗАПИСКА НА ОКНЕ',evidence_hint:'Открой жалюзи → ЗАПИСАТЬ МОМЕНТ → потом перечитай в паузе (Esc).',
   evidence_read:'Прочитать записку',evidence_photo:'Рассмотреть снимок',evidence_saved:'Записка снята · читай в заметках справа',evidence_title:'ЗАПИСКА СО СТЕКЛА',evidence_caption:'Сохранено с камеры. Записка доступна и в итогах этой ночи.',evidence_close:'Вернуться',
-  tipNoteMon:'Открой жалюзи → ЗАПИСАТЬ МОМЕНТ → прочитай здесь.',
+  tipNoteMon:'Открой жалюзи → ЗАПИСАТЬ МОМЕНТ → потом перечитай в паузе (Esc).',
   sound_dog:'ЛАЙ · он замрёт на 6 секунд',sound_steps:'ШАГИ · он отступит',sound_police:'тук · тук · тук'
 });
 Object.assign(STR.en,{
-  tipRed:'RED EYES: BRIGHT speeds him up. DIM slows him down. Use smart-home sounds, or BLINDS at the window.',
-  red_title:'NEW THREAT · RED EYES',red_intro:'His eyes are red. This time, BRIGHT makes him faster. DIM slows him down, but will not drive him away. Let’s try another way to stop him.',
+  tipRed:'RED EYES: light lets you see him but won\'t stop him. Use smart-home sounds, or BLINDS at the window.',
+  red_title:'NEW THREAT · RED EYES',red_intro:'His eyes are red. The rule has changed: light lets you see him but will not drive him off. You need another way.',
   red_dim:'Press DIM on the highlighted lamp to slow him down. The usual rule still applies to the ordinary stalker: BRIGHT pushes him back.',
   red_sound:'Now press the highlighted smart-home button. DOG BARK freezes him for 6 seconds. FOOTSTEPS push him back one stage. ALARM drives him away completely. Sounds can frighten Mia, so watch her panic.',
-  red_done:'Red eyes mean DIM and smart-home sounds. BLINDS also help at the window, before he gets too close. While devices recharge, avoid speeding him up with bright light.',
-  red_step:'RED EYES · {n}/3',red_resume:'Back to the stream',
-  evidence_new:'NOTE ON THE WINDOW',evidence_hint:'Blinds open → HIGHLIGHT MOMENT → read the note here.',
+  red_done:'Remember: red eyes mean smart-home sounds. BLINDS also help at the window, before he gets too close.',
+  red_step:'RED EYES · {n}/2',red_resume:'Back to the stream',
+  evidence_new:'NOTE ON THE WINDOW',evidence_hint:'Blinds open → HIGHLIGHT MOMENT → then read it again in the pause menu (Esc).',
   evidence_read:'Read the note',evidence_photo:'Inspect the photo',evidence_saved:'Note recorded · open it in MOD NOTES',evidence_title:'NOTE FROM THE WINDOW',evidence_caption:'Saved from the webcam. You can also open it in this night’s results.',evidence_close:'Back',
-  tipNoteMon:'Blinds open → HIGHLIGHT MOMENT → read the note here.',
+  tipNoteMon:'Blinds open → HIGHLIGHT MOMENT → then read it again in the pause menu (Esc).',
   sound_dog:'DOG BARK · freezes him for 6 seconds',sound_steps:'FOOTSTEPS · pushes him back',sound_police:'knock · knock · knock'
 });
 function redLessonStart(){
@@ -56,7 +56,7 @@ onboardingCurrentTarget=function(){
 const clarityGuideNext=$('guideNext').onclick;
 $('guideNext').onclick=()=>{
   const g=S&&S.guide;if(!g||g.kind!=='red')return clarityGuideNext();
-  if(g.phase==='redIntro'){g.phase='redDim';stat('lesson/red/step/dim');if(S.lamps[g.zone].burned)redLessonSound();}
+  if(g.phase==='redIntro'){redLessonSound();}   /* 22.11: no DIM step - light does not stop him, sound does */
   else if(g.phase==='redDone')onboardingFinish('done',true);hud(0);
 };
 const clarityGuideHud=onboardingHud;
@@ -65,7 +65,7 @@ onboardingHud=function(){
   if(!g.active||!S.running||paused){onboardingClear();return;}
   onboardingLayout();guideCard.hidden=false;$('stage').classList.add('guide-active');
   const keys={redIntro:'red_intro',redDim:'red_dim',redSound:'red_sound',redDone:'red_done'};
-  $('guideStep').textContent=g.phase==='redIntro'?T('red_title'):T('red_step',{n:{redDim:1,redSound:2,redDone:3}[g.phase]});
+  $('guideStep').textContent=g.phase==='redIntro'?T('red_title'):T('red_step',{n:{redSound:1,redDone:2}[g.phase]});
   $('guideText').textContent=T(keys[g.phase]);$('guideStatus').textContent=T('g_hold');$('guideSkip').textContent=T('g_skip');
   $('guideNext').hidden=!['redIntro','redDone'].includes(g.phase);$('guideNext').textContent=T(g.phase==='redDone'?'red_resume':'g_next');
   const target=onboardingCurrentTarget();onboardingTarget(target);onboardingPlace(target);
@@ -86,7 +86,9 @@ function evidenceOpen(){
 }
 function evidenceClose(resume=true){
   if(evidenceViewer.hidden)return;evidenceViewer.hidden=true;const go=evidenceWasRunning;evidenceWasRunning=false;
-  if(go&&resume&&S&&!S.over)setPause(false);else if(go&&!resume)paused=false;if(evidenceFocus&&evidenceFocus.isConnected)evidenceFocus.focus({preventScroll:true});
+  const back=evFromPause;evFromPause=false;
+  if(go&&resume&&S&&!S.over)setPause(false);else if(go&&!resume)paused=false;
+  if(back&&S&&!S.over&&paused)$('ovPause').hidden=false;   /* opened from the pause: back to it, still stopped */if(evidenceFocus&&evidenceFocus.isConnected)evidenceFocus.focus({preventScroll:true});
 }
 evidenceButton.onclick=evidenceOpen;$('evidenceClose').onclick=()=>evidenceClose();
 document.addEventListener('click',e=>{if(e.target.closest('[data-read-evidence]'))evidenceOpen();});
@@ -97,10 +99,10 @@ document.addEventListener('keydown',e=>{
   if(!e.target.closest('#evidenceViewer')){e.preventDefault();e.stopImmediatePropagation();}
 },true);
 function evidenceAppeared(){
-  tip('windowEvidence',T('evidence_hint'));floaty(T('evidence_new'));stat('evidence/appear/'+S.night.key);
+  tip('windowEvidence',T('evidence_hint'));if(!S.fri)floaty(T('evidence_new'));stat('evidence/appear/'+S.night.key);
 }
 function evidenceCaptured(){
-  S.ev.noteRec=true;S.ev.noteFly=1.4;S.ev.note=false;floaty(T('evidence_saved'));tip('evidenceCaptured',T('evidence_caption'));stat('evidence/capture/'+S.night.key);
+  S.ev.noteRec=true;S.ev.noteFly=1.4;S.ev.note=false;if(!S.fri)floaty(T('rl_evSavedNote'));tip('evidenceCaptured',T('evidence_caption'));stat('evidence/capture/'+S.night.key);
 }
 const clarityHud=hud;
 hud=function(dt){clarityHud(dt);if(!S)return;evidenceButton.hidden=!S.ev.noteRec;evidenceButton.disabled=!!(S.guide&&S.guide.active);evidenceLanguage();};

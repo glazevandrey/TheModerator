@@ -14,7 +14,7 @@ en:{
   lighting:'LIGHTING GRID', reconnect:'moderator: reconnecting… (weak signal)', blindsOpen:'BLINDS', blindsClosed:'SHUT', blindsJam:'JAMMED', fz:'FROZEN', tipBlindsHeat:'Window lamp getting hot? Use BLINDS in Smart Home (B) to hold him off while it cools.',
   cue_window:'♪ TAPPING ON THE GLASS', cue_door:'♪ SOMEONE IS TRYING THE DOOR HANDLE', cue_closet:'♪ RUSTLING IN THE CLOSET', cue_sub:'→ get the {z} lamp ready', cz_window:'WINDOW', cz_door:'DOOR', cz_closet:'CLOSET',
   z_window:'WINDOW', z_closet:'CLOSET', z_door:'DOOR', motion:'MOTION', heat:'HEAT',
-  ls_ok:'OK', ls_hot:'OVERHEAT', ls_dead:'BURNT OUT', ls_adapt:'LUNGE! → NORMAL', ls_motion:'SOMETHING HERE', ls_cool:'COOLING',
+  ls_ok:'NO MOTION', ls_out:'OUT', ls_outT:'OUT · {n} S', ls_hot:'OVERHEAT', ls_dead:'BURNT OUT', ls_adapt:'LUNGE! → NORMAL', ls_motion:'SOMETHING HERE', ls_cool:'COOLING',
   smartHome:'SMART HOME', sh_dog:'DOG BARK', sh_steps:'FOOTSTEPS', sh_alarm:'FIRE ALARM', shHint:'Dog: it FREEZES for 6 s. Steps: it backs off. Alarm: it leaves. Mia may go check.',
   system:'SYSTEM', sm_ok:'all systems nominal', sm_stalker:'motion near streamer', sm_panic:'streamer stress critical', sm_heat:'lamp overheating',
   sm_light:'a lamp burned out', sm_power:'most lamps are dead', sm_signal:'feed interrupted', sm_away:'streamer left frame',
@@ -25,13 +25,14 @@ en:{
   sub:"You moderate NyanBun — Mia's late-night stream. You see her room. She doesn't see what's in it.",
   rules:`<li>Keep the stream alive until <b>00:00</b>. If Mia's <b>panic</b> hits 100% or it reaches her, the night is over.</li>
 <li>It comes through the <b>window</b>, the <b>door</b> or out of the <b>closet</b>, then goes <b>behind her</b>. Listen for the warning sounds: a tap on the glass, a door creak, rattling hangers. The <b>MOTION</b> bar shows where it is.</li>
-<li>Each zone has a lamp: <b>DIM</b> lets it creep, <b>NORMAL</b> slows it, <b>BRIGHT</b> pushes it back but builds <b>heat</b>. At 100% the lamp burns out for the night. Hold BRIGHT too long and it gets used to the light.</li>
+<li>Each zone has a lamp: <b>NORMAL</b> or <b>BRIGHT</b>. Bright light pushes it back. <b>Red eyes</b> are not stopped by light — only by sounds and the blinds.</li>
 <li>At the window, <b>close the blinds</b>. Mia opens them again after a while.</li>
-<li><b>Smart home</b> noises scare it off, but Mia may leave to check. A <b>donation</b> keeps her eyes on the camera.</li>
-<li>Chat: ban trolls and spam. Banning a regular costs <b>trust</b> (3 strikes). Banning <b>him</b> makes him faster.</li>
-<li><b>Highlight moment</b> records it: closer and darker = more HypeCoins.</li>`,
-  keys:'1 window · 2 closet · 3 door — BRIGHT/NORMAL · Shift+1 2 3 — DIM · B blinds · R record · X ban selected · Z dog · C steps · F alarm · G donate · Esc pause',
-  skip:'Skip the tutorial', start:'Start the night', nightPick:'Night', note:'Prototype. Headphones recommended. Sudden loud sounds and a dark ending.',
+<li><b>Smart home</b> noises scare it off, but Mia may leave to check.</li>
+<li>Chat: ban trolls and spam — otherwise the chat turns toxic, viewers leave and Mia gets sad. <b>Show Mia</b> (Q) — she reads it first and answers. Banning a regular costs <b>trust</b>: with no trust left, Mia stops listening to you. Banning <b>him</b> makes him faster.</li>
+<li><b>Highlight moment</b> takes a snapshot from the camera — that is how evidence is kept.</li>
+<li>The endless shift is harsher: lamps heat up, clips pay HypeCoins for donations, upgrades and looks.</li>`,
+  keys:'1 window · 2 closet · 3 door — BRIGHT/NORMAL · B blinds · R record · Q show Mia · X ban selected · Z dog · C steps · F alarm · G donate (endless) · Esc pause',
+  skip:'Skip the tutorial', start:'Start the night', nightPick:'Night', note:'Headphones recommended. Sudden loud sounds and a dark ending.',
   locked:'locked',
   paused:'PAUSED', pausedSub:'The stream is frozen. So is it. Probably.', resume:'Resume',
   archive:'Archive · clips from tonight', again:'Replay this night', retry:'Try again', nextNight:'Next night: {day}', toFinale:'Watch the archive',
@@ -41,11 +42,13 @@ en:{
   t2:'Motion at the WINDOW. Close the blinds.', t2k:'Smart Home → BLINDS · or B',
   t3:"It reached the DOOR. Set the door lamp to BRIGHT until MOTION is empty, then back to NORMAL.", t3k:'door lamp → BRIGHT · or 3',
   t4:"It's BEHIND her — it came out of the closet. Set the CLOSET lamp to BRIGHT. Hurry.", t4k:'closet lamp → BRIGHT · or 2 · FIRE ALARM also works',
-  t5:"That's the job. Now it moves on its own — and not always through the window.", t5k:'record it up close for HypeCoins · donate to calm Mia',
+  t5:"That's the job. Now it moves on its own — and not always through the window.", t5k:'record what you see · ban trolls',
   t1msg:'this stream is so boring lol',
   tipCreepy:"That wasn't a viewer. If Mia reads it she panics — but banning HIM makes him faster.",
-  tipRec:"Closer shots and darker rooms earn more HC. Don't let him get too close.",
+  tipRec:"Saved. Clips keep what the camera saw — that is how evidence is kept.",
   tipHeat:'Over 80% heat the lamp flickers. At 100% it burns out for the night.',
+  tipHeatCamp:'BRIGHT heats the lamp. When it overheats it goes out for a few seconds — then it is dark there.', f_overheat:'{z}: the lamp overheated',
+  m_overheat:'ah! the {z} light went out…',
   tipAdapt:'He got used to the bright light. Switch back to NORMAL between bursts.',
   tipDonate:'Enough HypeCoins for a donation: it calms Mia and keeps her from wandering off.',
   tipDim:'DIM cools a lamp fast, but the dark scares Mia and lets it move faster.',
@@ -78,6 +81,11 @@ en:{
   e_win:['STREAM ENDED · 00:00','Mia: "okay chat, that\'s it for tonight... thanks for watching."'],
   e_panic:['STREAM CRASHED',"Mia's panic hit 100%. She ended the stream mid-sentence and went offline."],
   e_trust:['MOD STATUS REVOKED','You banned too many regular viewers. Mia removed you as a moderator.'],
+  n_fired:'Leaving trolls and spam in chat raises toxicity; wrong bans cost trust. At zero trust Mia ends the stream herself.',
+  e_fired:['MOD ACCESS OFF','Mia ended the stream herself and switched your moderator access off.'],
+  m_toxWarn:'chat, come on… mod, are you there? it\'s a mess in here', f_toxWarn:'Chat is getting toxic — Mia noticed',
+  m_trustLast:'mod, are you even reading the chat? one more time and i\'ll do it myself',
+  m_fired:'are you even reading the chat? fine, i\'ll do it myself tonight. ending the stream.',
   e_kill:['SIGNAL LOST','He put his hands on her shoulders. The feed cut out. Mia isn\'t answering.'],
   st_surv:'Survived until', st_peak:'Peak panic', st_bans:'Bans · right / wrong', noClips:'No clips recorded.', clipNothing:'nothing',
   wh_mon:'Stranger_99 → you (whisper): "see you tomorrow, mod."', wh_tue:'Stranger_99 → you (whisper): "tomorrow i\'ll come a little closer."', wh_thu:'Stranger_99 → you (whisper): "tell her to drink something warm."', wh_sat:'Stranger_99 → you (whisper): "your chat is so loud. tomorrow it\'ll be quiet."', wh_sun:'Stranger_99 → you (whisper): "you remember how monday ends."', wh_endless:'Stranger_99 → you (whisper): "one more, mod?"', wh_wed:'Stranger_99 → you (whisper): "did you like my chair?"',
@@ -87,7 +95,7 @@ en:{
   tox:'TOXIC', f_reports:'MASS REPORTS · −1 TRUST', m_reports:'chat... why is everyone reporting me?', sysReports:'the stream got mass-reported · −1 trust', f_frame:'TOO LATE · IT HOLDS THE FRAME',
   tipTox:'Unbanned trolls and spam make the chat TOXIC. At 100% you get mass reports and lose a trust point.', tipFrame:'Blinds only shoo it away early. Once it is at the glass, it just lets go of the frame and waits.',
   n_trust:'Only ban trolls and spam. Viewers asking questions or noticing things are regulars.',
-  n_panic:'Mia panics from darkness, glare, noises, creepy messages and it getting close. Donations calm her.',
+  n_panic:'Mia panics from darkness, glare, sharp noises, creepy messages and him getting close. Drive him off before he gets near.',
   noteMissed:'Something was taped to her window tonight. You never recorded it.',
   legBan:'BAN THESE:', legTroll:'trolls', legSpam:'spam bots', legHim:'creeps', legKeep:'LEAVE ALONE:', legViewers:'viewers',
   adNA:'Ad not available right now', adBlockNote:'Ad-based bonuses (×2 coins, continue) are off because an ad blocker is on.',
@@ -112,7 +120,7 @@ ru:{
   lighting:'СВЕТ В КОМНАТЕ', reconnect:'модератор: переподключение… (слабый сигнал)', blindsOpen:'ЖАЛЮЗИ', blindsClosed:'ЗАКРЫТО', blindsJam:'ЗАЕЛО', fz:'ЗАМЕР', tipBlindsHeat:'Лампа окна перегревается. Нажми ЖАЛЮЗИ (на лампе окна или B): он уйдёт, а лампа отдохнёт.',
   cue_window:'♪ СТУК В СТЕКЛО', cue_door:'♪ КТО-ТО ДЁРГАЕТ РУЧКУ ДВЕРИ', cue_closet:'♪ ШОРОХ В ШКАФУ', cue_sub:'→ готовь лампу {z}', cz_window:'ОКНА', cz_door:'ДВЕРИ', cz_closet:'ШКАФА',
   z_window:'ОКНО', z_closet:'ШКАФ', z_door:'ДВЕРЬ', motion:'ДВИЖЕНИЕ', heat:'НАГРЕВ',
-  ls_ok:'НОРМА', ls_hot:'ПЕРЕГРЕВ', ls_dead:'ПЕРЕГОРЕЛА', ls_adapt:'РВАНЁТ → НОРМА', ls_motion:'ТАМ КТО-ТО', ls_cool:'ОСТЫВАЕТ',
+  ls_ok:'НЕТ ДВИЖЕНИЯ', ls_out:'ПОГАСЛА', ls_outT:'ПОГАСЛА · {n} С', ls_hot:'ПЕРЕГРЕВ', ls_dead:'ПЕРЕГОРЕЛА', ls_adapt:'РВАНЁТ → ОБЫЧНЫЙ', ls_motion:'ТАМ КТО-ТО', ls_cool:'ОСТЫВАЕТ',
   smartHome:'УМНЫЙ ДОМ', sh_dog:'ЛАЙ СОБАКИ', sh_steps:'ШАГИ', sh_alarm:'ТРЕВОГА', shHint:'Собака — ЗАМРЁТ на 6 с. Шаги — отступит. Тревога — уйдёт. Мия может пойти проверить.',
   system:'СИСТЕМА', sm_ok:'все системы в норме', sm_stalker:'движение рядом со стримером', sm_panic:'стресс стримера критический', sm_heat:'лампа перегревается',
   sm_light:'лампа перегорела', sm_power:'почти весь свет погас', sm_signal:'трансляция прервана', sm_away:'стример вышел из кадра',
@@ -123,13 +131,14 @@ ru:{
   sub:'Ты модерируешь NyanBun — ночной стрим Мии. Ты видишь её комнату. Она не видит, что в ней.',
   rules:`<li>Продержи стрим до <b>00:00</b>. Если <b>паника</b> Мии дойдёт до 100% или он доберётся до неё — ночь проиграна.</li>
 <li>Он приходит через <b>окно</b>, <b>дверь</b> или из <b>шкафа</b> и идёт ей <b>за спину</b>. Перед этим его выдаёт звук: стук в стекло, скрип двери, шорох вешалок. Полоска <b>ДВИЖЕНИЕ</b> показывает, где он.</li>
-<li>У каждой зоны своя лампа: <b>ТЕМНЕЕ</b> — он подкрадывается, <b>НОРМА</b> — замедляется, <b>ЯРЧЕ</b> — отступает, но лампа <b>греется</b>. На 100% она перегорает до конца ночи. Если держать ЯРЧЕ слишком долго, он привыкает к свету.</li>
+<li>У каждой зоны своя лампа: <b>ОБЫЧНЫЙ</b> или <b>ЯРКИЙ</b>. Яркий свет отталкивает его. <b>Красные глаза</b> свет не останавливает — только звуки и жалюзи.</li>
 <li>У окна можно <b>закрыть жалюзи</b>. Через время Мия откроет их сама.</li>
-<li>Звуки <b>умного дома</b> отпугивают его, но Мия может пойти проверить. <b>Донат</b> удерживает её взгляд на камере.</li>
-<li>Чат: бань троллей и спам. Бан обычного зрителя стоит <b>доверия</b> (3 ошибки). Бан <b>его</b> делает его быстрее.</li>
-<li><b>Записать момент</b> — клип с ним: чем ближе и темнее, тем больше HypeCoins.</li>`,
-  keys:'1 окно · 2 шкаф · 3 дверь — ЯРЧЕ/НОРМА · Shift+1 2 3 — ТЕМНЕЕ · B жалюзи · R запись · X бан выбранного · Z собака · C шаги · F тревога · G донат · Esc пауза',
-  skip:'Пропустить обучение', start:'Начать ночь', nightPick:'Ночь', note:'Прототип. Лучше в наушниках. Есть резкие звуки и мрачный финал.',
+<li>Звуки <b>умного дома</b> отпугивают его, но Мия может пойти проверить.</li>
+<li>Чат: бань троллей и спам — иначе чат токсичнеет, зрители уходят, Мия грустит. <b>Показать Мие</b> (Q) — она прочтёт это первым и ответит. Бан обычного зрителя стоит <b>доверия</b>: без доверия Мия перестаёт тебя слушать. Бан <b>его</b> делает его быстрее.</li>
+<li><b>Записать момент</b> — снимок с камеры, так сохраняются улики.</li>
+<li>В бесконечной смене всё жёстче: лампы греются, за клипы платят HypeCoins — на донаты, улучшения и образы.</li>`,
+  keys:'1 окно · 2 шкаф · 3 дверь — ЯРКИЙ/ОБЫЧНЫЙ · B жалюзи · R запись · Q показать Мие · X бан выбранного · Z собака · C шаги · F тревога · G донат (бесконечная смена) · Esc пауза',
+  skip:'Пропустить обучение', start:'Начать ночь', nightPick:'Ночь', note:'Лучше в наушниках. Есть резкие звуки и мрачный финал.',
   locked:'закрыто',
   paused:'ПАУЗА', pausedSub:'Стрим замер. Он тоже. Наверное.', resume:'Продолжить',
   archive:'Архив · клипы этой ночи', again:'Сыграть эту ночь ещё раз', retry:'Ещё раз', nextNight:'Следующая ночь: {day}', toFinale:'Открыть архив',
@@ -137,14 +146,16 @@ ru:{
   di_fri:['ПЯТНИЦА','К её окну снова что-то приклеено.'], di_mon2:['ПОНЕДЕЛЬНИК','Последний стрим перед переездом.'],
   t1:'Тролль. Наведи на его сообщение и жми БАН — или кликни его и нажми большую кнопку БАН.', t1k:'чат справа',
   t2:'Движение у ОКНА. Закрой жалюзи.', t2k:'Свет в комнате → ЖАЛЮЗИ · или B',
-  t3:'Он у ДВЕРИ. Переключи лампу двери на ЯРЧЕ, пока ДВИЖЕНИЕ не опустеет, потом обратно на НОРМА.', t3k:'лампа двери → ЯРЧЕ · или 2',
-  t4:'Он ЗА СПИНОЙ — вылез из шкафа. Быстро ЯРЧЕ на лампе ШКАФА.', t4k:'лампа шкафа → ЯРЧЕ · или 3 · ТРЕВОГА тоже спасает',
-  t5:'Вот и вся работа. Дальше он ходит сам — и не всегда через окно.', t5k:'записывай его вблизи ради HypeCoins · донат успокаивает Мию',
+  t3:'Он у ДВЕРИ. Переключи лампу двери на ЯРКИЙ, пока ДВИЖЕНИЕ не опустеет, потом обратно на ОБЫЧНЫЙ.', t3k:'лампа двери → ЯРКИЙ · или 2',
+  t4:'Он ЗА СПИНОЙ — вылез из шкафа. Быстро ЯРКИЙ на лампе ШКАФА.', t4k:'лампа шкафа → ЯРКИЙ · или 3 · ТРЕВОГА тоже спасает',
+  t5:'Вот и вся работа. Дальше он ходит сам — и не всегда через окно.', t5k:'записывай то, что видишь · бань троллей',
   t1msg:'скукота а не стрим лол',
   tipCreepy:'Это писал не зритель. Если Мия прочитает — запаникует. Но бан его злит, и он становится быстрее.',
-  tipRec:'Клип стоит дороже, когда он близко, а лампа не светит. Рискованно.',
+  tipRec:'Сохранено. Клип хранит то, что видела камера, — так копятся улики.',
   tipHeat:'После 80% нагрева лампа мерцает, на 100% перегорает до конца ночи.',
-  tipAdapt:'Ты слишком долго держал ЯРЧЕ — он привык к свету и рванул. Включай ненадолго и возвращай НОРМА.',
+  tipHeatCamp:'ЯРКИЙ греет лампу. Перегреется — погаснет на несколько секунд, и там станет темно.', f_overheat:'{z}: лампа перегрелась',
+  m_overheat:'ай! свет {z} погас…',
+  tipAdapt:'Ты слишком долго держал ЯРКИЙ — он привык к свету и рванул. Включай ненадолго и возвращай ОБЫЧНЫЙ.',
   tipDonate:'Хватает HypeCoins на донат: он успокоит Мию и не даст ей уйти из кадра.',
   tipDim:'ТЕМНЕЕ быстро остужает лампу, но темнота пугает Мию и ускоряет его.',
   tipAway:'Звуки могут увести Мию из комнаты. Если он рядом, когда она выйдет, — она его увидит.',
@@ -175,16 +186,21 @@ ru:{
   e_win:['СТРИМ ОКОНЧЕН · 00:00','Мия: «ну всё, чат, на сегодня всё... спасибо, что смотрели.»'],
   e_panic:['СТРИМ ОБОРВАЛСЯ','Паника Мии дошла до 100%. Она оборвала стрим на полуслове и вышла.'],
   e_trust:['ТЫ БОЛЬШЕ НЕ МОДЕР','Ты забанил слишком много обычных зрителей. Мия сняла с тебя модерку.'],
+  n_fired:'Тролли и спам без бана растят токсичность, ошибочные баны снимают доверие. Доверие на нуле — Мия заканчивает эфир сама.',
+  e_fired:['ДОСТУП МОДЕРАТОРА ОТКЛЮЧЁН','Мия сама закончила эфир и отключила тебе модерку.'],
+  m_toxWarn:'чат, ну хватит… модер, ты тут? в чате ад', f_toxWarn:'Чат токсичный — Мия заметила',
+  m_trustLast:'модер, ты вообще читаешь чат? ещё раз — и я сама',
+  m_fired:'ты вообще читаешь чат? ладно, я сегодня сама. эфир заканчиваю.',
   e_kill:['СИГНАЛ ПОТЕРЯН','Его руки легли ей на плечи, и стрим оборвался. Мия не выходит на связь.'],
   st_surv:'Продержался до', st_peak:'Пик паники', st_bans:'Баны: верно / мимо', noClips:'Клипов нет.', clipNothing:'пусто',
   wh_mon:'Stranger_99 → тебе (шёпот): «до завтра, модер.»', wh_tue:'Stranger_99 → тебе (шёпот): «завтра я зайду дальше.»', wh_thu:'Stranger_99 → тебе (шёпот): «передай ей, пусть пьёт тёплое.»', wh_sat:'Stranger_99 → тебе (шёпот): «у тебя такой шумный чат. завтра будет тихо.»', wh_sun:'Stranger_99 → тебе (шёпот): «ты же помнишь, чем кончается понедельник.»', wh_endless:'Stranger_99 → тебе (шёпот): «ещё одну, модер?»', wh_wed:'Stranger_99 → тебе (шёпот): «тебе понравилось моё кресло?»',
   wh_fri:'Stranger_99 → тебе (шёпот): «ты прочитал моё письмо?»', wh_kill:'Stranger_99 → тебе (шёпот): «спасибо, что не мешал, модер.»', wh_panic:'Stranger_99 → тебе (шёпот): «она выключила стрим. до завтра, модер.»', wh_trust:'Stranger_99 → тебе (шёпот): «тебя сняли с модерки. теперь у неё никого нет.»', wh_tox:'Stranger_99 → тебе (шёпот): «чат её доконал. мне даже делать ничего не пришлось.»', wh_other:'Stranger_99 → тебе (шёпот): «опять?»',
-  n_win:'Ночь пройдена.', n_kill:'Когда он за спиной — ЯРЧЕ на лампе шкафа или пожарная тревога. У тебя пара секунд.',
+  n_win:'Ночь пройдена.', n_kill:'Когда он за спиной — ЯРКИЙ на лампе шкафа или пожарная тревога. У тебя пара секунд.',
   n_tox:'Тролли и спам без бана делают чат токсичным. На 100% зрители заваливают стрим жалобами, и ты теряешь доверие. Поглядывай в чат.', e_tox:['СТРИМ ЗАКРЫЛИ','Чат утонул в троллях и спаме. Зрители засыпали стрим жалобами, и платформа его закрыла.'],
   tox:'ТОКСИЧНОСТЬ', f_reports:'ЖАЛОБЫ · −1 ДОВЕРИЕ', m_reports:'чат... почему на меня все кидают жалобы?', sysReports:'на стрим посыпались жалобы · −1 доверие', f_frame:'ПОЗДНО · ОН ДЕРЖИТСЯ ЗА РАМУ',
   tipTox:'Тролли и спам без бана делают чат ТОКСИЧНЫМ. На 100% посыплются жалобы и ты потеряешь доверие.', tipFrame:'Жалюзи отгоняют его, только пока он далеко. Если он уже у стекла, он просто отпустит раму и будет ждать.',
   n_trust:'Бань только троллей и спам. Те, кто задаёт вопросы или что-то замечает, — обычные зрители.',
-  n_panic:'Мия паникует от темноты, слепящего света, шумов, жутких сообщений и когда он близко. Донаты её успокаивают.',
+  n_panic:'Мия паникует от темноты, слепящего света, резких звуков, жутких сообщений и когда он близко. Отгоняй его раньше, чем он подойдёт.',
   noteMissed:'Сегодня к её окну что-то приклеили. Ты так это и не записал.',
   legBan:'БАНЬ ИХ:', legTroll:'тролли', legSpam:'спам-боты', legHim:'жуткие', legKeep:'НЕ ТРОГАЙ:', legViewers:'зрители',
   adNA:'Реклама сейчас недоступна', adBlockNote:'Бонусы за рекламу (×2 монеты, продолжить) отключены: включён блокировщик рекламы.',

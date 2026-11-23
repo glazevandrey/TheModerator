@@ -69,8 +69,8 @@ function stalkerTick(dt){
   const base = st.aggr * DY().aggr * (1+.6*d) * (st.stage==='behind'?(DY().bm||1.5):1)
              * (DY().press&&d>DY().press.at?DY().press.rate:1) * (st.stage==='window'&&S.blinds.jammed?.7:1) * (st.stage==='window'&&S.winOpen?1.6:1) * (st.stage==='closet'?.85:1);
   let rate;
-  if(red){ // the light feeds him
-    rate = {DEAD:.13,DIM:.03,STABLE:.065,BOOST:.17}[m] * base;
+  if(red){ /* 22.11: light lets you see him but neither stops nor speeds him; sounds and blinds drive him off (was: light feeds him, DIM slows) */
+    rate = .065 * base;
     if(m==='BOOST'){ st.lit+=dt; if(st.lit>.5 && !st.litSaid){ st.litSaid=true; floaty(T('f_redLight')); S.glitch=.2; } }
   } else if(m==='BOOST'){
     st.boostT+=dt; rate = st.boostT<.4 ? 0 : -.12;

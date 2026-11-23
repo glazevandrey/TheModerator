@@ -2,7 +2,7 @@
 // ======================= REC (Highlight Moment) → HypeCoins, donations =======================
 function rec(){
   if(!S.running||S.rec.active>0||S.rec.cd>0) return;
-  S.rec.active=2.4; SFX.rec(); S.glitch=.35; SFX.glitch(); addPanic(4); S.stats.recs++;
+  S.rec.active=2.4; SFX.rec(); S.glitch=.35; SFX.glitch(); if(!camp()) addPanic(4); S.stats.recs++;   /* 22.11: in the campaign the camera is for evidence, it does not scare her */
   say('rec',T('m_rec'),12);
 }
 function recValue(){
@@ -22,11 +22,13 @@ function recValue(){
 function finishRec(){
   const found=recValue(); const best=found[0]||{val:0,label:'',kind:''}; best.val=Math.round(best.val*(1+.25*upLv('lens'))/10)*10;
   const capturedNote=found.some(f=>f.kind==='note')&&!S.ev.noteRec;
+  if(camp()) best.val=0;                          /* 22.11: no HC in the campaign - a clip is a record, not money */
   S.hc+=best.val; if(best.val) S.viewers+=Math.round(best.val/4);
   let img=''; try{ const th=document.createElement('canvas'); th.width=320; th.height=160; th.getContext('2d').drawImage(feed,0,0,320,160); img=th.toDataURL('image/jpeg',.8); }catch(e){}
   const clip={img,val:best.val,label:best.label,kind:found.some(f=>f.kind==='note')?'note':best.kind,clock:clockStr(),night:S.night.key};
+  if(typeof tueClip==='function') tueClip(clip);   /* Tuesday: the frame of the yard (tuesday.js) */
   S.clips.push(clip); if(capturedNote)evidenceCaptured(); ARCHIVE.push(clip); if(ARCHIVE.length>24) ARCHIVE.shift();
-  pushMsg('sys','',best.val?T('clipSaved',{v:best.val,label:best.label}):T('clipNone')).read=true;
+  pushMsg('sys','',best.val?T('clipSaved',{v:best.val,label:best.label}):camp()&&best.label?T('clipSavedCamp',{label:best.label}):T('clipNone')).read=true;
   S.rec.cd=CD.rec; S.rec.flash=.6;
   if(best.val&&!capturedNote) tip('recdone',T('tipRec'));
 }
@@ -36,6 +38,7 @@ function economyTick(dt){
   else S.rec.cd=Math.max(0,S.rec.cd-dt);
   S.rec.flash=Math.max(0,(S.rec.flash||0)-dt);
   S.donate.cd=Math.max(0,S.donate.cd-dt); S.focus=Math.max(0,S.focus-dt);
+  if(camp()) return;                              /* 22.11: income, donations and the rescue donation live in the endless shift */
   if(S.t>70 && S.hc>=donateCost()) tip('donate',T('tipDonate'));
   // the stream itself earns: subs and tips trickle in while she is on air
   const inc=S.night.inc||0; if(inc>0){ S.hcf+=inc*dt*(S.tox>TOX.half?.5:1); if(S.hcf>=1){ const k=Math.floor(S.hcf); S.hcf-=k; S.hc+=k; } }
@@ -45,7 +48,7 @@ function economyTick(dt){
 }
 function donateCost(){ const c=(S&&S.night&&S.night.cost)||COST.donate; return upLv('calm')?Math.max(80,c-30):c; }
 function donate(){
-  if(!S.running||S.hc<donateCost()||S.donate.cd>0) return;
+  if(!S.running||camp()||S.hc<donateCost()||S.donate.cd>0) return;
   const cost=donateCost(); S.hc-=cost; S.stats.donates++; S.donate.cd=CD.donate; S.focus=8; S.panic=Math.max(0,S.panic-(upLv('calm')?35:26)); SFX.donate();
   pushMsg('donation','modbot',T('donationMsg',{v:cost})).read=true;
   say('force',T('m_donate'));

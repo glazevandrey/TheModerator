@@ -22,13 +22,15 @@ const LIGHT={window:{x:62,y:70}, closet:{x:156,y:72}, door:{x:262,y:76}};
 //  tox   – how fast unbanned trolls/spam poison the chat (0 = off)
 //  routes – weights of the ways in (A window→door→behind, B door→behind, C closet→behind)
 //  red   – chance that an approach has red eyes (light feeds him)   decoy – chance of a shape with no eyes elsewhere
+//  noteAt – when the window note appears (s, default 45)   off – tools switched off this night (Friday slice: js/friday.js)
+//  mod2  – Steam slice moderation (js/moderation.js): hold – filter delay s, glance – Mia looks at chat every [min,max] s, minFeed – s in her feed before she can read it
 //  hot   – a hot night: Mia opens the window now and then (he comes through it faster until the blinds shut it)
 const NIGHTS=[
-  {key:'mon',  story:false, len:165, aggr:.70, wait0:14, waitMul:1.45, max:'window', bm:1, chat:2.0, troll:.55, pmul:.55, calm:1.3, adapt:false, rescue:true, cost:100, tox:.55, routes:{A:1}, inc:1.0, ev:{note:true}},
-  {key:'tue',  story:false,len:220, aggr:.80, wait0:20, waitMul:1.30, max:'door', bm:1,   chat:1.7, troll:.7,  pmul:.65, calm:1.1, adapt:false, rescue:true, cost:100, tox:.7, routes:{A:1}, hot:true, inc:1.0, ev:{}, mod:'surge'},
+  {key:'mon',  mod2:true, filter:false, noStalker:true, heat:.35, story:false, len:400, aggr:.70, wait0:14, waitMul:1.45, max:'window', bm:1, chat:2.0, troll:.55, pmul:.55, calm:1.3, adapt:false, rescue:true, cost:100, tox:.55, routes:{A:1}, inc:1.0, ev:{}},
+  {key:'tue',  mod2:true, filter:false, noStalker:true, story:false,len:600, aggr:.80, wait0:20, waitMul:1.30, max:'door', bm:1,   chat:1.7, troll:.7,  pmul:.65, calm:1.1, adapt:false, rescue:true, cost:100, tox:.7, routes:{A:1}, hot:false, inc:1.0, ev:{}, mod:''},
   {key:'wed',  story:true, len:230, aggr:0.70, wait0:20, waitMul:1.1, max:'behind', bm:1.0, chat:1.45,troll:.8,  pmul:.75, calm:.95, adapt:true,  rescue:true, cost:120, tox:0.6, routes:{A:.6,B:.4}, inc:.9,  ev:{chair:true,breakChat:true}},
   {key:'thu',  story:false,len:240, aggr:0.80,wait0:18, waitMul:0.95, max:'behind', bm:1.15, chat:1.25,troll:.9,  pmul:.85, calm:.8,  adapt:true,  rescue:true, cost:120, tox:0.85, routes:{A:.45,B:.35,C:.2}, inc:.9,  ev:{}, mod:'cold'},
-  {key:'fri',  story:true, len:255, aggr:.76,wait0:16, waitMul:0.92,  max:'behind', bm:1.25, chat:1.1, troll:1,   pmul:.95, calm:.7,  adapt:true,  rescue:true, cost:130, tox:1, routes:{A:.4,B:.3,C:.3}, red:.25, inc:.8,  ev:{note:true,chair:true}},
+  {key:'fri',  story:true, len:255, aggr:.76,wait0:16, waitMul:0.92,  max:'behind', bm:1.25, chat:1.1, troll:1,   pmul:.95, calm:.7,  adapt:true,  rescue:true, cost:130, tox:1, routes:{A:.4,B:.3,C:.3}, red:0, inc:.8,  ev:{note:true}, noteAt:55, mod2:true, hold:6, glance:[2,4], minFeed:1.5, off:['steps','alarm']},
   {key:'sat',  story:false,len:265, aggr:.74,wait0:14, waitMul:0.86,  max:'behind', bm:1.3, chat:1.2, troll:1,   pmul:1.0, calm:.6,  adapt:true,  rescue:false,cost:150, tox:1, routes:{A:.35,B:.35,C:.3}, red:.3, hot:true, inc:.8,  ev:{}, mod:'raid'},
   {key:'sun',  story:false,len:280, aggr:.76,wait0:12, waitMul:0.8,  max:'behind', bm:1.2, chat:1.0, troll:1,   pmul:1.05,calm:.55, adapt:true,  rescue:false,cost:150, tox:1, routes:{A:.3,B:.35,C:.35}, red:.25, decoy:.45, inc:.7,  ev:{}, mod:'blackout'},
   {key:'mon2', story:true, len:300, aggr:.82,wait0:8,  waitMul:0.68,  max:'behind', bm:1.45, chat:.95, troll:1,   pmul:.92, calm:.5, adapt:true,  rescue:false,cost:150, tox:1.1, routes:{A:.25,B:.4,C:.35}, red:.25, decoy:.35, inc:.7,  ev:{boxes:true,finale:true}}
@@ -81,9 +83,10 @@ function applyDiff(N,d){ const D=DIFFS[d]||DIFFS.normal; if(d==='normal'||!D) re
 function freshProg(){ return {v:2, diff:'normal', diffChosen:false, unlocked:0, done:false, bank:0, up:{}, owned:{hoodie:['blue'],phones:['pink'],lights:['warm']}, wear:{hoodie:'blue',phones:'pink',lights:'warm'}, best:0, daily:{last:'',streak:0}, tut:false, stars:{}, shopHint:false}; }
 let PROG=freshProg();
 function saveProg(){ pfSave(PROG); }
-function upLv(id){ return PROG.up[id]||0; }
+function upOwned(id){ return PROG.up[id]||0; }                                   /* what the shop shows: bought levels */
+function upLv(id){ if(S&&!S.night.endless) return 0; return upOwned(id); }   /* 22.11: in play, upgrades work in the endless shift only */
 // the cheapest upgrade the bank can pay for right now (null if none)
-function affordUp(){ let best=null; for(const u of UPGRADES){ const lv=upLv(u.id); if(lv<u.lv.length && PROG.bank>=u.lv[lv] && (!best||u.lv[lv]<best.price)) best={id:u.id,price:u.lv[lv]}; } return best; }
+function affordUp(){ let best=null; for(const u of UPGRADES){ const lv=upOwned(u.id); if(lv<u.lv.length && PROG.bank>=u.lv[lv] && (!best||u.lv[lv]<best.price)) best={id:u.id,price:u.lv[lv]}; } return best; }
 function look(cat){ const id=PROG.wear[cat]; return LOOKS[cat].find(x=>x.id===id)||LOOKS[cat][0]; }
 
 let S=null, nextId=1;
@@ -92,7 +95,7 @@ function newState(idx,endN,tut){
   const N = tut ? TUT_NIGHT : endN!=null ? endlessNight(endN) : applyDiff(NIGHTS[idx||0],PROG.diff||'normal');
   const s={
     idx:idx||0, night:N, len:N.len, t:0, running:false, over:false, overReason:null, scareT:0, continued:false,
-    panic:0, trust:3+upLv('trust'), maxTrust:3+upLv('trust'), hc:0, viewers:1204,
+    panic:0, trust:3+(N.endless?(PROG.up.trust||0):0), maxTrust:3+(N.endless?(PROG.up.trust||0):0), hc:0, viewers:1204,
     lamps:{window:lampObj(), closet:lampObj(), door:lampObj()},
     blinds:{closed:false,timer:0,cd:0,anim:0,jammed:N.mod==='blackout'},
     sh:{dog:0,steps:0,alarm:0}, alarmT:0, dogT:0,
@@ -110,10 +113,19 @@ function newState(idx,endN,tut){
   return s;
 }
 function DY(){ return S.night; }
+/* 22.11.2026: the campaign is about attention and Mia; the endless shift keeps the survival systems
+   (heat, adapt-lunge, HC, donations, shop upgrades). camp() = a campaign or tutorial night, not the endless shift. */
+function camp(){ return !!S && !S.night.endless; }
+/* demo build: Monday and Tuesday only, then «Demo over» with a wishlist button.
+   On with ?demo in the address or window.TM_DEMO=true set before the scripts (the demo build sets it). */
+const DEMO_BUILD=(typeof window!=='undefined')&&(window.TM_DEMO===true||/[?&]demo\b/.test(location.search));
+const DEMO_NIGHTS=2;                                   /* mon, tue */
+const STEAM_URL='';                                    /* the store page link, once it exists */
 function dprog(){ return clamp(S.t/S.len,0,1); }
 // the clock runs at one speed every night (1 stream minute = 5 s); longer nights simply start earlier (23:18 … 23:00)
-function streamMin(){ if(!S||S.len>3000) return S?Math.min(59,Math.floor(S.t/5)):0; const total=S.len/5; return Math.min(60,60-total+Math.min(total,S.t/5)); }
-function lampMode(z){ const L=S.lamps[z]; return L.burned?'DEAD':L.mode; }
-function adaptAt(){ return S.night.adapt ? 5.5-1.5*dprog() : 1e9; }
+function streamMin(){ if(!S||S.len>3000) return S?Math.min(59,Math.floor(S.t/5)):0; const total=S.len/5; if(total>60) return Math.min(60,S.t/S.len*60);   /* 23.11: nights longer than 300 s start at 23:00 and stretch the hour */
+  return Math.min(60,60-total+Math.min(total,S.t/5)); }
+function lampMode(z){ const L=S.lamps[z]; return L.burned||L.outT>0?'DEAD':L.mode; }
+function adaptAt(){ return S.night.adapt && !camp() ? 5.5-1.5*dprog() : 1e9; }   /* 22.11: no adapt-lunge in the campaign */
 function later(fn,ms){ const g=S; setTimeout(()=>{ if(S===g && S.running) fn(); },ms); }
 const ARCHIVE=[];

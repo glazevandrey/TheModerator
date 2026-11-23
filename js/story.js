@@ -6,17 +6,8 @@
 // Each night ends on a question that the next one answers. Beats fire at a share of the night (at) and wait for a free caption.
 const STORY={
  ru:{
-  mon:{beats:[{at:.08,mia:'модер, гостевой доступ к лампам и защитным звукам работает? если что — помоги со светом'},
-              {at:.20,mia:'через восемь дней переезжаю. хочу провести последнюю неделю эфиров здесь, пока всё не разобрала'},
-              {at:.35,mia:'кстати, вчера кто-то оставил у моей двери цветы. розовые пионы. без записки. мило… наверное'},
-              {at:.55,stalker:'ты снова тут? я скучал'},
-              {at:.93,mia:'всё, чат, спокойной ночи. модер, ты тоже иди спать, хорошо?'}]},
-  tue:{beats:[{at:.25,mia:'у нас на Шелковичной опять фонарь не горит. темнота под окнами'},
-              {at:.2, mia:'модер, гостевой доступ со вчера оставила. если опять кто-то будет у окна — помоги, ладно?'},
-              {at:.35,mia:'курьер из «Пиона» опять спрашивал, одна ли я живу. странный парень'},
-              {at:.45,mia:'мне кажется, вчера после стрима под окном кто-то стоял. долго стоял'},
-              {at:.6, stalker:'тебе идут розовые цветы'},
-              {at:.92,mia:'я купила умные лампы, чтобы было светлее. пусть хоть свет будет на моей стороне'}]},
+  mon:{beats:[{at:.20,mia:'через восемь дней переезжаю. хочу провести последнюю неделю эфиров здесь, пока всё не разобрала'},]},
+  tue:{beats:[{at:.25,mia:'у нас во дворе опять фонарь не горит. темнота под окнами'}]},   /* 23.11: the rest of Tuesday is scripted (tuesday.js) */
   wed:{beats:[{at:.3, mia:'чат… кто-то пишет мне в личку. он знает, что я ела на ужин. я никому не говорила'},
               {at:.4, mia:'и нет, это не Денис. мы расстались в мае, он вообще в другом городе. наверное'},
               {at:.5, stalker:'модер, ты тоже смотришь её каждую ночь?'},
@@ -47,17 +38,8 @@ const STORY={
                {at:.86,mia:'ладно. последний раз. не буду бояться'}]}
  },
  en:{
-  mon:{beats:[{at:.08,mia:"mod, do the guest controls work? the lights and speaker sounds? help with them if i need it, okay?"},
-              {at:.20,mia:"moving in eight days. one last week of streams here before i pack everything"},
-              {at:.35,mia:"btw, yesterday someone left flowers at my door. pink peonies. no note. sweet… i guess"},
-              {at:.55,stalker:"you're here again? i missed you"},
-              {at:.93,mia:"ok chat, good night. mod, you go to sleep too, ok?"}]},
-  tue:{beats:[{at:.25,mia:"the streetlight on Shelkovichnaya is out again. can't see a thing outside my window"},
-              {at:.2, mia:"mod, left your guest access on from yesterday. if that guy comes back to the window... please help, okay?"},
-              {at:.35,mia:"the delivery guy from Peony asked again if i live alone. weird guy"},
-              {at:.45,mia:"i think someone was standing under my window after the stream yesterday. for a long time"},
-              {at:.6, stalker:'pink flowers suit you'},
-              {at:.92,mia:"spent all that money on smart bulbs. they'd better be good for something"}]},
+  mon:{beats:[{at:.20,mia:"moving in eight days. one last week of streams here before i pack everything"},]},
+  tue:{beats:[{at:.25,mia:"the streetlight in our yard is out again. can't see a thing outside my window"}]},
   wed:{beats:[{at:.3, mia:"chat… someone keeps DMing me. he knows what i had for dinner. i didn't tell anyone"},
               {at:.4, mia:"and no, it's not Denis. we broke up in may, he's in another city anyway. i think"},
               {at:.5, stalker:'mod, do you watch her every night too?'},

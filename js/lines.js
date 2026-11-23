@@ -325,33 +325,31 @@ function pickNormal(){ const L=C(), top=L.TOPIC&&L.TOPIC[DY().key]; return fresh
 
 // ---------------------------------------------------------------- ways in, habits, hot nights (RU / EN)
 Object.assign(STR.ru,{
-  zl_closet:'шкаф', f_closet:'ШКАФ ПРИОТКРЫЛСЯ', f_redLight:'КРАСНЫЕ ГЛАЗА · СВЕТ ЕГО ЗЛИТ', f_decoy:'ЭТО ПРОСТО ТЕНЬ', f_winClosed:'ОКНО ЗАКРЫТО',
+  zl_closet:'шкаф', f_closet:'ШКАФ ПРИОТКРЫЛСЯ', f_redLight:'КРАСНЫЕ ГЛАЗА · СВЕТ ЕГО НЕ ПУГАЕТ', f_decoy:'ЭТО ПРОСТО ТЕНЬ', f_winClosed:'ОКНО ЗАКРЫТО',
   tipCloset:'Он может быть уже в квартире — в шкафу. Шорох вешалок = шкаф. Лампа шкафа отгоняет его, «Шаги» и «Лай» тоже работают.',
   tipRouteB:'Он вошёл сразу через дверь, без окна. Слушай перед появлением: стук — окно, скрип — дверь, шорох вешалок — шкаф.',
-  tipRed:'КРАСНЫЕ ГЛАЗА: свет его только злит, ЯРЧЕ ускоряет. Убавь лампу (ТЕМНЕЕ) и пугай звуками умного дома, у окна — жалюзи.',
+  tipRed:'КРАСНЫЕ ГЛАЗА: свет помогает его увидеть, но не останавливает. Отгоняй звуками умного дома, у окна — жалюзи.',
   tipDecoy:'Не всё, что видно, — он. У обманки нет глаз, а ДАТЧИК ДВИЖЕНИЯ на карточке лампы не врёт.',
   tipHot:'Мия открыла окно: через открытое окно он идёт гораздо быстрее. Закрой жалюзи — окно закроется.',
   m_hot:['так жарко... открою окно, ладно?','всё, не могу, открываю окно','чат, тут дышать нечем. проветрю немного'],
-  nw_tue:'Сегодня жарко: Мия может открыть окно. Тогда он идёт через окно быстрее — закрывай жалюзи.',
+  /* 22.11: no nw_tue - the game showed the rule as text before any scene; Tuesday is being rebuilt */
   nw_wed:'Новое: он может войти сразу через ДВЕРЬ. Перед этим скрипнет дверь — слушай.',
   nw_thu:'Новое: ШКАФ. Шорох вешалок значит, что он уже в квартире. Лампа шкафа — твой ответ.',
-  nw_fri:'Новое: КРАСНЫЕ ГЛАЗА. Такого свет не пугает, а злит: убавляй лампу и пугай звуками.',
+  /* 22.11: no nw_fri - on Friday the red eyes come only in the finale and the red lesson teaches them then; the lesson moves to Thursday */
   nw_sat:'Рейд и жара: чат будет бешеный, а Мия может открыть окно.',
   nw_sun:'Новое: ОБМАНКИ. В темноте не всё — он. Смотри на датчик движения на карточках ламп.',
   nw_mon2:'Он знает все пути. И ты тоже.'
 });
 Object.assign(STR.en,{
-  zl_closet:'closet', f_closet:'THE CLOSET CREAKED OPEN', f_redLight:'RED EYES · LIGHT ANGERS IT', f_decoy:'JUST A SHADOW', f_winClosed:'WINDOW SHUT',
+  zl_closet:'closet', f_closet:'THE CLOSET CREAKED OPEN', f_redLight:'RED EYES · LIGHT DOESN\'T SCARE IT', f_decoy:'JUST A SHADOW', f_winClosed:'WINDOW SHUT',
   tipCloset:'He can already be inside — in the closet. Rattling hangers = the closet. The closet lamp drives him back; Footsteps and Bark work too.',
   tipRouteB:'He came straight through the door, skipping the window. Listen before he shows up: a tap = window, a creak = door, rattling hangers = closet.',
-  tipRed:'RED EYES: light only feeds this one, BRIGHT speeds him up. Turn the lamp DOWN and scare him with smart-home noises; at the window — the blinds.',
+  tipRed:'RED EYES: light lets you see him, but won\'t stop him. Scare him off with smart-home sounds; at the window — the blinds.',
   tipDecoy:"Not everything you see is him. A decoy has no eyes, and the MOTION sensor on the lamp card never lies.",
   tipHot:'Mia opened the window: through an open window he comes much faster. Shut the blinds — the window closes too.',
   m_hot:["it's so hot... i'm opening the window, ok?","that's it, opening the window","chat, i can't breathe in here. airing it out a bit"],
-  nw_tue:"It's hot tonight: Mia may open the window. Then he comes through it faster — shut the blinds.",
   nw_wed:'New: he can come straight through the DOOR. The door creaks first — listen.',
   nw_thu:"New: the CLOSET. Rattling hangers mean he's already inside. Use the closet lamp.",
-  nw_fri:"New: RED EYES. Light doesn't scare this one, it angers him: dim the lamp, use the noises.",
   nw_sat:'Raid and heat: chat goes wild, and Mia may open the window.',
   nw_sun:'New: DECOYS. In the dark not everything is him. Watch the motion sensor on the lamp cards.',
   nw_mon2:'He knows every way in. So do you.'
@@ -361,14 +359,16 @@ CHAT.en.STALKER.closet=["i've been here a while",'it smells like your sweaters i
 CHAT.ru.NERVOUS.closet=['шкаф приоткрылся??','в шкафу кто-то есть','мия, что у тебя в шкафу','я видел глаза в шкафу','почему шкаф открыт'];
 CHAT.en.NERVOUS.closet=['did the closet just open??',"someone's in the closet",'mia whats in your closet','i saw eyes in the closet','why is the closet open'];
 
-Object.assign(STR.ru,{ f_winOpen:'МИЯ ОТКРЫЛА ОКНО', f_surge:'СКАЧОК: ЛАМПА {z} +30% НАГРЕВА', ls_surge:'СКАЧОК!', ls_red:'СВЕТ ЗЛИТ → ТЕМНЕЕ', tag_first:'знакомство',
-  tipSurge:'Скачок напряжения резко греет одну лампу. Если она уже горячая — переведи её на НОРМУ, иначе перегорит.',
+Object.assign(STR.ru,{ f_winOpen:'МИЯ ОТКРЫЛА ОКНО', f_surge:'СКАЧОК: ЛАМПА {z} +30% НАГРЕВА', ls_surge:'СКАЧОК!', ls_red:'СВЕТ НЕ ПУГАЕТ → ЗВУК', tag_first:'знакомство',
+  tipSurge:'Скачок напряжения резко греет одну лампу. Если она уже горячая — переведи её на ОБЫЧНЫЙ, иначе перегорит.',
+  f_surgeOut:'СКАЧОК: ЛАМПА {z} ПОГАСЛА', clipSavedCamp:'момент записан · {label}', demoEndTitle:'ДЕМО ОКОНЧЕНО', chapEndTitle:'ГЛАВА 1 ЗАВЕРШЕНА', chapEndSub:'Спасибо, что посидел с Мией. Дальше — среда, и в её комнате будет уже не так спокойно. Продолжение в работе.', demoEndSub:'Спасибо, что посидел с Мией. Дальше — среда, и в её комнате будет уже не так спокойно.', demoWish:'Добавить в список желаемого в Steam', demoSoon:'Скоро в Steam', demoMenu:'В меню', demoNext:'Что дальше', m_distrust:'модер, ты вообще что делаешь? ладно… дальше я сама', f_distrust:'МИЯ БОЛЬШЕ НЕ СЛУШАЕТ МОДЕРА', tipSurgeOut:'Скачок напряжения на пару секунд гасит лампу. Свет вернётся сам.',
   tt_tox:'Тролли и спам, которых ты не забанил, копятся: растёт ТОКСИЧНОСТЬ чата. На 100% зрители кидают жалобы, и ты теряешь ★ доверие. Не забывай про чат.' });
-Object.assign(STR.en,{ f_winOpen:'MIA OPENED THE WINDOW', f_surge:'SURGE: {z} LAMP +30% HEAT', ls_surge:'SURGE!', ls_red:'LIGHT ANGERS → DIM', tag_first:'first night',
+Object.assign(STR.en,{ f_winOpen:'MIA OPENED THE WINDOW', f_surge:'SURGE: {z} LAMP +30% HEAT', ls_surge:'SURGE!', ls_red:'LIGHT WON\'T STOP IT → SOUND', tag_first:'first night',
   tipSurge:'A power surge heats one lamp up. If it is already hot, set it to NORMAL or it will burn out.',
+  f_surgeOut:'SURGE: {z} LAMP WENT OUT', clipSavedCamp:'moment recorded · {label}', demoEndTitle:'END OF DEMO', chapEndTitle:'CHAPTER 1 COMPLETE', chapEndSub:'Thanks for keeping Mia company. Next is Wednesday, and her room won’t stay this calm. The next chapter is in the works.', demoEndSub:'Thanks for keeping Mia company. Next is Wednesday, and her room won’t stay this calm.', demoWish:'Add to your Steam wishlist', demoSoon:'Coming soon to Steam', demoMenu:'Main menu', demoNext:'What’s next', m_distrust:"mod, what are you even doing? fine… i'll handle it myself", f_distrust:'MIA NO LONGER LISTENS TO THE MOD', tipSurgeOut:'A power surge puts a lamp out for a few seconds. The light comes back by itself.',
   tt_tox:"Trolls and spam you don't ban pile up: chat TOXICITY rises. At 100% viewers mass-report the stream and you lose a ★ trust credit. Keep an eye on the chat." });
 
-Object.assign(STR.ru,{ f_breaker:'ПРОБКИ: ЯРЧЕ — ТОЛЬКО ОДНА ЛАМПА', tipBreaker:'Пробки не тянут две лампы на ЯРЧЕ: включишь вторую — первая вернётся на НОРМУ. Угадывай, где он, по звуку и датчикам.' });
+Object.assign(STR.ru,{ f_breaker:'ПРОБКИ: ЯРКИЙ — ТОЛЬКО ОДНА ЛАМПА', tipBreaker:'Пробки не тянут две лампы на ЯРКИЙ: включишь вторую — первая вернётся на ОБЫЧНЫЙ. Угадывай, где он, по звуку и датчикам.' });
 Object.assign(STR.en,{ f_breaker:'BREAKER: ONLY ONE LAMP ON BRIGHT', tipBreaker:"The breaker can't take two lamps on BRIGHT: turn on a second one and the first drops back to NORMAL. Use the sounds and motion sensors to find him." });
 
 Object.assign(STR.ru,{ diff:'Сложность', diffTitle:'Выбери сложность', diffSub:'Её можно сменить в любой момент в меню «Ночи». Прогресс общий.', diffRec:'рекомендуем',

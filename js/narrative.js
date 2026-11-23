@@ -10,7 +10,8 @@ function freshLine(pool,key){
   old.push(typeof value==='string'?value:value.t);while(old.length>Math.min(8,pool.length-1))old.shift();NARRATIVE_RECENT.set(id,old);return value;
 }
 const REGULARS=['sleepy_otter','vhs_witch','mint_fern','noodle_owl'];
-function viewerName(){return Math.random()<.6?pick(REGULARS):genName();}
+/* 22.11: regulars less often (they repeated every few lines); mint_fern is a story character - rare in random chat */
+function viewerName(){const r=Math.random();return r<.3?pick(REGULARS.filter(n=>n!=='mint_fern')):r<.33?'mint_fern':genName();}
 const NIGHT_TALKS={
  ru:{
  mon:[['гирлянду в новую квартиру заберу первой. пусть хоть что-то там сразу будет знакомое',['сначала чайник','и кружку с котом']],['vhs_witch, да, на левом ушке всё ещё та золотая звёздочка. держится лучше меня',['не отклеивай','уже фирменный знак']],['эти пионы пахнут на всю комнату. никогда мне такие не дарили',['красивые','только воду меняй']]],

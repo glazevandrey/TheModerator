@@ -2,6 +2,7 @@
 // ======================= LIGHTING GRID: three lamps × DIM / STABLE / BOOST, heat, burnout, blinds =======================
 function setLamp(z,mode){
   const L=S.lamps[z]; if(!S.running||L.burned||!MODES.includes(mode)||L.mode===mode) return;
+  if(mode==='DIM') return;                         /* 22.11: no DIM any more - a lamp is NORMAL or BRIGHT */
   if(mode==='BOOST' && !S.tut.active){ for(const o of ZONES){ const O=S.lamps[o]; if(o!==z && O.mode==='BOOST' && !O.burned){ O.mode='STABLE'; relayClick('STABLE',o); if(hintOk('breaker')) floaty(T('f_breaker')); tip('breaker',T('tipBreaker')); } } }
   L.mode=mode; relayClick(mode,z);
   /* BRIGHT at the window while he stands there: the light flares the whole screen, like hitting a phone camera */
@@ -10,11 +11,23 @@ function setLamp(z,mode){
   if(mode==='DIM'){ say('dim',T('m_dim'),25); tip('dim',T('tipDim')); }
 }
 function toggleBoost(z){ const L=S.lamps[z]; setLamp(z, L.mode==='BOOST'?'STABLE':'BOOST'); }
-function toggleDim(z){ const L=S.lamps[z]; setLamp(z, L.mode==='DIM'?'STABLE':'DIM'); }
+function toggleDim(z){}                            /* 22.11: DIM removed (Shift+1/2/3 does nothing) */
 
 function lightingTick(dt){
   for(const z of ZONES){
     const L=S.lamps[z]; if(L.burned){ L.flick=0; continue; }
+    if(L.outT>0){ L.outT=Math.max(0,L.outT-dt); L.flick=L.outT>0?0:1; }      /* a power surge put it out for a moment */
+    if(camp()){   /* 23.11 (playtest): simplified heat in the campaign - only BRIGHT heats, NORMAL cools; at 100% the lamp goes out
+                     for 3.5 s and comes back on NORMAL (no burning for the night, no cooling upgrades). BRIGHT is strong but temporary. */
+      if(L.mode==='BOOST') L.rel=0; else L.rel+=dt;
+      if(L.outT>0) continue;
+      L.heat=clamp(L.heat+(L.mode==='BOOST'?HEAT.boost*(S.night.heat||1):HEAT.stable)*dt,0,100);
+      L.flick = L.heat>80 ? (Math.random()<.25?rnd(.2,.6):1) : 1;
+      if(L.heat>80 && !L.warned){ L.warned=true; say('flick',T('m_flick',{z:T('zat_'+z)}),20); tip('heatCamp',T('tipHeatCamp')); }
+      if(L.heat<70) L.warned=false;
+      if(L.heat>=100){ L.outT=3.5; L.flick=0; L.heat=55; L.mode='STABLE'; L.warned=false; SFX.burn(); S.glitch=.25; addPanic(4);
+        say('force',T('m_overheat',{z:T('zat_'+z)})); floaty(T('f_overheat',{z:T('zl_'+z)})); }
+      continue; }
     const r = L.mode==='BOOST'?HEAT.boost*(1-.15*upLv('cool'))*(1+.35*dprog())*(S.night.heat||1) : L.mode==='STABLE'?HEAT.stable : HEAT.dim;
     L.heat=clamp(L.heat+r*dt,0,S.tut.active?95:100);
     if(L.mode==='BOOST') L.rel=0; else L.rel+=dt;
@@ -32,6 +45,7 @@ function lightingTick(dt){
   b.anim += ((b.closed?1:0)-b.anim)*Math.min(1,dt*8);
 }
 function toggleBlinds(){
+  if(!toolOpen('blinds')) return;   /* 22.11: a tool this night has not opened (layout.js) */
   const b=S.blinds; if(!S.running) return;
   if(b.closed){ b.closed=false; SFX.blinds(); return; }
   if(b.jammed){ floaty(T('jammed')); SFX.wrong(); return; }

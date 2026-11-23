@@ -1,25 +1,27 @@
 # THE MODERATOR
 
-You are the moderator of NyanBun, Mia's late-night livestream. You can see her room through the webcam. She can't see what's behind her.
+A psychological horror about the night **shift** of a stream moderator.
+You moderate NyanBun — Mia's late-night stream. You see her room. She doesn't see what's in it.
 
-Watch the room, moderate the chat, control the lights, and use smart-home devices to keep Mia streaming until midnight.
+Entry for **GitHub Game Off 2026** (theme: **SHIFT**): you work the night shift in chat, and what you show Mia
+— or hide from her — shifts what she does next.
 
-**[Play on itch.io](https://andreyglazev.itch.io/the-moderator)**
+**Play it in the browser:** https://andreyglazev.itch.io/the-moderator
 
-Free to play in a desktop browser. Available in English and Russian.
+## What this repository contains
 
-## Game Off 2026 — SHIFT
+The game's source code: HTML, CSS and JavaScript, no engine and no build step. `index.html` is the only entry point
+(this build opens the two-night version submitted to the jam).
 
-Our interpretation of SHIFT is a **night shift**: an evening spent moderating a livestream becomes a struggle to keep the streamer safe.
+## What it does not contain
 
-## Made with
+Art (Mia, the room, the stalker, the props), music, sound effects and Mia's voice are **not included**.
+In the game they live in `assets/`, `v2/**/*.png|jpg` and the generated data files
+`js/art.js`, `js/art-gaze.js`, `js/musicdata.js`, `js/sfxdata.js`, `js/vox.js`.
+The game will not start from this repository on its own — please play it on itch.io.
 
-Vanilla JavaScript, HTML5 Canvas, CSS, and the Web Audio API.
+## License
 
-## AI disclosure
+All rights reserved — see [LICENSE](LICENSE). The code is published only so it can be seen as part of Game Off 2026.
 
-Development involved AI coding assistance, AI-generated character artwork and music, and synthesized vocal syllables. The room and interface use Canvas and CSS rendering.
-
-## Rights
-
-Source code is shared for viewing as part of the project. No open-source license is granted, and this repository does not grant permission to reuse or redistribute the code, artwork, audio, or characters. Third-party material remains subject to its respective terms.
+© 2026 Andrey Glazev

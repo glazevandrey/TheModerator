@@ -2,6 +2,7 @@
 // ======================= SMART HOME: dog bark, footsteps, fire alarm =======================
 // Each noise affects the stalker, and each can send Mia out of the room to check (unless a donation holds her attention).
 function smartHome(kind){
+  if(!toolOpen(kind)) return;   /* 22.11: a tool this night has not opened (layout.js) */
   if(!S.running||S.sh[kind]>0) return;
   S.sh[kind]=CD[kind]*(1-.15*upLv('speaker')); const st=S.st;
   if(kind==='dog'){
@@ -33,6 +34,7 @@ function smartHomeTick(dt){
   if(m.awayT>0){
     m.awayT-=dt;
     if(m.awayT<=0){
+      if(m.awayScripted){ m.awayScripted=false; m.sawSomething=false; return; }   /* a scripted walk (monday.js) says its own return line */
       if(m.sawSomething || S.st.stage==='door' || S.st.stage==='closet' || S.st.stage==='behind'){ addPanic(25,{force:true}); say('force',T('m_backSaw')); stalkerRetreat('hidden'); }
       else say('force',T('m_back'));
       m.sawSomething=false;

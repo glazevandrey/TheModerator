@@ -1,0 +1,13 @@
+/* THE MODERATOR — review UI v5 (21.11.2026): no paper note, two splits of the upper row. Desktop layout only.
+   A = video 50 / chat 50 · B = video 58 / chat 42 (the game's own split before the note column was added).
+   The note element stays in the DOM (the game keeps writing into it) but is not shown; no notes button is added. */
+html.lvA #stage#stage#stage.notes-pinned .glassnote,html.lvB #stage#stage#stage.notes-pinned .glassnote{display:none}
+html.lvA #stage#stage#stage.notes-pinned .ux-upper{grid-template-columns:minmax(0,50fr) minmax(0,50fr)}
+html.lvB #stage#stage#stage.notes-pinned .ux-upper{grid-template-columns:minmax(0,58fr) minmax(0,42fr)}
+/* the chat's bottom row kept room for the old column - not needed any more */
+html.lvA #stage#stage#stage.notes-pinned .chat .ux-moderation,html.lvB #stage#stage#stage.notes-pinned .chat .ux-moderation{padding-right:155px}
+/* review page bits */
+#wv2{display:none!important}
+#lvBar{position:fixed;left:50%;top:6px;transform:translateX(-50%);z-index:100002;display:flex;gap:4px;align-items:center;padding:4px 8px;border-radius:8px;background:#120d16e6;border:1px solid #5b4a66;color:#eee6f4;font:13px system-ui,sans-serif}
+#lvBar button{font:inherit;padding:2px 9px;border-radius:6px;border:1px solid #6d5a7a;background:#2a2131;color:#fff;cursor:pointer}#lvBar button.on{background:#6d4a86}
+body.sc-clean #lvBar{display:none}

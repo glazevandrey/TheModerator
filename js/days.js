@@ -27,7 +27,7 @@ const TUT=[
   {k:'cool2', hl:'#lamp-closet .mk[data-m="STABLE"]', done(){ return S.lamps.closet.mode==='STABLE'; }},
   {k:'rec', hl:'#actRec', key:'tt_recK', on(){ S.blinds.closed=false; S.blinds.timer=0; S.tut.clips=S.clips.length; S.rec.cd=0; tutShowStalker('window',.55); },
     done(){ if(S.clips.length>S.tut.clips && S.rec.active<=0){ tutHide(); return true; } }},
-  {k:'donate', hl:'#actDonate', key:'tt_donateK', on(){ S.panic=55; S.hc=Math.max(S.hc,donateCost()); S.donate.cd=0; S.tut.don=S.stats.donates; }, done(){ return S.stats.donates>S.tut.don; }},
+  /* 22.11: the donate step is gone - donations live in the endless shift */
   {k:'smart', next:true, hl:'.smarthome', on(){ S.sh.dog=0; }},
   {k:'done', next:true, last:true}
 ];
@@ -63,14 +63,15 @@ function dayEventsTick(dt){
     if(E.hotT===undefined) E.hotT=rnd(28,40);
     E.hotT-=dt; if(E.hotT<=0){ E.hotT=rnd(50,75);
       if(!nightRain(S.night) && !S.winOpen && !S.blinds.closed && !S.blinds.jammed && S.mia.awayT<=0 && S.st.stage!=='window'){ S.winOpen=true; SFX.sash(); floaty(T('f_winOpen')); say('force',T('m_hot')); later(()=>tip('hot',T('tipHot')),1500); } } }
-  if(DY().mod==='surge'){ E.surgeT-=dt; if(E.surgeT<=0){ E.surgeT=rnd(28,42)/(S.night.surge||1); const z=pick(ZONES.filter(z=>!S.lamps[z].burned)); if(z){ S.lamps[z].heat=Math.min(99,S.lamps[z].heat+Math.round(32*(S.night.surge||1))); S.lamps[z].surgeT=1.6; S.glitch=.3; SFX.surge(); floaty(T('f_surge',{z:T('zat_'+z)})); tip('surge',T('tipSurge')); say('surge',T('m_surge'),30); } } }
+  if(DY().mod==='surge'){ E.surgeT-=dt; if(E.surgeT<=0){ E.surgeT=rnd(28,42)/(S.night.surge||1); const z=pick(ZONES.filter(z=>!S.lamps[z].burned)); if(z){ if(camp()) S.lamps[z].outT=3.5; else S.lamps[z].heat=Math.min(99,S.lamps[z].heat+Math.round(32*(S.night.surge||1))); S.lamps[z].surgeT=1.6;   /* 22.11: in the campaign a surge puts the lamp out for a moment (no heat) */
+      S.glitch=.3; SFX.surge(); floaty(T(camp()?'f_surgeOut':'f_surge',{z:T('zat_'+z)})); tip('surge',T(camp()?'tipSurgeOut':'tipSurge')); say('surge',T('m_surge'),30); } } }
   if(DY().mod==='cold' && S.t>6) say('cold',T('m_cold'),999);
   if(ev.chair){
     if(E.chairShow>0){ E.chairShow=lampMode('closet')==='BOOST'?0:Math.max(0,E.chairShow-dt); }
     else { E.chairT-=dt; if(E.chairT<=0 && lampMode('closet')!=='BOOST' && S.st.stage!=='behind'){ E.chairShow=4.5; E.chairT=rnd(35,50); SFX.near(); later(()=>say('chair',T('m_chair'),20),2600); } }
   }
   if(ev.note){
-    const want = S.t>45 && S.t<255 && !E.noteRec;
+    const want = S.t>(DY().noteAt||45) && S.t<255 && !E.noteRec; /* noteAt: per night (Friday slice: 70 s) */
     if(want && !E.note){ E.note=true; SFX.thud(); evidenceAppeared(); later(()=>say('note',T('m_note'),60),2500); if(DY().key==='mon') later(()=>tip('noteMon',T('tipNoteMon')),4500); }
     if(!want) E.note=false;
   }
@@ -180,7 +181,7 @@ function finEnter(ph){
       setTimeout(()=>{ if(FIN.tok===tok&&FIN.phase===6&&FIN.bans===0) finKnock(); },14000); },1300); }
   if(ph===7){ SFX.sirenOff(); $('stage').classList.remove('finban'); S.finLights=null; fillProtocol(); $('epilogue').hidden=false; $('protoNext').hidden=true; }
   if(ph===8){ SFX.slam(); $('epilogue').classList.add('slam'); }
-  if(ph===9){ $('endLast').textContent=FX().last; $('endMia').textContent=FX().notFound; $('endSys').textContent=FX().sys; $('endcard').hidden=false; rateShow($('rateItchEnd'),true); stat('finale/end',true); }
+  if(ph===9){ $('endLast').textContent=FX().last; $('endMia').textContent=FX().notFound; $('endSys').textContent=FX().sys; $('endcard').hidden=false; rateShow($('rateItchEnd'),false);   /* 22.11: no itch rating prompt in the Steam build */ stat('finale/end',true); }
 }
 function finaleTick(dt){
   if(!FIN.active) return; FIN.t+=dt; const t=FIN.t, since=t-FIN.tp;

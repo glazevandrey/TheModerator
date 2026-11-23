@@ -1,0 +1,42 @@
+/* THE MODERATOR — UI variant B2 (21.11.2026): variant B + four fixes. Review only; <html class="uiB uiB2">.
+   Layout, key sizes, gold for selected modes, green/amber/red statuses and all logic stay as in B / the game. */
+
+/* 1. moderator's note: a compact handwritten memo, not a newspaper column.
+      Handwriting stack: Caveat (Google) → Segoe Print (Windows) → Comic Sans MS → Comic Relief → cursive,
+      so it stays handwritten even when the web font does not load (offline build). */
+html.uiB.uiB2{ --hand:'Caveat','Segoe Print','Comic Sans MS','Comic Relief',cursive; }
+html.uiB.uiB2 #stage#stage#stage.notes-pinned .glassnote{padding:16px 14px 12px;gap:8px}
+html.uiB.uiB2 #stage#stage#stage.notes-pinned .glassnote>b{font:800 12px/1.15 var(--f-ui);letter-spacing:.08em;color:#6e4a5c}
+html.uiB.uiB2 #stage#stage#stage.notes-pinned .glassnote>.gn,html.uiB.uiB2 #stage#stage#stage .glassnote .gn{font-family:var(--hand);font-weight:600;font-size:22px;line-height:1.22;letter-spacing:0;color:#33202d;flex:0 1 auto}
+html.uiB.uiB2 #stage#stage#stage.notes-pinned .glassnote .banleg{font-family:var(--hand);font-size:19px;line-height:1.15;gap:5px;padding-top:8px;margin-top:auto}
+/* text at the top, the legend and «ОСТОРОЖНО!!» at the bottom of the sheet, like the original memo */
+html.uiB.uiB2 #stage#stage#stage.notes-pinned .glassnote .banleg:not([hidden]) ~ .wo{margin-top:6px}
+html.uiB.uiB2 #stage#stage#stage.notes-pinned .glassnote .banleg .bh{font:800 11px/1.1 var(--f-ui);letter-spacing:.06em}
+html.uiB.uiB2 #stage#stage#stage.notes-pinned .glassnote .banleg .bi,html.uiB.uiB2 #stage#stage#stage.notes-pinned .glassnote .banleg .bi svg{width:22px;height:22px}
+html.uiB.uiB2 #stage#stage#stage.notes-pinned .glassnote .wo{font-family:var(--hand);font-size:22px;font-weight:700;line-height:1;margin-top:auto;transform:rotate(-3deg);letter-spacing:.02em}
+
+/* 2. locked smart-home keys (ШАГИ, ТРЕВОГА …): readable text and icon, but plainly not pressable -
+      no fill, a dashed line, muted icon; no dimming filter that turned them black */
+html.uiB.uiB2 #stage#stage#stage .smarthome .shb:disabled,html.uiB.uiB2 #stage#stage#stage .smarthome #actBlinds:disabled{
+  filter:none;transform:none;opacity:1;background:transparent;border:1px dashed #5a4b5f;box-shadow:none;color:#ab9ca8;cursor:not-allowed}
+html.uiB.uiB2 #stage#stage#stage .smarthome .shb:disabled>.i,html.uiB.uiB2 #stage#stage#stage .smarthome #actBlinds:disabled>.i{color:#8d7d8b}
+html.uiB.uiB2 #stage#stage#stage .smarthome .shb:disabled small{opacity:.8}
+
+/* 3. Mia's line: no box any more - a soft dark wash that fades out at the edges, text with a shadow.
+      Several lines still fit: same width rule, no clipping, no fixed height. */
+html.uiB.uiB2 #stage#stage#stage .caption{background:radial-gradient(closest-side,rgba(14,10,17,.62),rgba(14,10,17,.38) 70%,rgba(14,10,17,0));
+  border:0;border-radius:14px;box-shadow:none;padding:6px 22px 7px;max-width:64%;bottom:6px;font-size:16px;line-height:1.28;text-align:center;
+  text-shadow:0 1px 2px #000,0 0 6px rgba(0,0,0,.6);overflow:visible;white-space:normal}
+html.uiB.uiB2 #stage#stage#stage .caption b{color:#e9a6c6}
+
+/* 4. panels vs keys: panels a step darker, keys a step lighter with a slightly clearer edge (no new colours) */
+html.uiB.uiB2 #stage#stage#stage .mod{background:linear-gradient(180deg,#241f29,#1f1a24)}
+html.uiB.uiB2 #stage#stage#stage .lighting .lamp,html.uiB.uiB2 #stage#stage#stage .lighting #lamp-window{background:#1b171f;border-color:#3d3243}
+html.uiB.uiB2 #stage#stage#stage .hcrow.ux-wallet{background:#1b171f}
+html.uiB.uiB2 #stage#stage#stage .mk,html.uiB.uiB2 #stage#stage#stage .smarthome .shb:not(:disabled),html.uiB.uiB2 #stage#stage#stage .smarthome #actBlinds:not(:disabled),html.uiB.uiB2 #stage#stage#stage .chat .pbtn.m2b,html.uiB.uiB2 #stage#stage#stage .ux-wallet #actDonate{
+  background:linear-gradient(#41374a,#382f40);border-color:#6b5a72;box-shadow:inset 0 1px 0 rgba(255,235,245,.08),0 1px 0 #0f0c12}
+html.uiB.uiB2 #stage#stage#stage .mk:disabled{background:transparent;border-color:#4a3f50;color:#857884}
+/* the coloured states keep winning over the step-lighter keys above */
+html.uiB.uiB2 #stage#stage#stage .smarthome #actBlinds.shut:not(:disabled){border-color:#8fae78;background:#33402f;color:#e3efd2}
+html.uiB.uiB2 #stage#stage#stage .smarthome #actBlinds.jam:not(:disabled),html.uiB.uiB2 #stage#stage#stage .smarthome #actBlinds.jam{border-color:#c46a5d;background:#4a2a2e;color:#ffd7cb}
+html.uiB.uiB2 #stage#stage#stage .ux-wallet.can-donate #actDonate{border-color:#9fbf86;background:#3d4f3b;color:#eef4dc}

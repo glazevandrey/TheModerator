@@ -3,7 +3,7 @@
 Object.assign(STR.en,{
   dayLbl_tue:'TUE · NIGHT 2', dayLbl_wed:'WED · NIGHT 3', dayLbl_thu:'THU · NIGHT 4', dayLbl_fri:'FRI · NIGHT 5', dayLbl_sat:'SAT · NIGHT 6', dayLbl_sun:'SUN · NIGHT 7', dayLbl_mon2:'MON · NIGHT 8', dayLbl_endless:'ENDLESS · NIGHT {n}',
   dayName_tue:'Tuesday', dayName_thu:'Thursday', dayName_sat:'Saturday', dayName_sun:'Sunday', dayName_endless:'Endless shift',
-  di_tue:['TUESDAY','Power surges tonight. Lamps heat up on their own.'], di_thu:['THURSDAY','Mia has a cold. She\'s more easily frightened tonight.'],
+  di_tue:['TUESDAY','The streetlight in the yard is out again.'], di_thu:['THURSDAY','Mia has a cold. She\'s more easily frightened tonight.'],
   di_sat:['SATURDAY','A troll raid hits the chat. Keep it clean.'], di_sun:['SUNDAY','Blackout. The blinds are jammed and the lamps are already warm.'],
   di_endless:['NIGHT {n}','The shift never ends. How long can you keep her on air?'],
   mod_surge:'Power surges', mod_cold:'Mia has a cold', mod_raid:'Troll raid', mod_blackout:'Blackout',
@@ -27,15 +27,15 @@ Object.assign(STR.en,{
   deskTile:'Your desktop', deskTileSub:'files from the nights you played',
   rulesShort:`<li><b>Survive until 00:00.</b> If Mia's panic hits 100% or it reaches her, the night is lost.</li>
 <li>It comes through the <b>window</b>, the <b>door</b> or the <b>closet</b>, then goes <b>behind her</b>. The <b>MOTION</b> bars show where.</li>
-<li><b>BRIGHT</b> the lamp of that zone to push it back. Lamps <b>heat up</b> and burn out at 100%. <b>DIM</b> cools them but the dark lets it creep.</li>
+<li><b>BRIGHT</b> the lamp of that zone to push it back. <b>Red eyes</b> are not stopped by light — use sounds and the blinds.</li>
 <li>Window: <b>close the blinds</b>. Behind her: <b>closet lamp</b> or the <b>fire alarm</b>.</li>
-<li>Chat: ban trolls and spam, not regulars. Banning <b>him</b> makes him faster.</li>
-<li><b>Record</b> it up close for HypeCoins. Spend them on donations, upgrades and looks.</li>`
+<li>Chat: ban trolls and spam, not regulars. <b>Show Mia</b> — she reads it first. Banning <b>him</b> makes him faster.</li>
+<li><b>Record</b> a moment to keep evidence.</li>`
 });
 Object.assign(STR.ru,{
   dayLbl_tue:'ВТ · НОЧЬ 2', dayLbl_wed:'СР · НОЧЬ 3', dayLbl_thu:'ЧТ · НОЧЬ 4', dayLbl_fri:'ПТ · НОЧЬ 5', dayLbl_sat:'СБ · НОЧЬ 6', dayLbl_sun:'ВС · НОЧЬ 7', dayLbl_mon2:'ПН · НОЧЬ 8', dayLbl_endless:'БЕСКОНЕЧНАЯ · НОЧЬ {n}',
   dayName_tue:'вторник', dayName_thu:'четверг', dayName_sat:'суббота', dayName_sun:'воскресенье', dayName_endless:'бесконечная смена',
-  di_tue:['ВТОРНИК','Сегодня скачки напряжения. Лампы греются сами.'], di_thu:['ЧЕТВЕРГ','Мия простыла. Она пугается быстрее.'],
+  di_tue:['ВТОРНИК','Во дворе опять не горит фонарь.'], di_thu:['ЧЕТВЕРГ','Мия простыла. Она пугается быстрее.'],
   di_sat:['СУББОТА','На чат налетел рейд троллей. Держи его в чистоте.'], di_sun:['ВОСКРЕСЕНЬЕ','Блэкаут. Жалюзи заело, лампы уже горячие.'],
   di_endless:['НОЧЬ {n}','Смена не кончается. Сколько продержишь её в эфире?'],
   mod_surge:'Скачки напряжения', mod_cold:'Мия простыла', mod_raid:'Рейд троллей', mod_blackout:'Блэкаут',
@@ -59,10 +59,10 @@ Object.assign(STR.ru,{
   deskTile:'Рабочий стол', deskTileSub:'файлы из пройденных ночей',
   rulesShort:`<li><b>Продержись до 00:00.</b> Если паника Мии дойдёт до 100% или он доберётся до неё — ночь проиграна.</li>
 <li>Он приходит через <b>окно</b>, <b>дверь</b> или <b>шкаф</b> и идёт ей <b>за спину</b>. Полоски <b>ДВИЖЕНИЕ</b> показывают где.</li>
-<li><b>ЯРЧЕ</b> на лампе этой зоны отталкивает его. Лампы <b>греются</b> и перегорают на 100%. <b>ТЕМНЕЕ</b> остужает, но в темноте он подкрадывается.</li>
+<li><b>ЯРКИЙ</b> на лампе этой зоны отталкивает его. <b>Красные глаза</b> свет не останавливает — звуки и жалюзи.</li>
 <li>У окна — <b>закрой жалюзи</b>. За спиной — <b>лампа шкафа</b> или <b>пожарная тревога</b>.</li>
-<li>Чат: бань троллей и спам, а не зрителей. Бан <b>его</b> делает его быстрее.</li>
-<li><b>Записывай</b> его вблизи ради HypeCoins. Трать их на донаты, улучшения и образы.</li>`
+<li>Чат: бань троллей и спам, а не зрителей. <b>Показать Мие</b> — она прочтёт первым. Бан <b>его</b> делает его быстрее.</li>
+<li><b>Записать момент</b> — снимок для улик.</li>`
 });
 // spam without anything that looks like a real link
 CHAT.en.SPAM=['FREE FOLLOWERS!!! check my profile','cheap viewers, dm me','wanna grow your channel? check my bio','promote your stream for $5, dm me'];
@@ -90,19 +90,19 @@ Object.assign(STR.en,{
   tutDoneList:`<li>It comes through the <b>window</b>, the <b>door</b> or the <b>closet</b>, then goes <b>behind her</b>.</li>
 <li>Window: <b>close the blinds</b>. Door and behind: <b>BRIGHT</b> on that lamp, then back to <b>NORMAL</b>.</li>
 <li>Ban <b>trolls and spam</b>, never regular viewers.</li>
-<li><b>Record</b> it for HypeCoins, <b>donate</b> when Mia's panic climbs.</li>`,
+<li><b>Record</b> the moment when you see something important.</li>`,
   tt_hello:"Meet Mia. You're moderating her late-night stream. Help her stay on air until midnight.",
   tt_troll:'That red angry face marks a troll. Hover over the message or tap it, then press BAN beside it.', tt_trollK:'or hover the message → BAN',
-  tt_normal:'Look at the icon next to the name. Red angry face — troll, grey robot — spam: ban those. Purple devil — creepy messages: ban them before Mia reads them. Everyone else is a regular viewer, even if they write weird stuff ("67") or complain. Don\'t ban them: a wrong ban costs a ★ trust credit, three mistakes and you lose your mod rights.',
-  tt_lamps:'This is the room lighting. The window, the door and the closet each have a lamp: DIM · NORMAL · BRIGHT. Bright light pushes him back, but the lamp heats up. Only one lamp can be on BRIGHT at a time, or the fuse trips.',
+  tt_normal:'Look at the icon next to the name. Red angry face — troll, grey robot — spam: ban those. Purple devil — creepy messages: ban them before Mia reads them. Everyone else is a regular viewer, even if they write weird stuff ("67") or complain. Don\'t ban them: a wrong ban costs a ★ trust credit; with no trust left, Mia stops listening to you.',
+  tt_lamps:'This is the room lighting. The window, the door and the closet each have a lamp: NORMAL · BRIGHT. Bright light pushes him back. Only one lamp can be on BRIGHT at a time, or the fuse trips.',
   tt_cue:'Right before he shows up you hear a sound: tapping on the glass — window, someone trying the handle — door, hangers rustling — closet. That lamp flashes yellow. Hear it — get the light ready there.',
   tt_window:'He is at the WINDOW — see the MOTION bar? Use BLINDS in Smart Home. While he is still far from the glass, the blinds send him away.', tt_windowK:'Smart Home → BLINDS · or B',
   tt_dog:'He is at the DOOR again. Press DOG BARK: he FREEZES for 6 seconds. He won\'t leave, but it buys you time.', tt_dogK:'or Z',
   tt_door:'Now he is at the DOOR. Press BRIGHT on the door lamp and wait until the MOTION bar is empty.', tt_doorK:'or key 3',
-  tt_cool:'He left. The lamp got hot — set it back to NORMAL so it cools. At 100% heat it burns out for the night.',
+  tt_cool:'He left. Set the lamp back to NORMAL: BRIGHT is only needed while he is close.',
   tt_behind:'He came out of the closet. He\'s BEHIND her now. Set the CLOSET lamp to BRIGHT, quickly.', tt_behindK:'or key 2',
   tt_cool2:'He backed off. Closet lamp back to NORMAL.',
-  tt_rec:'Record him to earn HypeCoins (HC). Closer shots and darker rooms pay more. Press HIGHLIGHT MOMENT.', tt_recK:'or R',
+  tt_rec:'Record what the camera sees: clips keep evidence. Press HIGHLIGHT MOMENT.', tt_recK:'or R',
   tt_donate:"Mia is getting nervous — watch the PANIC bar under the video. At 100% she ends the stream. Donate to calm her down. HC also trickle in while the stream runs.", tt_donateK:'or G',
   tt_smart:'Smart home is your backup plan. Dog: he freezes. Footsteps: he backs off one step. Fire alarm: he leaves until his next approach. But Mia may leave to check the noise.',
   tt_done:'You\'re ready. In a real night, he won\'t wait for you. Good luck, mod.',
@@ -113,27 +113,27 @@ Object.assign(STR.en,{
   donationMsg:'donated {v} HC: "you\'re doing great, breathe <3"'
 });
 Object.assign(STR.ru,{
-  m_DIM:'ТЕМНЕЕ', m_STABLE:'НОРМА', m_BOOST:'ЯРЧЕ', banShort:'БАН',
+  m_DIM:'ТЕМНЕЕ', m_STABLE:'ОБЫЧНЫЙ', m_BOOST:'ЯРКИЙ', banShort:'БАН',
   sc_ok:'СИСТЕМА ОК', sc_warn:'ВНИМАНИЕ', sc_light:'СБОЙ СВЕТА', sc_power:'НЕТ ПИТАНИЯ', sc_signal:'НЕТ СИГНАЛА',
   dayLbl_tut:'ОБУЧЕНИЕ', dayName_tut:'обучение', di_tut:['ОБУЧЕНИЕ','Никакой спешки. Тут нельзя проиграть.'],
   tutTile:'Обучение', tutGo:'Пройти обучение', tutNext:'Дальше', tutSkip:'Пропустить обучение', tutFinish:'Начать ночь 1',
   tutDoneTitle:'ОБУЧЕНИЕ ПРОЙДЕНО', tutDoneSub:'Вот и вся работа. Первая ночь — лёгкая.',
   tutDoneList:`<li>Он приходит через <b>окно</b>, <b>дверь</b> или <b>шкаф</b> и идёт ей <b>за спину</b>.</li>
-<li>У окна — <b>закрой жалюзи</b>. У двери и за спиной — <b>ЯРЧЕ</b> на этой лампе, потом обратно <b>НОРМА</b>.</li>
+<li>У окна — <b>закрой жалюзи</b>. У двери и за спиной — <b>ЯРКИЙ</b> на этой лампе, потом обратно <b>ОБЫЧНЫЙ</b>.</li>
 <li>Бань <b>троллей и спам</b>, обычных зрителей не трогай.</li>
-<li><b>Записывай</b> его ради HypeCoins, <b>донать</b>, когда паника Мии растёт.</li>`,
+<li><b>Записывай момент</b>, когда видишь что-то важное.</li>`,
   tt_hello:'Это Мия, она стримит по ночам. Ты — её модератор. Задача: продержать её в эфире до полуночи. Сейчас покажу, как.',
   tt_troll:'В чате тролль (красное злое лицо). Нажми на его сообщение, потом большую кнопку БАН.', tt_trollK:'или наведи на сообщение → БАН',
-  tt_normal:'Смотри на значок у ника. Красное злое лицо — тролль, серый робот — спам: их бань. Фиолетовый чёртик — жуткие сообщения: бань, пока Мия не прочитала. Все остальные — обычные зрители, даже если пишут странное («67») или ворчат. Их не трогай: за ошибочный бан теряешь ★ доверие, три ошибки — и тебя снимут с модерки.',
-  tt_lamps:'Это свет в комнате. У окна, двери и шкафа своя лампа: ТЕМНЕЕ · НОРМА · ЯРЧЕ. Яркий свет отпугивает его, но лампа греется. ЯРЧЕ можно держать только на одной лампе, иначе выбьет пробки.',
+  tt_normal:'Смотри на значок у ника. Красное злое лицо — тролль, серый робот — спам: их бань. Фиолетовый чёртик — жуткие сообщения: бань, пока Мия не прочитала. Все остальные — обычные зрители, даже если пишут странное («67») или ворчат. Их не трогай: за ошибочный бан теряешь ★ доверие; без доверия Мия перестанет тебя слушать.',
+  tt_lamps:'Это свет в комнате. У окна, двери и шкафа своя лампа: ОБЫЧНЫЙ · ЯРКИЙ. Яркий свет отпугивает его. ЯРКИЙ можно держать только на одной лампе, иначе выбьет пробки.',
   tt_cue:'Перед его появлением слышен звук: стук в стекло — окно, кто-то дёргает ручку — дверь, шорох вешалок — шкаф. Лампа этой зоны мигнёт жёлтым. Услышал — готовь там свет.',
   tt_window:'Он у ОКНА — видишь полоску ДВИЖЕНИЕ? Нажми ЖАЛЮЗИ на лампе окна. Пока он далеко от стекла, жалюзи прогоняют его.', tt_windowK:'кнопка ЖАЛЮЗИ на лампе ОКНО · или B',
   tt_dog:'Он снова у ДВЕРИ. Нажми ЛАЙ СОБАКИ: он ЗАМРЁТ на 6 секунд. Не уйдёт, но даст тебе время.', tt_dogK:'или Z',
-  tt_door:'Теперь он у ДВЕРИ. Нажми ЯРЧЕ на лампе двери и подожди, пока полоска ДВИЖЕНИЕ не опустеет.', tt_doorK:'или клавиша 3',
-  tt_cool:'Он ушёл. Лампа нагрелась — верни НОРМА, чтобы остыла. На 100% нагрева она перегорит до конца ночи.',
-  tt_behind:'Он ЗА СПИНОЙ — вылез из шкафа. Это самое опасное: быстро ЯРЧЕ на лампе ШКАФА.', tt_behindK:'или клавиша 2',
-  tt_cool2:'Он отступил. Верни лампу шкафа на НОРМА.',
-  tt_rec:'Его можно заснять: за клипы платят HypeCoins (HC). Чем он ближе и темнее, тем дороже. Нажми ЗАПИСАТЬ МОМЕНТ.', tt_recK:'или R',
+  tt_door:'Теперь он у ДВЕРИ. Нажми ЯРКИЙ на лампе двери и подожди, пока полоска ДВИЖЕНИЕ не опустеет.', tt_doorK:'или клавиша 3',
+  tt_cool:'Он ушёл. Верни лампу на ОБЫЧНЫЙ: ЯРКИЙ нужен, только пока он рядом.',
+  tt_behind:'Он ЗА СПИНОЙ — вылез из шкафа. Это самое опасное: быстро ЯРКИЙ на лампе ШКАФА.', tt_behindK:'или клавиша 2',
+  tt_cool2:'Он отступил. Верни лампу шкафа на ОБЫЧНЫЙ.',
+  tt_rec:'Его можно заснять: клип сохраняет то, что видела камера, — так копятся улики. Нажми ЗАПИСАТЬ МОМЕНТ.', tt_recK:'или R',
   tt_donate:'Мия нервничает — смотри шкалу ПАНИКА под видео. На 100% она бросит стрим. Задонать — она успокоится. HC капают и сами, пока идёт стрим.', tt_donateK:'или G',
   tt_smart:'Умный дом — запасной план. Собака — он замирает. Шаги — отступает на шаг. Тревога — уходит совсем. Но Мия может уйти проверить шум.',
   tt_done:'Всё! Дальше он ходит сам. Удачи, модер.',

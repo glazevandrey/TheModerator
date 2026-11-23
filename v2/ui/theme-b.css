@@ -1,0 +1,88 @@
+/* THE MODERATOR — UI variant B «легче» (21.11.2026). Review only, loaded by review/ui_v3/index.html with <html class="uiB">.
+   Same layout, same sizes and hit areas, same fonts. Lighter surfaces: one flat plum-graphite panel tone, 1px lines,
+   no bevel or drop "plinths" under keys, pink only as a quiet accent (headers, icons, Mia's line), gold only for what is
+   selected/important (lamp mode, HC, REC). The terminal stays: rivets, LCD clock, CRT screen, case around it. */
+
+html.uiB{ --b-bg:#1c1922; --b-panel:#28222d; --b-panel2:#221d27; --b-line:#4b3e50; --b-line2:#5e4d63; --b-ink:#ece0e6; --b-dim:#a998a6; --b-accent:#cf93b4; --b-gold:#d7ae62; }
+
+/* desk and case: cooler, darker; the case keeps its shape and a thin edge light */
+html.uiB #stage#stage#stage{background:radial-gradient(900px 700px at 97% 45%,rgba(196,138,172,.10),transparent 60%),linear-gradient(180deg,#131117 0%,#16131a 78%,transparent 78.1%),var(--noise),linear-gradient(180deg,#2a2028 78%,#1b151b 100%);background-blend-mode:normal,normal,overlay,normal}
+html.uiB #stage#stage#stage .lampglow{opacity:.45}
+html.uiB #stage#stage#stage .monitor{background:var(--noise),linear-gradient(180deg,#2c2631,#221e27 35%,#1c1920);background-blend-mode:overlay,normal;
+  box-shadow:inset 0 1px 0 rgba(255,235,245,.07),inset 0 -3px 8px rgba(0,0,0,.4),0 0 0 1px #0d0b10,0 8px 0 #100d13,0 30px 60px rgba(0,0,0,.65)}
+html.uiB #stage#stage#stage .monitor::after{background:none}
+html.uiB #stage#stage#stage .screen{background:var(--b-bg);box-shadow:inset 0 0 0 1px #0b0a0d,inset 0 0 40px rgba(0,0,0,.7),0 0 0 1px #3d3443}
+
+/* panels: flat, 1px line, rounded 12, soft shadow; rivets kept but quieter */
+html.uiB #stage#stage#stage .mod{border:1px solid var(--b-line);border-radius:12px;background:linear-gradient(180deg,var(--b-panel),var(--b-panel2));box-shadow:0 6px 16px rgba(0,0,0,.35)}
+html.uiB #stage#stage#stage .actions::before,html.uiB #stage#stage#stage .lighting::before,html.uiB #stage#stage#stage .smarthome::before,html.uiB #stage#stage#stage .system::before{opacity:.45}
+html.uiB #stage#stage#stage .modhead{background:transparent;border-bottom:1px solid #3a3040;box-shadow:none;color:var(--b-ink);font-size:13px;letter-spacing:.09em;text-shadow:none}
+html.uiB #stage#stage#stage .modhead .i{color:var(--b-accent)}
+html.uiB #stage#stage#stage .streamhead,html.uiB #stage#stage#stage .streambar{background:#201b25;box-shadow:inset 0 0 0 1px #2f2735}
+html.uiB #stage#stage#stage .video{box-shadow:0 0 0 1px #4a3d50;outline:none}
+html.uiB #stage#stage#stage .chat #chatlist{background:#1f1a24;box-shadow:inset 0 0 0 1px #2e2634}
+html.uiB #stage#stage#stage .chat .msg.sel:not(.deleted){background:#cf93b41a;box-shadow:inset 0 0 0 1px #cf93b4aa}
+html.uiB #stage#stage#stage button{text-shadow:none}
+
+/* keys: same size, flat; pressed = 1px, not 3px */
+html.uiB #stage#stage#stage .mk,html.uiB #stage#stage#stage .smarthome .shb,html.uiB #stage#stage#stage .smarthome #actBlinds{
+  border:1px solid var(--b-line2);background:linear-gradient(#372e3c,#302834);color:#dccfd6;box-shadow:inset 0 1px 0 rgba(255,235,245,.06),0 1px 0 #120e15;text-shadow:none}
+html.uiB #stage#stage#stage .mk:active:not(:disabled),html.uiB #stage#stage#stage .shb:active:not(:disabled),html.uiB #stage#stage#stage #actBlinds:active:not(:disabled),html.uiB #stage#stage#stage #actRec:active:not(:disabled){transform:translateY(1px);box-shadow:inset 0 1px 2px #0008}
+html.uiB #stage#stage#stage .mk.on[data-m="DIM"],html.uiB #stage#stage#stage .mk.on[data-m="STABLE"],html.uiB #stage#stage#stage .mk.on[data-m="BOOST"]{
+  border-color:#e7c37f;background:var(--b-gold);color:#2b1e10;transform:none;box-shadow:0 0 0 1px #d7ae6244,0 0 8px #d7ae6226}
+html.uiB #stage#stage#stage .mk.on[data-m="BOOST"]{background:#e6b65f;border-color:#ffd88f;box-shadow:0 0 0 1px #e6b65f66,0 0 12px #e6b65f44}
+html.uiB #stage#stage#stage .mk.on[data-m="DIM"]{background:#b39466;border-color:#cdb07e}
+html.uiB #stage#stage#stage .lighting .lamp,html.uiB #stage#stage#stage .lighting #lamp-window{border:1px solid #43374a;border-radius:10px;background:#211c26;box-shadow:none}
+html.uiB #stage#stage#stage .lamptop{color:var(--b-ink);text-shadow:none}
+html.uiB #stage#stage#stage .lamp .seg{background:#141118;box-shadow:inset 0 0 0 1px #2c2532}
+html.uiB #stage#stage#stage .lamp .mline{color:var(--b-dim)}
+
+/* four lamp states as chips with a colour bar: НОРМА · ОПАСНОСТЬ · ПЕРЕГРЕВ · ВЫКЛЮЧЕНО */
+html.uiB #stage#stage#stage .lamp .lstatus{border:0;border-left:4px solid #7fae68;border-radius:5px;background:#7fae681c;color:#b6d79b;text-shadow:none;box-shadow:none}
+html.uiB #stage#stage#stage .lamp.hot .lstatus{border-left-color:#e39a45;background:#e39a4526;color:#ffd099}
+html.uiB #stage#stage#stage .lighting .lamp.hot{border-color:#a8763f;box-shadow:0 0 0 1px #e39a4533}
+html.uiB #stage#stage#stage .lamp.motion .lstatus,html.uiB #stage#stage#stage .lamp.redeyes .lstatus,html.uiB #stage#stage#stage .lamp.adapt .lstatus{border-left-color:#e2574d;background:#e2574d2e;color:#ffd0c6}
+html.uiB #stage#stage#stage .lighting .lamp.motion,html.uiB #stage#stage#stage .lighting .lamp.redeyes,html.uiB #stage#stage#stage .lighting .lamp.adapt{border-color:#c55a52;box-shadow:0 0 0 1px #e2574d55,0 0 12px #e2574d26}
+html.uiB #stage#stage#stage .lamp.burned .lstatus{border-left-color:#6c636f;background:#ffffff08;color:#978c96}
+html.uiB #stage#stage#stage .lighting .lamp.burned{border-color:#3a333e}
+
+/* REC: important → gold, but as a lit outline instead of a gold slab; HC stays gold; donate is a quiet key */
+html.uiB #stage#stage#stage #actRec{border:1px solid #d7ae62;background:linear-gradient(180deg,#3a2f2a,#2e2526);box-shadow:inset 0 0 0 1px #d7ae6222,0 0 10px #d7ae6214}
+html.uiB #stage#stage#stage #actRec .tx b,html.uiB #stage#stage#stage #actRec .st{color:#f0c46f;text-shadow:none}
+html.uiB #stage#stage#stage #actRec .cambadge{box-shadow:0 2px 0 #1a1414,0 3px 5px #0006}
+html.uiB #stage#stage#stage .hcrow.ux-wallet{background:#211c26;box-shadow:inset 0 0 0 1px #33293a}
+html.uiB #stage#stage#stage .ux-wallet #actDonate,html.uiB #stage#stage#stage .ux-wallet #actDonate:disabled{border:1px solid var(--b-line2);background:#30283a;color:#d9cad2;box-shadow:none}
+html.uiB #stage#stage#stage .ux-wallet.can-donate #actDonate{border-color:#9fbf86;background:#3d4f3b;color:#eef4dc}
+
+/* smart home icons: the soft pink accent; states keep their colours */
+html.uiB #stage#stage#stage .smarthome .shb>.i,html.uiB #stage#stage#stage .smarthome #actBlinds>.i{color:var(--b-accent);filter:none}
+html.uiB #stage#stage#stage .smarthome .shb.alarm>.i{color:#e58a82}
+html.uiB #stage#stage#stage .smarthome #actBlinds.shut{border-color:#8fae78;background:#33402f;color:#e3efd2}
+html.uiB #stage#stage#stage .smarthome #actBlinds.jam{border-color:#c46a5d;background:#4a2a2e;color:#ffd7cb}
+html.uiB #stage#stage#stage.notes-pinned .smarthome .shhint{background:#211c26;box-shadow:inset 0 0 0 1px #33293a;color:#cbbcc5}
+
+/* moderator's note: still a taped paper with handwriting, but dusty rose-beige paper and plum ink - sits with the room */
+html.uiB #stage#stage#stage.notes-pinned .glassnote{border:1px solid #c9b0a8;transform:rotate(.6deg);
+  background:repeating-linear-gradient(0deg,transparent 0 30px,#8a6a7a1c 31px),linear-gradient(105deg,#dccbc4,#ebdfd8 55%,#d6c3bb);
+  box-shadow:0 10px 18px rgba(0,0,0,.45),inset 0 1px 1px #fff8;color:#3a2632}
+html.uiB #stage#stage#stage .glassnote .gn{color:#33202d}
+html.uiB #stage#stage#stage.notes-pinned .glassnote>b{color:#6e4a5c;text-shadow:none}
+html.uiB #stage#stage#stage .glassnote .banleg .bh{color:#9a3a44}
+html.uiB #stage#stage#stage .glassnote .banleg .bh.ok{color:#4b6b45}
+html.uiB #stage#stage#stage.notes-pinned .glassnote .wo{color:#a8323d}
+
+/* Mia's line: compact, low, with a thin pink edge - leaves her face and hands free */
+html.uiB #stage#stage#stage .caption{font-size:16px;line-height:1.25;max-width:62%;bottom:6px;padding:4px 12px 5px;border-radius:6px;border-left:3px solid var(--b-accent);
+  background:rgba(20,15,23,.72);box-shadow:0 2px 8px rgba(0,0,0,.4);text-align:left}
+
+/* bottom bezel */
+html.uiB #stage#stage#stage .bzb{background:#26212b;box-shadow:inset 0 0 0 1px #3a3141;text-shadow:none}
+
+/* chat actions: flat keys; ban: red, flat */
+html.uiB #stage#stage#stage .chat .pbtn.m2b{border:1px solid var(--b-line2);background:#2d2632;box-shadow:none;color:#d9cad2}
+html.uiB #stage#stage#stage .chat #actBan{border:1px solid #d96d5d;background:#8f3a36;box-shadow:none}
+
+/* the variant switch bar of this review page (not part of either theme) */
+#uiBar{position:fixed;left:50%;top:6px;transform:translateX(-50%);z-index:100002;display:flex;gap:4px;align-items:center;padding:4px 8px;border-radius:8px;background:#120d16e6;border:1px solid #5b4a66;color:#eee6f4;font:13px system-ui,sans-serif}
+#uiBar button{font:inherit;padding:2px 9px;border-radius:6px;border:1px solid #6d5a7a;background:#2a2131;color:#fff;cursor:pointer}#uiBar button.on{background:#6d4a86}
+body.sc-clean #uiBar{display:none}

@@ -1,12 +1,7 @@
 "use strict";
 // ======================= GAME LOOP & FLOW (campaign, endless, rewards, ads) =======================
-/* itch only: ask for a rating (after Tue / Thu and on the final card) - itch ranks games with ratings and comments higher */
-const RATE_URL='https://andreyglazev.itch.io/the-moderator';
-function rateShow(el,on){
-  if(!el) return; on = on && window.MOD_PLATFORM==='itch'; el.hidden=!on; if(!on) return;
-  el.innerHTML=`${esc(T('rateTxt'))} <a href="${RATE_URL}" target="_blank" rel="noopener">${esc(T('rateLink'))}</a>`;
-  const a=el.querySelector('a'); if(a) a.onclick=()=>stat('rate/click',true);
-}
+/* 22.11.2026: Steam project - no itch rating prompt; the call sites stay, the prompt is always hidden */
+function rateShow(el,on){ if(el) el.hidden=true; }
 function update(dt){
   if(!S||!S.running) return;
   if(typeof UI_MOTION!=='undefined'&&UI_MOTION.shift)return;
@@ -14,8 +9,8 @@ function update(dt){
   S.t+=dt;
   lightingTick(dt); economyTick(dt); smartHomeTick(dt);
   S.glitch=Math.max(0,S.glitch-dt); S.shake=Math.max(0,S.shake-dt); S.mia.surpriseT=Math.max(0,S.mia.surpriseT-dt);
-  tutTick(dt); dayEventsTick(dt); storyTick(dt);
-  stalkerTick(dt); if(!S.running||S.guide&&S.guide.active&&S.guide.kind==='red') return;
+  tutTick(dt); dayEventsTick(dt); storyTick(dt); if(S.night.key==='mon'&&camp()) monTick(dt); if(S.night.key==='tue'&&camp()) tueTick(dt);
+  if(!S.night.noStalker||S.stalkerOn) stalkerTick(dt);   /* S.stalkerOn: a scripted scene lets the stalker system run (tuesday.js) */ if(!S.running||S.guide&&S.guide.active&&S.guide.kind==='red') return;
   chatTick(dt); miaTalkTick(dt);
   panicTick(dt); if(!S.running) return;
   S.vT=(S.vT||0)-dt; if(S.vT<=0){ S.vT=rnd(1.5,3); S.viewers=Math.max(300,S.viewers+Math.round(rnd(-12,14))); }
@@ -34,7 +29,7 @@ function resetScreens(){
   ['ovMenu','ovEnd','ovTut','ovPause','ovPhoto','police','epilogue','endcard','archiveWin','playbar','finCard','readDoc','tipToast','desktop','report','flash','mail','fcur'].forEach(id=>$(id).hidden=true);
   $('reflection').classList.remove('show'); $('stage').classList.remove('quake','finban','finauto'); if(S){ S.finReflect=null; S.finLights=null; S.finaleEmpty=false; } SFX.droneOff&&SFX.droneOff(); SFX.sirenOff&&SFX.sirenOff(); $('police').classList.remove('soft'); $('ovPhoto').classList.remove('top'); FIN.wait=false; FIN.q=null; reflCv=null; $('epilogue').classList.remove('slam'); SFX.staticOff();
 }
-function begin(idx,endN,opts){
+function begin(idx,endN,opts){ TIPS.length=0; hintClear(); $('video').classList.remove('mon-dark');   /* pause → «Как играть» lists this night's tips only */
   const shiftFrom=typeof motionCaptureMenu==='function'?motionCaptureMenu(opts):null;
   STATS.quitSent=false;
   try{ if(opts&&opts.tut) stat('tutorial/start'); else if(endN!=null) stat('endless/start/'+endN); else stat('night/'+NIGHTS[idx].key+'/start/'+(PROG.diff||'normal')); }catch(e){}
@@ -44,7 +39,7 @@ function begin(idx,endN,opts){
   S=newState(idx,endN,tut); S.running=true; list.innerHTML=''; nextId=1; highlight(null); hideCallout(); $('floaty').classList.remove('show'); $('caption').hidden=true; $('cueline').hidden=true;
   if(tut){ S.tut.step=-1; S.st.wait=1e9; }
   $('tip').textContent=T('tip0'); S.tipKey=null; banLegend();
-  pushMsg('sys','',T('sysStart')).read=true;
+  if(!document.documentElement.classList.contains('lvC')) pushMsg('sys','',T('sysStart')).read=true;   /* 23.11: layout C has no «you are now moderating» line */
   onboardingInit(opts);
   const intro=()=>{later(()=>say('force',T('m_hello')),900);dayIntro();pfGameplay(S.running);};
   hud(0);
@@ -62,6 +57,7 @@ function start(idx,opts){ if(opts&&opts.endless!=null) startEndless(opts.endless
 let lastEnd=null, pendingReward=null;
 function endGame(reason){ $('cueline').hidden=true;
   if(!S.running) return;
+  if(S.noDeath && reason!=='win' && reason!=='fired'){ tueSpared(reason); return; }   /* 23.11: the Tuesday scene - a failed defense is a bad scare, not a death (tuesday.js) */
   S.running=false; S.over=true; S.overReason=reason; pfGameplay(false);
   onboardingFinish(reason==='win'?'night-win':'night-lose',reason==='win');
   try{ if(!S.tut.active){ const N=S.night; if(N.endless&&reason!=='win'&&endlessRun) stat('endless/reached/'+Math.min(endlessRun.n,20)); stat(N.endless?'endless/'+(reason==='win'?'win':'lose/'+reason):'night/'+N.key+'/'+(reason==='win'?'win':'lose/'+reason)); } }catch(e){}
@@ -75,7 +71,20 @@ function endGame(reason){ $('cueline').hidden=true;
     setTimeout(()=>{ if(S===g){ SFX.staticOff(); show(); } },TAKE_LEN*1000+300); }
   else { if(reason!=='win'){ S.glitch=1; SFX.glitch(); } setTimeout(show, reason==='win'?500:900); }
 }
-function nightBonus(){ return S.night.endless ? 60+20*S.night.n : 100+30*S.idx; }
+function nightBonus(){ return S.night.endless ? 60+20*S.night.n : camp() ? 0 : 100+30*S.idx; }   /* 22.11: no HC from the campaign */
+/* 22.11: demo build - after the last demo night: «Demo over» and the store page */
+function demoOver(N,win){ return DEMO_BUILD && win && !N.endless && !N.tut && S.idx>=DEMO_NIGHTS-1; }
+function showDemoEnd(){
+  let o=$('ovDemo');
+  if(!o){ o=document.createElement('div'); o.className='overlay'; o.id='ovDemo'; o.hidden=true; $('stage').appendChild(o); }
+  const has=!!STEAM_URL, jam=window.TM_JAM===true;   /* 23.11: the Game Off build ends a chapter, not a demo; no store button until there is a store page */
+  o.innerHTML=`<div class="paper small pausecard"><h2>${esc(T(jam?'chapEndTitle':'demoEndTitle'))}</h2><p class="sub">${esc(T(jam?'chapEndSub':'demoEndSub'))}</p>
+    <div class="btnrow">${jam&&!has?'':`<button class="pbtn" id="demoWish" type="button" ${has?'':'disabled'}><b>${esc(T(has?'demoWish':'demoSoon'))}</b></button>`}
+    <button class="pbtn plain" id="demoMenu" type="button"><b>${esc(T('demoMenu'))}</b></button></div></div>`;
+  $('ovEnd').hidden=true; o.hidden=false; stat('demo/end',true);
+  if($('demoWish')) $('demoWish').onclick=()=>{ if(!has) return; stat('demo/wishlist',true); try{ window.open(STEAM_URL,'_blank','noopener'); }catch(e){} };
+  $('demoMenu').onclick=()=>{ o.hidden=true; openMenu('main'); };
+}
 function showEnd(reason){
   lastEnd=reason; const st=S.stats, N=S.night, win=reason==='win';
   const endlessOver = N.endless && !win;
@@ -84,33 +93,34 @@ function showEnd(reason){
   $('endStats').innerHTML=[[T('st_surv'),clockStr()],...(N.endless||N.tut?[]:[[T('diff'),T('diff_'+(N.diff||'normal'))]]),[T('st_peak'),Math.round(st.maxPanic)+'%'],[T('st_bans'),st.goodBans+' / '+st.wrongBans],[T('trust'),S.trust+'/'+S.maxTrust]]
     .map(([k,v])=>`<div class="stat${/\d/.test(v)?'':' txt'}"><div class="lbl">${esc(k)}</div><div class="sv">${esc(v)}</div></div>`).join('');
   pendingReward={hc:S.hc, bonus:win?nightBonus():0, mult:1, committed:false};
-  renderReward();
+  renderReward(); $('endReward').hidden=camp();   /* 22.11: no HC in the campaign */
   $('endArchive').innerHTML = S.clips.length ? S.clips.slice(-4).map(c=>`<div class="clip">${c.img?`<img src="${c.img}" alt="">`:''}<div>${c.clock} · ${c.val?`<b>+${c.val}</b> · ${esc(c.label)}`:esc(T('clipNothing'))}</div></div>`).join('') : `<div class="note">${esc(T('noClips'))}</div>`;
   if(S.ev.noteRec)$('endArchive').insertAdjacentHTML('beforeend',`<button type="button" class="pbtn evidence-archive" data-read-evidence>${esc(T(N.key==='fri'?'evidence_photo':'evidence_read'))}</button>`);
   if(N.key==='mon' && S.ev.noteRec) $('endArchive').insertAdjacentHTML('beforeend',`<div class="clipnote"><small>${esc(T('noteMonLbl'))}</small>${esc(T('noteMonTxt'))}</div>`);
   if((S.storyLog||[]).length)$('endArchive').insertAdjacentHTML('beforeend',`<button type="button" class="pbtn story-archive" data-read-story>${esc(T('storyRead'))}</button>`);
   $('endWhisper').textContent = win ? (T('wh_'+N.key)!=='wh_'+N.key?T('wh_'+N.key):T('wh_other')) : (T('wh_'+reason)!=='wh_'+reason ? T('wh_'+reason) : T('wh_other'));
   let note = win ? T('n_win') : T('n_'+reason);
-  if((N.key==='fri'||N.key==='mon') && !S.ev.noteRec) note+=' '+T('noteMissed');
+  if(S.endStory){ note=S.endStory; $('endWhisper').textContent=''; }   /* 23.11: a scripted night writes its own cause → effect line (tuesday.js) */
+  if((N.key==='fri'||N.key==='mon'&&N.ev&&N.ev.note) && !S.ev.noteRec) note+=' '+T('noteMissed');   /* 22.11: the new Monday has no note */
   $('endNote').textContent=note;
-  rateShow($('rateItch'), win && (N.key==='tue'||N.key==='thu'));
+  rateShow($('rateItch'), false);   /* 22.11: Steam build - no itch rating prompt */
   $('photoBtn').hidden = !(N.key==='fri' && S.ev.noteRec);
   if(N.key==='fri' && S.ev.noteRec && win && !PROG.photoSeen){ PROG.photoSeen=true; saveProg(); setTimeout(()=>{ if(!$('ovEnd').hidden) $('photoBtn').click(); },1300); }
-  $('contBtn').hidden = win || S.continued || (IS_CG && PF.adblock); $('contBtn').disabled=false; { const cb=$('contBtn').querySelector('b'); if(cb) cb.textContent=T('continueAd'); }
+  $('contBtn').hidden = true;   /* 22.11: Steam build - no «continue the night» (it came from the ad-supported browser builds) */ $('contBtn').disabled=false; { const cb=$('contBtn').querySelector('b'); if(cb) cb.textContent=T('continueAd'); }
   if(IS_CG && PF.adblock) $('endNote').textContent += ' '+T('adBlockNote');
   if(win) pfHappy();
-  $('x2Btn').hidden = NO_ADS || (IS_CG && PF.adblock) || !(pendingReward.hc+pendingReward.bonus>0); $('x2Btn').disabled=false; $('x2Lbl').textContent=T('x2ad');
-  const hasNext = win && (N.endless || S.idx<NIGHTS.length-1);
-  $('nextLbl').textContent = N.endless ? (win?T('endlessNext'):T('retry')) : hasNext ? T('nextNight',{day:T('dayName_'+NIGHTS[S.idx+1].key)}) : T('retry');
+  $('x2Btn').hidden = true;   /* 22.11: no ad-doubled rewards */ $('x2Btn').disabled=false; $('x2Lbl').textContent=T('x2ad');
+  const hasNext = win && (N.endless || S.idx<NIGHTS.length-1) && !demoOver(N,win);
+  $('nextLbl').textContent = demoOver(N,win) ? T('demoNext') : N.endless ? (win?T('endlessNext'):T('retry')) : hasNext ? T('nextNight',{day:T('dayName_'+NIGHTS[S.idx+1].key)}) : T('retry');
   $('againBtn').hidden = !(win && !N.endless); $('againLbl').textContent=T('again');
   $('ovEnd').hidden=false;
   if(win && !N.endless && !N.tut){ const k=N.key, r=DIFF_RANK[N.diff||'normal']||2; PROG.stars=PROG.stars||{}; if((PROG.stars[k]||0)<r) PROG.stars[k]=r; }
-  if(win && !N.endless){ PROG.unlocked=Math.max(PROG.unlocked,Math.min(S.idx+1,NIGHTS.length-1)); }
+  if(win && !N.endless){ PROG.unlocked=Math.max(PROG.unlocked,Math.min(S.idx+1,NIGHTS.length-1,DEMO_BUILD?DEMO_NIGHTS-1:99)); }
   if(N.endless){ if(win) endlessRun.n++; else { PROG.best=Math.max(PROG.best,endlessRun.n); pfSetScore(PROG.best); } }
   commitReward(); // bank right away (protects against closing the tab); x2 adds the difference later
   // the shop is one tap away; flag it when the bank covers an upgrade, explain it once, suggest it after a loss
   const can=affordUp(), upName=can?TA('up_'+can.id)[0]:'';
-  $('shopCan').textContent = can ? T('canBuy',{name:upName}) : ''; $('shopBtn').classList.toggle('pulse',!!can);
+  $('shopCan').textContent = can ? T('canBuy',{name:upName}) : ''; $('shopBtn').classList.toggle('pulse',!!can); $('shopBtn').hidden=camp();   /* 22.11: no shop in the campaign */
   $('shopHint').hidden = !(can && !PROG.shopHint); if(can && !PROG.shopHint){ $('shopHint').textContent=T('shopHintFirst'); PROG.shopHint=true; saveProg(); }
   if(can && !win && !N.endless) $('endNote').textContent += ' '+T('loseShop',{name:upName});
 }
@@ -149,15 +159,17 @@ function adFailed(btn){ const b=$(btn); if(!b) return; b.disabled=true; const l=
 
 let paused=false;
 function setPause(v){
-  if(!S||(!S.running&&!paused)) return; paused=v; S.running=!v; $('ovPause').hidden=!v; try{ fsLabels(); }catch(e){} volUI();
+  if(!S||(!S.running&&!paused)) return; paused=v; S.running=!v; $('ovPause').hidden=!v; if(v) pauseCardOpen(); try{ fsLabels(); }catch(e){} volUI();
   pfGameplay(!v); if(A.ctx){ (v||A.muted)?A.ctx.suspend():A.ctx.resume(); }
 }
 function quitToMenu(){ statQuit('menu'); if(S&&S.running) S.running=false; paused=false; $('ovPause').hidden=true; if(S&&!S.over&&!S.tut.active){ PROG.bank+=S.hc; saveProg(); } hideCallout(); highlight(null); S.over=true; openMenu('main'); }
 
 // ---- input
 $('nextBtn').onclick=()=>leaveEnd(()=>{ const N=S.night, win=lastEnd==='win';
+  if(demoOver(N,win)){ if(N.key==='tue'&&camp()) dmTuesday(()=>tueFinale(showDemoEnd,true)); else showDemoEnd(); return; }      /* 22.11: the demo ends after Tuesday; 23.11: after the DMs and the last message */
   if(N.endless) startEndless(win?endlessRun.n:0);
-  else if(win && S.idx<NIGHTS.length-1){ const i=S.idx+1; showDesktop(N.key,()=>startNight(i,{skipTut:true})); }   // your desktop between nights
+  else if(win && S.idx<NIGHTS.length-1){ const i=S.idx+1, go=()=>showDesktop(N.key,()=>startNight(i,{skipTut:true}));   // your desktop between nights
+    if(N.key==='mon' && camp()) dmMonday(go); else if(N.key==='tue' && camp()) dmTuesday(()=>tueFinale(go)); else go(); }   /* 23.11: Mia writes to the mod after Monday (dm.js) */
   else startNight(S.idx,{skipTut:true}); });
 $('againBtn').onclick=()=>leaveEnd(()=>startNight(S.idx,{skipTut:true}));
 $('menuBtn').onclick=()=>leaveEnd(()=>openMenu('main'));
@@ -188,8 +200,9 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){ if(!$('ovPhoto').hidden){ $('ovPhoto').hidden=true; return; } if(S&&(S.running||paused)) setPause(!paused); return; }
   if(!S||!S.running||e.repeat) return;
   const c=e.code;
-  if(KEYZ[c]){ e.preventDefault(); if(e.shiftKey) toggleDim(KEYZ[c]); else toggleBoost(KEYZ[c]); return; }
+  if(KEYZ[c]){ e.preventDefault(); if(!e.shiftKey) toggleBoost(KEYZ[c]); return; }   /* 22.11: Shift = DIM removed */
   if(c==='KeyB') toggleBlinds(); else if(c==='KeyR') rec(); else if(c==='KeyX') banSelected();
+  else if(c==='KeyQ'&&typeof mod2Act==='function') mod2Act('pin'); /* 22.11: E (hide) removed */ /* mod2 nights only */
   else if(c==='KeyZ') smartHome('dog'); else if(c==='KeyC') smartHome('steps'); else if(c==='KeyF') smartHome('alarm'); else if(c==='KeyG') donate();
 });
 document.addEventListener('visibilitychange',()=>{ if(document.hidden){ if(S&&S.running) setPause(true); if(A.ctx) A.ctx.suspend(); } else if(A.ctx && !A.muted && !paused && !PF.inAd) A.ctx.resume(); });
@@ -227,7 +240,7 @@ function loop(now){
   fitStage();
   await platformInit();
   if(PF.lang){ LANG = PF.lang==='ru'||['be','kk','uk','uz'].includes(PF.lang) ? 'ru' : 'en'; }
-  try{ const sv=localStorage.getItem('mod_lang'); if(sv && !PF.ysdk && !PF.vk) LANG=sv; }catch(e){}
+  try{ const sv=localStorage.getItem('mod_lang'); if(sv) LANG=sv; }catch(e){}
   const saved=await pfLoad(); if(saved && saved.v===2) PROG=Object.assign(freshProg(),saved);
   /* old music toggle (localStorage mod_music) -> music slider at 0 */
   try{ if(!PROG.vol && localStorage.getItem('mod_music')==='0') PROG.vol={mus:0,sfx:VOL_DEF.sfx}; }catch(e){}

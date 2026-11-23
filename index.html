@@ -15,6 +15,8 @@
 <link rel="stylesheet" href="css/ui-motion.css">
 <link rel="stylesheet" href="css/playtest-clarity.css">
 <link rel="stylesheet" href="css/narrative.css">
+<link rel="stylesheet" href="css/moderation.css">
+<link rel="stylesheet" href="css/layout.css?v=2311u">
 <!-- boot loader (12.11): painted before the ~5 MB of embedded art / music / code arrives, removed in boot() -->
 <style>#boot{position:fixed;inset:0;z-index:9999;background:#141016;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .4s;font:700 15px/1 system-ui,sans-serif;letter-spacing:.22em;color:#8e8597}
 #boot svg{width:84px;height:84px}#boot .d{transform-origin:50px 50px;animation:bootP 1.4s ease-in-out infinite}#boot .w{transform-origin:50px 50px;animation:bootW 1.4s ease-out infinite}
@@ -22,10 +24,15 @@
 #boot.off{opacity:0;pointer-events:none}
 #boot .bar{width:240px;height:6px;border-radius:3px;background:#2a2430;overflow:hidden}#boot .bar i{display:block;height:100%;width:0;background:#d9443c;border-radius:3px;transition:width .25s}</style>
 <div id="boot"><svg viewBox="0 0 100 100"><circle class="w" cx="50" cy="50" r="33" fill="none" stroke="#d9443c" stroke-width="3"/><circle cx="50" cy="50" r="33" fill="none" stroke="#f1e8d8" stroke-width="7"/><circle class="d" cx="50" cy="50" r="16" fill="#d9443c"/></svg><b id="bootT">LOADING</b><div class="bar"><i id="bootB"></i></div></div>
+<script>window.TM_DEMO=true; window.TM_JAM=true;   /* Game Off 2026 build: index.html opens the two-night version, it ends as «Chapter 1» */</script>
 <script>(function(){ var t=document.getElementById('bootT'), w=/^(ru|uk|be|kk|uz)/i.test(navigator.language||'')?'ЗАГРУЗКА':'LOADING'; t.textContent=w;
  window.__bp=function(p){ var b=document.getElementById('bootB'); if(!b) return; p=Math.min(1,Math.max(0,p)); b.style.width=Math.round(p*100)+'%'; t.textContent=w+' '+Math.round(p*100)+'%'; }; })();</script>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-zwin" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M12 4v16M4 12h16"/></symbol>
+  <symbol id="i-zcloset" viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="1.5"/><path d="M12 3.5v17M10 11.5v1.5M14 11.5v1.5"/></symbol>
+  <symbol id="i-zdoor" viewBox="0 0 24 24"><rect x="6.5" y="3.5" width="11" height="17" rx="1"/><circle cx="14.6" cy="12.3" r=".9"/></symbol>
+  <symbol id="i-therm" viewBox="0 0 24 24"><path d="M10 14.5V5a2 2 0 0 1 4 0v9.5a3.6 3.6 0 1 1-4 0z"/><path d="M12 9v7"/></symbol>
   <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></symbol>
   <symbol id="i-cam" viewBox="0 0 24 24"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.6"/></symbol>
   <symbol id="i-gavel" viewBox="0 0 24 24"><path d="M13.5 3.5l7 7M9.8 7.2l7 7M11.6 5.4L6.3 10.7l7 7 5.3-5.3M9.8 14.2L3 21"/></symbol>
@@ -34,7 +41,7 @@
   <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 21h6M10 18h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.1V17h5v-1.1c0-.8.4-1.5 1.1-2.1A6 6 0 0 0 12 3z"/></symbol>
   <symbol id="i-blinds" viewBox="0 0 24 24"><path d="M3 4h18M5 8h14M5 12h14M5 16h14M12 16v5"/></symbol>
   <symbol id="i-house" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M5 9.5V20h14V9.5M10 20v-6h4v6"/></symbol>
-  <symbol id="i-dog" viewBox="0 0 24 24"><path d="M5 10l-1-5 4 3h6l4-3-1 5c1.5 1.2 2 2.8 2 4.5C19 19 16 21 12 21s-7-2-7-6.5C5 12.8 5.5 11.2 5 10z"/><circle cx="9.5" cy="13" r=".8"/><circle cx="14.5" cy="13" r=".8"/><path d="M11 16.5h2l-1 1.2z"/></symbol>
+  <symbol id="i-dog" viewBox="0 0 24 24"><path d="M8.4 5.6C9.4 4.9 10.6 4.5 12 4.5s2.6.4 3.6 1.1c.6 1.4.9 3 .9 4.7 0 4.6-2 8.7-4.5 8.7s-4.5-4.1-4.5-8.7c0-1.7.3-3.3.9-4.7z"/><path d="M8.4 5.6C6.2 5.8 4.6 8 4.6 11.5c0 2.6.8 5 2 5 .9 0 1.2-1.6 1.1-3.3M15.6 5.6c2.2.2 3.8 2.4 3.8 5.9 0 2.6-.8 5-2 5-.9 0-1.2-1.6-1.1-3.3"/><circle cx="10.4" cy="10.6" r=".45"/><circle cx="13.6" cy="10.6" r=".45"/><path d="M10.9 14.6c0-.5.5-.8 1.1-.8s1.1.3 1.1.8-.5 1-1.1 1-1.1-.5-1.1-1z"/></symbol>
   <symbol id="i-steps" viewBox="0 0 24 24"><path d="M7 4c2 0 3 2.5 3 5s-1 4-3 4-3-1.5-3-4 1-5 3-5zM6 15.5h3v1.5a1.5 1.5 0 0 1-3 0zM17 8c2 0 3 2.5 3 5s-1 4-3 4-3-1.5-3-4 1-5 3-5zM16 19.5h3V21a1.5 1.5 0 0 1-3 0z"/></symbol>
   <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 21h4M12 2v2"/></symbol>
   <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="currentColor" stroke="none"/><path d="m6.5 12 3.5 3.5 7.5-8" stroke="#243124" stroke-width="2.5"/></symbol>
@@ -43,6 +50,7 @@
   <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H10l-5 4v-4H4z"/></symbol>
   <symbol id="i-signal" viewBox="0 0 24 24"><path d="M4 20v-3M9 20v-7M14 20v-11M19 20V5"/></symbol>
   <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/></symbol>
+  <symbol id="i-clap" viewBox="0 0 24 24"><path d="M4 10h16v10H4zM4 10l1.6-5 14.4 0-1.6 5M8.5 5l-1.6 5M13 5l-1.6 5M17.5 5l-1.6 5"/></symbol>
   <symbol id="i-frame" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="1"/></symbol>
   <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
@@ -126,21 +134,21 @@
     <section class="mod lighting">
       <header class="modhead"><svg class="i"><use href="#i-bulb"/></svg><b data-i18n="lighting">LIGHTING GRID</b></header>
       <div class="lamps">
-        <div class="lamp" id="lamp-window"><div class="lamptop"><span class="bulb"></span><b data-i18n="z_window">WINDOW</b><span class="k">1</span></div>
+        <div class="lamp" id="lamp-window"><div class="lamptop"><span class="bulb"></span><svg class="i zi" aria-hidden="true"><use href="#i-zwin"/></svg><b data-i18n="z_window">WINDOW</b><span class="k">1</span></div>
           <div class="mline"><span data-i18n="motion">MOTION</span><div class="seg prox"><i></i></div></div>
-          <div class="modes"><button type="button" class="mk" data-m="DIM" data-i18n="m_DIM">DIM</button><button type="button" class="mk" data-m="STABLE" data-i18n="m_STABLE">NORMAL</button><button type="button" class="mk" data-m="BOOST" data-i18n="m_BOOST">BRIGHT</button></div>
-          <div class="mline"><span data-i18n="heat">HEAT</span><div class="seg heat"><i></i></div><b class="hv">0</b></div>
+          <div class="modes"><button type="button" class="mk" data-m="STABLE" data-i18n="m_STABLE">NORMAL</button><button type="button" class="mk" data-m="BOOST" data-i18n="m_BOOST">BRIGHT</button></div>
+          <div class="mline heatline"><svg class="i ti" aria-hidden="true"><use href="#i-therm"/></svg><span data-i18n="heat">HEAT</span><div class="seg heat"><i></i></div><b class="hv">0</b></div>
           <div class="lstatus"><svg class="i" aria-hidden="true"><use href="#i-ok"/></svg><span>OK</span></div>
           <button class="blindsbtn" id="actBlinds" type="button"><span class="cd"></span><svg class="i"><use href="#i-blinds"/></svg><span id="blindsLbl">BLINDS</span><em id="blindsT"></em><small>B</small></button></div>
-        <div class="lamp" id="lamp-closet"><div class="lamptop"><span class="bulb"></span><b data-i18n="z_closet">CLOSET</b><span class="k">2</span></div>
+        <div class="lamp" id="lamp-closet"><div class="lamptop"><span class="bulb"></span><svg class="i zi" aria-hidden="true"><use href="#i-zcloset"/></svg><b data-i18n="z_closet">CLOSET</b><span class="k">2</span></div>
           <div class="mline"><span data-i18n="motion">MOTION</span><div class="seg prox"><i></i></div></div>
-          <div class="modes"><button type="button" class="mk" data-m="DIM" data-i18n="m_DIM">DIM</button><button type="button" class="mk" data-m="STABLE" data-i18n="m_STABLE">NORMAL</button><button type="button" class="mk" data-m="BOOST" data-i18n="m_BOOST">BRIGHT</button></div>
-          <div class="mline"><span data-i18n="heat">HEAT</span><div class="seg heat"><i></i></div><b class="hv">0</b></div>
+          <div class="modes"><button type="button" class="mk" data-m="STABLE" data-i18n="m_STABLE">NORMAL</button><button type="button" class="mk" data-m="BOOST" data-i18n="m_BOOST">BRIGHT</button></div>
+          <div class="mline heatline"><svg class="i ti" aria-hidden="true"><use href="#i-therm"/></svg><span data-i18n="heat">HEAT</span><div class="seg heat"><i></i></div><b class="hv">0</b></div>
           <div class="lstatus"><svg class="i" aria-hidden="true"><use href="#i-ok"/></svg><span>OK</span></div></div>
-        <div class="lamp" id="lamp-door"><div class="lamptop"><span class="bulb"></span><b data-i18n="z_door">DOOR</b><span class="k">3</span></div>
+        <div class="lamp" id="lamp-door"><div class="lamptop"><span class="bulb"></span><svg class="i zi" aria-hidden="true"><use href="#i-zdoor"/></svg><b data-i18n="z_door">DOOR</b><span class="k">3</span></div>
           <div class="mline"><span data-i18n="motion">MOTION</span><div class="seg prox"><i></i></div></div>
-          <div class="modes"><button type="button" class="mk" data-m="DIM" data-i18n="m_DIM">DIM</button><button type="button" class="mk" data-m="STABLE" data-i18n="m_STABLE">NORMAL</button><button type="button" class="mk" data-m="BOOST" data-i18n="m_BOOST">BRIGHT</button></div>
-          <div class="mline"><span data-i18n="heat">HEAT</span><div class="seg heat"><i></i></div><b class="hv">0</b></div>
+          <div class="modes"><button type="button" class="mk" data-m="STABLE" data-i18n="m_STABLE">NORMAL</button><button type="button" class="mk" data-m="BOOST" data-i18n="m_BOOST">BRIGHT</button></div>
+          <div class="mline heatline"><svg class="i ti" aria-hidden="true"><use href="#i-therm"/></svg><span data-i18n="heat">HEAT</span><div class="seg heat"><i></i></div><b class="hv">0</b></div>
           <div class="lstatus"><svg class="i" aria-hidden="true"><use href="#i-ok"/></svg><span>OK</span></div></div>
       </div>
     </section>
@@ -217,10 +225,11 @@
     <button class="pbtn plain sm" id="tutMenu" type="button"><b data-i18n="menu">Menu</b></button></div></div>
   <div class="overlay" id="ovPause" hidden><div class="paper small pausecard"><h2 data-i18n="paused">PAUSED</h2><p class="sub" data-i18n="pausedSub"></p>
     <button class="pbtn ban playbtn" id="resumeBtn" type="button"><b>▶ <span data-i18n="resume">Resume</span></b></button>
+    <button class="pbtn plain" id="rlEvBtn" type="button" hidden></button><button class="pbtn plain" id="rlHowBtn" type="button"></button>
     <div class="vols"><label class="vol"><span data-i18n="musicV">♪ Music</span><input type="range" id="volMus" min="0" max="100" step="5"><i id="volMusN">100%</i></label><label class="vol"><span data-i18n="sfxV">🔊 Sounds</span><input type="range" id="volSfx" min="0" max="100" step="5"><i id="volSfxN">100%</i></label></div>
     <div class="prow"><button class="pbtn plain fsbtn" type="button"><b class="fsLbl">Fullscreen</b></button></div>
     <div class="langsw" role="group" aria-label="Language"><button type="button" data-lang="en">English</button><button type="button" data-lang="ru">Русский</button></div>
-    <button class="pbtn plain sm" id="quitBtn" type="button"><b data-i18n="quit">Menu</b></button></div></div>
+    <button class="pbtn plain sm" id="quitBtn" type="button"><b data-i18n="quit">Menu</b></button><div id="rlHow" hidden></div></div></div>
   <div class="overlay" id="ovEnd" hidden>
     <div class="paper">
       <h2 id="endTitle"></h2><p class="sub" id="endSub"></p>
@@ -284,6 +293,7 @@
 <script src="js/scare.js"></script>
 <script src="js/memes.js"></script>
 <script src="js/art.js"></script>
+<script src="js/art-gaze.js"></script>
 <script src="js/assets.js"></script>
 <script src="js/platform.js"></script>
 <script src="js/stats.js"></script>
@@ -304,5 +314,41 @@
 <script src="js/playtest-clarity.js"></script>
 <script src="js/narrative.js"></script>
 <script src="js/ui-motion.js"></script>
+<script src="js/moderation.js"></script>
 <script src="js/game.js"></script>
+<script src="js/friday.js"></script>
+<script src="js/friday-photo.js"></script>
+<script src="js/friday-blind.js"></script>
+<script src="js/monday.js"></script>
+<script src="js/tuesday.js"></script>
+<script src="js/dm.js"></script>
+<script src="js/layout.js"></script>
+<!-- 22.11.2026: the v2 look - drawing modules only (room v3 + door, new Mia, window and blinds, closet, desk and mug,
+     drinking and typing, round eyes, calm stretches, subtitles and tone, the stalker dark under BRIGHT).
+     Game rules, chat actions, hints, the Friday changes and the screen layout live in js/ (fold 22.11: js/layout.js,
+     css/layout.css, css/pause.css). Test panels and keys are off unless ?dev (v2/release.js). -->
+<script>window.DV2_BASE="v2/door/"; window.MV2_BASE="v2/mia/"; window.WV2_BASE="v2/window/"; window.CL1_BASE="v2/closet/"; window.MUG_BASE="v2/desk/"; window.DRK_BASE="v2/drink/"; window.TYP_BASE="v2/typing/"; window.RL_BASE="v2/rules/";</script>
+<script src="v2/door/door-v2.js"></script>
+<script src="v2/mia/mia-v2.js"></script>
+<link rel="stylesheet" href="v2/ui/theme-b.css">
+<link rel="stylesheet" href="v2/ui/theme-b2.css">
+<link rel="stylesheet" href="v2/ui/layout.css">
+<link rel="stylesheet" href="css/pause.css">
+<script>document.documentElement.classList.add('uiB','uiB2','lvA','clm','lvC');</script>
+<script src="v2/window/window-v2.js"></script>
+<script src="v2/closet/closet-v1.js"></script>
+<script src="v2/desk/desk-v1.js"></script>
+<script src="v2/desk/mug-v1.js"></script>
+<script src="v2/drink/drink-v1.js"></script>
+<script src="v2/typing/typing-v1.js"></script>
+<script src="v2/eyes/eyes-v1.js"></script>
+<script src="v2/ambient/ambient-v1.js"></script>
+<script src="v2/present/present.js"></script>
+<script src="v2/eyes/dark-boost.js"></script>
+<script>/* the night journal for playtests (wraps game functions to record them) - only with ?dev */
+if(/[?&]dev\b/.test(location.search)) document.write('<scr'+'ipt src="v2/telemetry/'+'fri-log.js"></scr'+'ipt>');   /* split so the build inliner leaves it alone */</script>
+<script src="v2/release.js"></script>
+<style>/* dev (?dev): the folded test panel (H / ⚙ окно); ui_v5/layout.css hides #wv2 */
+html body #wv2{display:flex!important}html body.wv2-clean #wv2{display:none!important}html body.wv2-clean #cl1Btn{display:none}
+#dv2,#mv2,#demoBar{display:none!important}</style>
 

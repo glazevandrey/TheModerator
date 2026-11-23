@@ -29,7 +29,10 @@ function fitStage(){
 window.addEventListener('resize',()=>{ fitStage(); try{ placeCallout(); }catch(e){} });
 
 // --- Mia speaks (subtitle). On Wednesday/Friday the stalker sometimes types her line before she says it.
+/* the last line key and when (key moments: her glances wait, background chat thins - moderation.js) */
+const SAYK={key:'',at:-1e9};
 function say(key,text,cool=8){
+  if(S){ SAYK.key=String(key||''); SAYK.at=S.t; }
   if(!S||S.tut.active) return; const now=S.t;
   if(S.running&&S.storyCaptionUntil>now&&key!=='story')return;
   if(S.mia.last[key]!==undefined && now-S.mia.last[key]<cool) return;
@@ -39,9 +42,14 @@ function say(key,text,cool=8){
   show();
 }
 function tipKeyOf(text){ for(const L of ['en','ru']) for(const k in STR[L]) if(STR[L][k]===text) return k; return null; }
+/* this night's tips, for pause → «Как играть» (reset in start()) */
+const TIPS=[];
 function tip(id,text){ if(!S||S.tipsDone[id]||S.tut.active) return;
   if(S.guide&&S.guide.active){S.guide.pendingTip={id,text};return;}
-  S.tipsDone[id]=1; S.tipKey=tipKeyOf(text); $('tip').textContent=text; $('tip').parentElement.classList.remove('new'); void $('tip').offsetWidth; $('tip').parentElement.classList.add('new');
+  S.tipsDone[id]=1; if(!TIPS.includes(text)) TIPS.push(text);
+  /* desktop: the tip appears next to its element (js/hints.js); the evidence ones are said by the task line */
+  if(!MOBILE && S.running && !/^(windowEvidence|evidenceCaptured|noteMon)$/.test(id)) hintAt(text,()=>hintTarget(id));
+  S.tipKey=tipKeyOf(text); $('tip').textContent=text; $('tip').parentElement.classList.remove('new'); void $('tip').offsetWidth; $('tip').parentElement.classList.add('new');
   if(MOBILE){ const t=$('tipToast'); t.textContent=text; t.hidden=false; t.classList.remove('go'); void t.offsetWidth; t.classList.add('go'); clearTimeout(tip._h); tip._h=setTimeout(()=>{ t.hidden=true; },Math.min(9000,3500+text.length*45)); } }  // phones have no sticky note: the tip pops over the chat
 /* on-video hint captions (sound cue, breaker, blinds): easy only, and each one only on the first night it comes up (remembered in PROG.hintSeen) */
 function hintOk(k){ if(!S||S.night.diff!=='easy'||S.night.endless) return false; const H=PROG.hintSeen=PROG.hintSeen||{}, n=S.night.key;
@@ -125,7 +133,7 @@ function hud(dt){
     card.classList.toggle('cue', S.cueZ===z && S.cueT>0);
     setSeg(card.querySelector('.heat i'), L.burned?100:L.heat);
     card.querySelector('.hv').textContent=L.burned?'—':Math.round(L.heat)+'%';
-    const key = L.burned ? 'ls_dead' : redHere ? 'ls_red' : L.surgeT>0 ? 'ls_surge' :
+    const key = L.burned ? 'ls_dead' : L.outT>0 ? 'ls_out' : redHere ? 'ls_red' : L.surgeT>0 ? 'ls_surge' :
       adapting ? 'ls_adapt' : L.heat>80 ? 'ls_hot' : motion ? 'motion' :
       L.mode==='DIM' && L.heat>0 ? 'ls_cool' : 'ls_ok';
     const status = card.querySelector('.lstatus');
@@ -134,7 +142,7 @@ function hud(dt){
       status.dataset.type=type;
       status.querySelector('use').setAttribute('href','#i-'+type);
     }
-    const label = key==='motion' ? T(key)+' · '+T('z_'+z) : T(key);
+    const label = key==='ls_out'&&L.outT<=10 ? T('ls_outT').replace('{n}',Math.ceil(L.outT)) : T(key);   /* 23.11: the card already names the zone; a short outage counts down */
     if(status.lastElementChild.textContent!==label) status.lastElementChild.textContent=label;
   }
   blindsHud();
@@ -159,12 +167,12 @@ function hud(dt){
 function blindsHud(){
   const b=S.blinds, bb=$('actBlinds'), st=S.st, max=8+3*upLv('blinds');
   const cool=!b.closed&&b.cd>0, ready=!b.closed&&!cool&&!b.jammed;
-  $('blindsLbl').textContent=T(b.jammed&&!b.closed?'blindsJam':b.closed?'blindsClosed':'blindsOpen');
+  $('blindsLbl').textContent=T(document.documentElement.classList.contains('lvC')?'blindsOpen':b.jammed&&!b.closed?'blindsJam':b.closed?'blindsClosed':'blindsOpen');   /* 23.11: in layout C the state is in the status line under the name */
   $('blindsT').textContent= b.closed?Math.ceil(Math.max(0,b.timer)) : cool?Math.ceil(b.cd)+(LANG==='ru'?' с':'s') : '';
   bb.classList.toggle('shut',b.closed); bb.classList.toggle('cool',cool); bb.classList.toggle('jam',!!b.jammed&&!b.closed);
   bb.classList.toggle('call', S.running && ready && ((st.stage==='window' && st.p<=.5) || S.winOpen || (S.cueZ==='window'&&S.cueT>0)));
   bb.disabled=!S.running||cool;
-  const f=bb.querySelector('.cd'); f.style.width=(b.closed?Math.max(0,b.timer)/max*100 : cool?(1-b.cd/CD.blinds)*100 : 0)+'%';
+  const f=bb.querySelector('.cd'); f.style.width=(b.closed?Math.min(100,Math.max(0,b.timer)/max*100) : cool?(1-b.cd/CD.blinds)*100 : 0)+'%';
 }
 function cd(btn,v,max){ const e=btn.querySelector('.cd'); if(e) e.style.width=(v>0?v/max*100:0)+'%'; }
 
@@ -179,8 +187,25 @@ function applyLang(){ try{ if(typeof banLegend==='function') banLegend(); }catch
   $('tip').textContent=T((S&&S.tipKey)||'tip0');
   if(typeof renderMenu==='function') renderMenu();
   if(S&&S.over&&lastEnd&&!$('ovEnd').hidden) showEnd(lastEnd);
+  pauseHowFill(); pauseEvSync();
   if(S) hud(0);
 }
+/* ---- the pause card (22.11): after «Записать момент» captured the note, «Прочитать записку» (Friday: «Рассмотреть снимок»)
+   opens the evidence viewer; closing it returns to the pause, the night stays stopped. «Как играть» opens the rules inside the card. */
+let evFromPause=false;
+function evIsPhoto(){ return !!(S&&S.night&&S.night.key==='fri'); }
+function pauseEvSync(){ const b=$('rlEvBtn'); if(!b) return; b.hidden=!(S && S.ev && S.ev.noteRec && !S.over);
+  b.innerHTML='<b>'+(evIsPhoto()?'🔍 ':'📄 ')+esc(T(evIsPhoto()?'evidence_photo':'evidence_read'))+'</b>'; }
+function pauseHowFill(){ const btn=$('rlHowBtn'), box=$('rlHow'); if(!btn||!box) return;
+  btn.innerHTML='<b>? '+esc(box.hidden?T('rl_how'):T('rl_back'))+'</b>';
+  if(box.hidden) return;
+  box.innerHTML=`<h3>${esc(T('howto'))}</h3><ul>${T('rulesShort')}</ul><h3>${esc(T('rl_mod'))}</h3><ul>${T('rl_modList')}</ul>`+
+    `<h3>${esc(T('rl_keys'))}</h3><p class="keys">${esc(T('keys'))}</p>`+
+    `<h3>${esc(T('rl_tips'))}</h3>${TIPS.length?'<ul>'+TIPS.slice(-6).map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul>':'<p class="keys">'+esc(T('rl_noTips'))+'</p>'}`; }
+function pauseCardOpen(){ const box=$('rlHow'); if(box){ box.hidden=true; box.parentElement.classList.remove('rl-open'); } pauseHowFill(); pauseEvSync(); }
+$('rlHowBtn').onclick=()=>{ const box=$('rlHow'); box.hidden=!box.hidden; box.parentElement.classList.toggle('rl-open',!box.hidden); pauseHowFill(); };
+$('rlEvBtn').onclick=()=>{ if(!S||!S.ev.noteRec||!paused) return; evFromPause=true; $('ovPause').hidden=true; evidenceOpen();
+  if($('evidenceViewer').hidden){ evFromPause=false; $('ovPause').hidden=false; } };   /* the viewer refused (guide/finale): stay in the pause */
 function setLang(l){ LANG=l; try{ localStorage.setItem('mod_lang',l); }catch(e){} applyLang(); try{ fsLabels(); }catch(e){} }
 document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
 

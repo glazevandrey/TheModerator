@@ -72,7 +72,7 @@ const SFX={
   droneOff(){ if(!A.drone||!A.ctx) return; const d=A.drone, t=A.ctx.currentTime; A.drone=null; d.g.gain.cancelScheduledValues(t); d.g.gain.setValueAtTime(d.g.gain.value,t); d.g.gain.linearRampToValueAtTime(0,t+.08); d.os.forEach(o=>{ try{o.stop(t+.1);}catch(e){} }); },
   heart(n){ let d=0; for(let i=0;i<n;i++){ tone(52,.13,'sine',.45,34,d); tone(46,.11,'sine',.3,30,d+.2); d+=Math.max(.42,.95-i*.06); } },
   breath(){ noiseBurst(.45,.22,'bandpass',1100,.8,0); noiseBurst(.9,.12,'bandpass',700,.7,.6); noiseBurst(.6,.1,'bandpass',900,.7,1.9); noiseBurst(1.1,.08,'bandpass',650,.7,2.6); },
-  doorbell(){ tone(659,1.1,'sine',.12,null,0); tone(1318,.6,'sine',.03,null,0); tone(523,1.6,'sine',.12,null,.55); tone(1046,.8,'sine',.03,null,.55); },
+  doorbell(){ tone(659,1.1,'sine',.3,null,0); tone(1318,.6,'sine',.07,null,0); tone(523,1.6,'sine',.3,null,.55); tone(1046,.8,'sine',.07,null,.55); },   /* 23.11: was .12 - easy to miss under the music */
   shutter(){ noiseBurst(.04,.25,'highpass',3000,1,0); tone(1600,.03,'square',.05,null,0); noiseBurst(.05,.2,'highpass',2500,1,.09); },
   softKnock(){ for(const d of [0,.5,1.0]){ tone(120,.12,'sine',.22,80,d); noiseBurst(.06,.12,'lowpass',700,1,d); } },   /* three calm knocks */
   sirenOn(){ if(!A.ctx||A.siren) return; const t=A.ctx.currentTime, o=A.ctx.createOscillator(), l=A.ctx.createOscillator(), lg=A.ctx.createGain(), f=A.ctx.createBiquadFilter(), g=A.ctx.createGain();

@@ -12,7 +12,7 @@ function claimDaily(){
   PROG.daily.streak = PROG.daily.last===yk ? PROG.daily.streak+1 : 0;
   PROG.bank+=dailyValue(); PROG.daily.last=todayKey(); saveProg(); SFX.donate(); renderMenu();
 }
-function nextNightIdx(){ return Math.min(PROG.unlocked, NIGHTS.length-1); }
+function nextNightIdx(){ return Math.min(PROG.unlocked, NIGHTS.length-1, DEMO_BUILD?DEMO_NIGHTS-1:99); }
 function nightTag(N){ return N.story?T('story'):N.mod?T('mod_'+N.mod):T('tag_first'); }
 function openMenu(view){ menuView=view||'main'; ['ovEnd','ovTut','ovPhoto','ovPause'].forEach(id=>$(id).hidden=true); paused=false;
   if(!S||!S.running){ S=newState(0); S.menuScene=true; S.st.stage='window'; S.st.p=.82; MS.stT=rnd(16,24); }   /* the menu shows a calm night with him at the window */
@@ -62,16 +62,15 @@ function renderMenuLive(){
   const ni=nextNightIdx(), N=NIGHTS[ni], first=PROG.onboardMon!==2&&PROG.unlocked===0;
   const endOpen=PROG.unlocked>=3||PROG.done;
   const tiles=[
-    `<button class="mltile" data-go="nights" type="button"><b>🌙 ${esc(T('nights'))}</b><span>${Math.min(PROG.unlocked+(PROG.done?1:0),NIGHTS.length)}/${NIGHTS.length}</span></button>`,
+    `<button class="mltile" data-go="nights" type="button"><b>🌙 ${esc(T('nights'))}</b><span>${Math.min(PROG.unlocked+(PROG.done?1:0),DEMO_BUILD?DEMO_NIGHTS:NIGHTS.length)}/${DEMO_BUILD?DEMO_NIGHTS:NIGHTS.length}</span></button>`,
     `<button class="mltile${affordUp()?' canbuy':''}" data-go="shop" type="button"><b>🛒 ${esc(T('shop'))}</b><span>${affordUp()?esc(T('canBuyShort')):esc(T('upgrades'))}</span></button>`,
     `<button class="mltile" data-go="endless" type="button" ${endOpen?'':'disabled'}><b>∞ ${esc(T('endlessShort'))}</b><span>${endOpen?esc(T('best',{n:PROG.best})):esc(T('endlessLocked'))}</span></button>`,
     `<button class="mltile" data-go="howto" type="button"><b>? ${esc(T('tutTile'))}</b><span>${esc(T('howto'))}</span></button>`,
     lastDeskKey()?`<button class="mltile" id="deskBtn" type="button"><b>🖥 ${esc(T('deskTile'))}</b><span>${esc(T('deskTileSub'))}</span></button>`:'',
-    dailyAvailable()?`<button class="mltile daily2" id="dailyBtn" type="button"><b>🎁 ${esc(T('dailyClaim',{v:dailyValue()}))}</b><span>${esc(T('daily'))}</span></button>`
-      :`<div class="mltile done"><b>✓ ${esc(T('daily'))}</b><span>${esc(T('dailyDone',{s:PROG.daily.streak+1}))}</span></div>`
-  ].filter(Boolean).join('');
+    ''   /* 22.11: the daily bonus is gone (a browser free-to-play leftover) */
+  ].filter(Boolean).filter(t=>!DEMO_BUILD||!/data-go="(shop|endless)"|dailyBtn|daily2|mltile done/.test(t)).join('');   /* demo: no shop, endless or daily bonus */
   return `<div class="ml-top"><span class="ml-live">● LIVE</span><span class="ml-chip" id="mlViewers">${esc(T('mlViewers',{n:MS.viewers.toLocaleString(LANG==='ru'?'ru-RU':'en-US')}))}</span><span class="ml-chip ml-clock">23:58</span>
-      <span class="ml-chip ml-bank"><span class="coin">HC</span><b>${PROG.bank}</b></span></div>
+      ${DEMO_BUILD?'':`<span class="ml-chip ml-bank"><span class="coin">HC</span><b>${PROG.bank}</b></span>`}</div>
     <div class="ml-title"><h1 class="logo">${LOGO_HTML}</h1><p>${esc(T('sub'))}</p></div>
     <div class="ml-chat"><div class="ml-msgs" id="mlChat"></div><p class="ml-role">⚑ ${esc(T('mlRole'))}</p></div>
     <div class="ml-act"><button class="pbtn ban ml-play" id="playBtn" type="button"><b>▶ ${esc(T('mlShift'))}</b><small>${esc(first?T('g_first'):T('playNight',{n:ni+1,day:T('dayName_'+N.key)}))}</small></button>
@@ -93,7 +92,7 @@ function renderMenu(){
   if(false){
   } else if(menuView==='nights'){
     h=`<div class="mtop"><h2>${esc(T('nights'))}</h2>${coin}</div><div class="diffsw"><span>${esc(T('diff'))}:</span>${['easy','normal','hard'].map(d=>`<button type="button" class="${PROG.diff===d?'on':''}" data-diffsw="${d}">${esc(T('diff_'+d))}</button>`).join('')}</div><div class="nightgrid">`+NIGHTS.map((N,i)=>{
-      const open=i<=PROG.unlocked; return `<button class="nightbtn${N.story?' story':''}" type="button" data-night="${i}" ${open?'':'disabled'}><b>${i+1}</b><span>${esc(T('dayName_'+N.key))}</span><em>${open?esc(nightTag(N)):esc(T('locked'))}</em>${open&&PROG.stars&&PROG.stars[N.key]?`<i class="nstars" title="${esc(T('diff_'+['','easy','normal','hard'][PROG.stars[N.key]]))}">${'★'.repeat(PROG.stars[N.key])}</i>`:''}</button>`; }).join('')+`</div>${back}`;
+      const open=i<=PROG.unlocked && !(DEMO_BUILD&&i>=DEMO_NIGHTS);   /* 22.11: demo = Monday and Tuesday */ return `<button class="nightbtn${N.story?' story':''}" type="button" data-night="${i}" ${open?'':'disabled'}><b>${i+1}</b><span>${esc(T('dayName_'+N.key))}</span><em>${open?esc(nightTag(N)):esc(T('locked'))}</em>${open&&PROG.stars&&PROG.stars[N.key]?`<i class="nstars" title="${esc(T('diff_'+['','easy','normal','hard'][PROG.stars[N.key]]))}">${'★'.repeat(PROG.stars[N.key])}</i>`:''}</button>`; }).join('')+`</div>${back}`;
   } else if(menuView==='diff'){
     h=`<div class="mtop"><h2>${esc(T('diffTitle'))}</h2>${coin}</div><p class="sub">${esc(T('diffSub'))}</p><div class="diffgrid">`+['easy','normal','hard'].map(d=>
       `<button class="diffcard ${d}${PROG.diff===d?' on':''}" type="button" data-diff="${d}"><b>${esc(T('diff_'+d))}</b><span>${esc(T('diffD_'+d))}</span>${d==='normal'?`<em>${esc(T('diffRec'))}</em>`:''}</button>`).join('')+`</div>${back}`;
@@ -101,7 +100,7 @@ function renderMenu(){
     h=`<div class="mtop"><h2>${esc(T('shop'))}</h2>${coin}</div>
       ${SHOP_LOOKS?`<div class="tabs"><button type="button" class="${shopTab==='up'?'on':''}" data-tab="up">${esc(T('upgrades'))}</button><button type="button" class="${shopTab==='look'?'on':''}" data-tab="look">${esc(T('looks'))}</button></div>`:''}`;
     if(!SHOP_LOOKS) shopTab='up';
-    if(shopTab==='up') h+=`<div class="uplist">`+UPGRADES.map(u=>{ const lv=upLv(u.id), max=lv>=u.lv.length, price=max?0:u.lv[lv], [nm,ds]=TA('up_'+u.id);
+    if(shopTab==='up') h+=`<div class="uplist">`+UPGRADES.map(u=>{ const lv=upOwned(u.id), max=lv>=u.lv.length, price=max?0:u.lv[lv], [nm,ds]=TA('up_'+u.id);
         return `<div class="uprow"><div class="upinfo"><b>${esc(nm)}</b><span>${esc(ds)}</span></div><div class="pips">${u.lv.map((_,k)=>`<i class="${k<lv?'on':''}"></i>`).join('')}</div>
         ${max?`<span class="maxed">${esc(T('maxed'))}</span>`:`<button class="pbtn buy" type="button" data-up="${u.id}" ${PROG.bank<price?'disabled':''}><span class="coin">HC</span><b>${price}</b></button>`}</div>`; }).join('')+`</div>`;
     else h+=`<div class="looklist">`+Object.keys(LOOKS).map(cat=>`<div class="lookcat"><b>${esc(T('look_'+cat))}</b><div class="swatches">`+LOOKS[cat].map(o=>{
@@ -140,7 +139,7 @@ function bindMenu(box){
   const ms=box.querySelector('#menuSound'); if(ms) ms.onclick=()=>{ setMuted(!A.muted); $('muteLbl').textContent=T(A.muted?'soundOff':'soundOn'); renderMenu(); };
 }
 function buyUpgrade(id){
-  const u=UPGRADES.find(x=>x.id===id), lv=upLv(id); if(!u||lv>=u.lv.length||PROG.bank<u.lv[lv]) return;
+  const u=UPGRADES.find(x=>x.id===id), lv=upOwned(id); if(!u||lv>=u.lv.length||PROG.bank<u.lv[lv]) return;
   stat('shop/'+id+'/'+(lv+1));
   PROG.bank-=u.lv[lv]; PROG.up[id]=lv+1; saveProg(); SFX.donate(); renderMenu();
 }

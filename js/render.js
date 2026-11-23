@@ -89,7 +89,7 @@ function drawRoom(c){
     c.strokeStyle='rgba(170,190,230,.18)'; c.lineWidth=.5; for(let i=0;i<3;i++){ const yy=36+i*8+sw*1.5; c.beginPath(); c.moveTo(24,yy); c.quadraticCurveTo(34,yy-2,46,yy+1); c.stroke(); }
     c.fillStyle='#4a4048'; c.beginPath(); c.moveTo(18,28); c.lineTo(31,24); c.lineTo(31,63); c.lineTo(18,62); c.closePath(); c.fill();
     c.fillStyle='rgba(90,110,150,.35)'; c.beginPath(); c.moveTo(20,30); c.lineTo(29,27); c.lineTo(29,60); c.lineTo(20,60); c.closePath(); c.fill(); }
-  if(S.ev.note || S.ev.noteFly>0){ /* Captured paper peels away only after its frame has been saved. */
+  if(S.ev.note || S.ev.noteFly>0 || S.ev.noteStay){ /* Captured paper peels away only after its frame has been saved. Friday slice: noteStay keeps the photo taped on. */
     c.save(); if(S.ev.noteFly>0){const p=1-S.ev.noteFly/1.4;c.translate(12*p,65*p*p);c.translate(36,72);c.rotate(p*1.1);c.scale(1-p*.2,1-p*.2);c.translate(-36,-72);c.globalAlpha=1-p;}
     const mon=S.night&&S.night.key==='mon';   /* Monday: just a handwritten line; Friday: the one with the photo */
     if(has('window_note')&&!mon) c.drawImage(IMG.window_note,26,58,22,28);
@@ -97,7 +97,7 @@ function drawRoom(c){
       c.strokeStyle='#3a3030'; c.lineWidth=.6; for(let i=0;i<5;i++){ c.beginPath(); c.moveTo(-7,-8+i*4); c.lineTo(-7+[13,10,14,8,11][i],-8+i*4+(i%2?.4:-.3)); c.stroke(); }
       if(!mon){ c.fillStyle='#2b2224'; c.beginPath(); c.arc(1,7,3,0,7); c.fill(); c.fillRect(-2,9,6,3); } c.restore(); }
   }
-  if(S.ev.note || S.ev.noteFly>0)c.restore();
+  if(S.ev.note || S.ev.noteFly>0 || S.ev.noteStay)c.restore();
   if(S.blinds.anim>.01){ const hh=68*S.blinds.anim; c.fillStyle='#8a8070'; c.fillRect(18,28,70,hh); c.fillStyle='#5d564b'; for(let y=28;y<28+hh;y+=3.5) c.fillRect(18,y,70,.8); }
   c.restore();
   c.fillStyle='#4a4048'; c.fillRect(15,25,76,3.5); c.fillRect(15,95,76,4); c.fillRect(15,25,3.5,74); c.fillRect(87.5,25,3.5,74); c.fillRect(52,28,2,68); c.fillRect(18,61,70,1.6);
@@ -228,6 +228,7 @@ function miaExpr(){
   const m=S.mia, p=S.panic, UP=[40,65,85], DOWN=[34,59,79];
   let lv=m.exLv||0; while(lv<3 && p>UP[lv]) lv++; while(lv>0 && p<DOWN[lv-1]) lv--; m.exLv=lv;
   let want = m.surpriseT>0 ? 'surprised' : lv===3 ? 'panic' : lv===2 ? 'anxious' : lv===1 ? 'scared' : mouthOpen() ? 'talk' : 'calm';   /* mouth follows the voice syllables (audio.js MOUTH) */
+  if(m.forceFace && S.t<(m.forceFaceUntil||0) && IMG['mia_'+m.forceFace]) want=m.forceFace; /* Friday slice: a scripted reaction holds her face for a moment */
   if(m.phone && IMG.mia_phoneclosed){ /* scare.js phone call: she holds the phone to her ear */
     want = m.phone==='scared'||lv>=2 ? 'phonescared' : m.phone==='open'&&mouthOpen() ? 'phone' : 'phoneclosed';
     m.ex=want; m.exT=S.t; return want; }
@@ -394,12 +395,45 @@ function drawMiaPulled(c,k){ // k: 0 → 1 while she is dragged out of frame
   c.drawImage(cut,-w/2,-h*.6,w,h); c.globalAlpha=1;
   const q=w/ART_W; c.fillStyle='#070608'; for(const sx of [175,450]){ const hx=-w/2+sx*q, hy=-h*.6+300*q; c.beginPath(); c.ellipse(hx,hy,9,6,0,0,7); c.fill(); for(let f=0;f<4;f++){ c.beginPath(); c.ellipse(hx+(f-1.5)*3.4,hy+5,1.6,5,0,0,7); c.fill(); } }
   c.restore(); }
+/* C1: small body motion over the single drawn frame — breathing, a flinch, a lean toward an event.
+   Friday only for now. No rotation: the art is one flat picture, turning it reads as a puppet. */
+function miaMoOn(){ return typeof friOn==='function' && friOn(); }
+function miaMo(){ const m=S.mia; return m.mo||(m.mo={x:0,y:0,tx:0,ty:0,hold:0,fl:0,flP:0,lt:S.t}); }
+function miaLean(dx,dy,sec,gaze){ if(!miaMoOn()) return; const o=miaMo(); o.tx=dx; o.ty=dy||0; o.hold=sec||1.4; if(gaze){ S.mia.gaze=gaze; S.mia.gazeUntil=S.t+o.hold; } }
+/* her eyes on the threat: 'win' (screen-left) / 'door' (screen-right); only faces that have gaze frames */
+function miaGazeImg(img){
+  const m=S.mia; if(!miaMoOn()) return img;
+  const dir = (m.gaze && S.t<(m.gazeUntil||0)) ? m.gaze : miaAutoGaze(); if(!dir) return img;
+  m.gazeNow=dir;
+  const base=img===IMG.mia_calm?'calm':img===IMG.mia_talk?'talk':img===IMG.mia_scared?'scared':null;
+  return (base && IMG['mia_'+base+'_'+dir]) || img; }
+function miaFlinch(p){ if(!miaMoOn()) return; const o=miaMo(); o.fl=.4; o.flP=p||1; }
+/* between scripted moments her eyes follow him — but only once she could actually notice him:
+   he is right at the glass / in the doorway (p>0.7), or red eyes glowing close (p>0.5). Through closed blinds she sees nothing.
+   Sounds (a knock) turn her head through the scripted gaze in friday.js, not here. (Author's test 19.11: she looked too early.) */
+function miaAutoGaze(){ const st=S.st; if(!st || S.mia.awayT>0) return null;
+  if(st.stage!=='window' && st.stage!=='door') return null;
+  if(st.stage==='window' && S.blinds && S.blinds.closed) return null;
+  return (st.p>.7 || (st.red && st.p>.5)) ? (st.stage==='window'?'win':'door') : null; }
+function miaMoRect(r){
+  if(!miaMoOn()) return r;
+  const o=miaMo(), dt=Math.max(0,Math.min(.1,S.t-o.lt)); o.lt=S.t;
+  if(o.hold>0){ o.hold-=dt; if(o.hold<=0){ o.tx=0; o.ty=0; } }
+  if(o.hold<=0){ const g=miaAutoGaze(); o.tx=(g==='win'?-1.2:g==='door'?1.2:0)+(o.bx||0); o.ty=0; }   /* bx: she sits a bit away from the window for the rest of the night (friday-photo.js) */   /* a slight lean toward where she keeps looking */
+  const stg=S.st&&S.st.stage; if(stg!==o.stg){ if((stg==='window'||stg==='door') && o.stg==='hidden' && S.mia.awayT<=0) { if(o.fl<=0){ o.fl=.3; o.flP=.6; } } o.stg=stg; } /* he appears: a small start */
+  const k=1-Math.exp(-dt*5); o.x+=(o.tx-o.x)*k; o.y+=(o.ty-o.y)*k;   /* eased, never a jump */
+  let fx=0, fy=0; if(o.fl>0){ o.fl-=dt; const a=Math.max(0,o.fl/.4)*o.flP; fx=Math.sin(S.t*55)*.8*a; fy=-.9*a; } /* short jolt up, a few px */
+  const calm=S.panic<60, b=(Math.sin(S.t*(calm?1.35:2.4))*.5+.5)*(calm?.012:.009); /* breath ~1.2%, quicker and shallower when scared */
+  const [x,y,w,h]=r, desk=163.4, nh=h*(1+b), ny=desk-(desk-y)*(1+b);       /* grow up from the desk line: hands stay put */
+  return [x+o.x+fx, ny+o.y+fy, w, nh];
+}
 function drawMiaArt(c,ex,jx,br){
   const own=IMG['mia_'+ex]; let img=own||IMG.mia_calm;
   if(S.mia.blink>0 && IMG.mia_blink && (ex==='calm'||ex==='talk')) img=IMG.mia_blink; /* real closed-eyes frame */
   else if(ex==='talk' && own && Math.floor(S.t*7)%3===2) img=IMG.mia_calm; /* lips move while she talks (eyes are identical in both frames) */
+  img=miaGazeImg(img);
   const trem = ex==='panic' ? Math.sin(S.t*29)*.22+Math.sin(S.t*17)*.12 : 0;  /* a fine shiver, no random jumps */
-  const [x,y,w,h]=miaArtRect();
+  const [x,y,w,h]=miaMoRect(miaArtRect());
   c.drawImage(img,x,y,w,h); if(trem) c.drawImage(cutOf(img),x+trem,y,w,h); S.artRect=[x,y,w,h,img];
   const k=w/ART_W, P=(px,py)=>[x+px*k,y+py*k];headphoneStar(c,x+185*k,y+68*k,6*k);
   if(own) return;
@@ -413,8 +447,26 @@ function drawMiaArt(c,ex,jx,br){
 }
 function drawMiaHeadOnly(c){ const old=S.panic; S.panic=0; c.save(); c.beginPath(); c.rect(MIA.x-40,MIA.y-60,80,80); c.clip(); drawMia(c); c.restore(); S.panic=old; }
 
-// ---------- Friday: the photo inside the note (the player's own back)
+// ---------- Friday: the photo inside the note
+/* 21.11: the author's picture (evidence_photo.jpg, 16:10) - used everywhere: the evidence viewer and its zoom (friday-photo.js),
+   the end-of-night archive, the Friday photo screen, the desk. On top: her monitor's offline line in the game's language (small,
+   pale - it reads only in the zoom), grain, vignette and the camera time stamp 00:20 (the player is asked to find it).
+   Until the picture has loaded, the older code drawing below. */
+const EV_PHOTO=new Image(); EV_PHOTO.src=(window.RL_BASE||'v2/rules/')+'evidence_photo.jpg';
 function drawPhoto(cv){
+  if(!EV_PHOTO.complete||!EV_PHOTO.naturalWidth){ drawPhotoOld(cv); return; }
+  const c=cv.getContext('2d'); c.save(); c.setTransform(cv.width/320,0,0,cv.height/200,0,0);
+  c.drawImage(EV_PHOTO,0,0,320,200);
+  { const ru=typeof LANG==='undefined'||LANG==='ru', x=219, y=96; c.textAlign='left';
+    c.fillStyle='rgba(225,205,240,.62)'; c.font='bold 3.3px sans-serif'; c.fillText(ru?'ЭФИР ОКОНЧЕН':'STREAM ENDED',x,y);
+    c.fillStyle='rgba(225,205,240,.42)'; c.font='2.2px sans-serif'; c.fillText(ru?'спасибо, что смотрели ♡':'thanks for watching ♡',x,y+3.6);
+    c.fillStyle='rgba(120,110,135,.7)'; c.fillRect(x,y-8.4,9,2.8); c.fillStyle='rgba(235,225,245,.75)'; c.font='bold 1.9px sans-serif'; c.fillText('OFFLINE',x+.6,y-6.4); }
+  c.globalAlpha=.08; try{ c.drawImage(noises[0],0,0,320,200); }catch(e){} c.globalAlpha=1;
+  const vg=c.createRadialGradient(160,100,70,160,100,200); vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,.55)'); c.fillStyle=vg; c.fillRect(0,0,320,200);
+  c.font='bold 5px monospace'; c.textAlign='left'; c.fillStyle='rgba(255,150,70,.62)'; c.fillText('00:20',276,189);
+  c.restore(); }
+/* the older code drawing (the player's own back) */
+function drawPhotoOld(cv){
   if(has('mia_calm')&&has('chair_back')){ drawPhotoBack(cv); return; }
   const c=cv.getContext('2d'); const w=cv.width,h=cv.height; c.setTransform(w/320,0,0,h/200,0,0);
   c.fillStyle='#0d0b0c'; c.fillRect(0,0,320,200);
@@ -451,14 +503,18 @@ function drawPhotoBack(cv){
   c.fillStyle='#1c1820'; c.fillRect(0,0,320,200); c.fillStyle='#1d1920'; c.fillRect(0,126,320,74);
   const lg=c.createRadialGradient(292,46,0,292,46,150); lg.addColorStop(0,'rgba(233,170,94,.38)'); lg.addColorStop(1,'rgba(233,170,94,0)'); c.fillStyle=lg; c.fillRect(140,0,180,200);
   c.fillStyle='#2a2224'; c.beginPath(); c.moveTo(276,34); c.lineTo(304,22); c.lineTo(312,44); c.closePath(); c.fill();
-  /* desk and the monitor with her stream on it */
+  /* desk and the monitor: her stream has ENDED - the offline screen (canon: window_0808.jpg, 8 Aug 00:20, after Thursday's stream) */
   const mx=160, mw=96, mh=58, my=56, sx=mx-mw/2, sy=my;
   c.fillStyle='#2b2327'; c.fillRect(mx-120,my+mh+12,240,10); c.fillStyle='#211b1f'; c.fillRect(mx-120,my+mh+22,240,40);
   c.fillStyle='#121014'; c.fillRect(mx-6,my+mh,12,14); c.fillStyle='#0d0c10'; c.fillRect(sx-4,sy-4,mw+8,mh+8);
   c.fillStyle='#2a2531'; c.fillRect(sx,sy,mw,mh);
-  { const vw=mw*.66, vh=vw*mia.height/mia.width; c.save(); c.beginPath(); c.rect(sx,sy,mw*.68,mh); c.clip(); c.globalAlpha=.9; c.drawImage(mia,sx-2,sy+mh-vh+2,vw+4,vh); c.restore(); }
-  c.fillStyle='#1c1a22'; c.fillRect(sx+mw*.68,sy,mw*.32,mh); c.fillStyle='rgba(200,190,210,.35)'; for(let i=0;i<7;i++) c.fillRect(sx+mw*.71,sy+5+i*(mh-8)/7,mw*.24*(.5+((i*7)%5)/10),2);
-  c.fillStyle='#b7443f'; c.fillRect(sx+3,sy+3,9,4);
+  { const ru=typeof LANG==='undefined'||LANG==='ru'; const og=c.createLinearGradient(sx,sy,sx,sy+mh); og.addColorStop(0,'#2c2536'); og.addColorStop(1,'#1d1824'); c.fillStyle=og; c.fillRect(sx,sy,mw,mh);
+    /* her head covers the middle: the words sit in the visible left strip, small enough to need the zoom */
+    c.fillStyle='rgba(225,210,240,.78)'; c.font='bold 4.2px sans-serif'; c.textAlign='left';
+    c.fillText(ru?'ЭФИР':'STREAM',sx+3,sy+22); c.fillText(ru?'ОКОНЧЕН':'ENDED',sx+3,sy+29);
+    c.fillStyle='rgba(225,210,240,.45)'; c.font='3.4px sans-serif'; c.fillText(ru?'спасибо, что':'thanks for',sx+3,sy+36); c.fillText(ru?'смотрели ♡':'watching ♡',sx+3,sy+40.5);
+    c.fillStyle='#6b6474'; c.fillRect(sx+3,sy+3,15,5); c.fillStyle='#d9d3e2'; c.font='bold 3.4px sans-serif'; c.fillText('OFFLINE',sx+3.6,sy+6.7);
+    c.fillStyle='rgba(200,190,210,.16)'; for(let i=0;i<5;i++) c.fillRect(sx+mw*.78,sy+8+i*9,mw*.16,2); }
   const mg=c.createRadialGradient(mx,my+mh/2,4,mx,my+mh/2,120); mg.addColorStop(0,'rgba(150,175,235,.28)'); mg.addColorStop(1,'rgba(150,175,235,0)'); c.fillStyle=mg; c.fillRect(0,0,320,200);
   /* her head from behind, above the chair back */
   const ch=150, cw=ch*chair.width/chair.height, cx=160, cy=88;
@@ -479,6 +535,8 @@ function drawPhotoBack(cv){
   c.fillStyle='rgba(180,200,230,.06)'; c.beginPath(); c.moveTo(20,200); c.lineTo(90,0); c.lineTo(120,0); c.lineTo(50,200); c.fill();
   c.globalAlpha=.1; c.drawImage(noises[0],0,0,320,200); c.globalAlpha=1;
   const vg=c.createRadialGradient(160,100,60,160,100,200); vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,.7)'); c.fillStyle=vg; c.fillRect(0,0,320,200);
+  /* a camera time stamp in the corner: small enough to need the zoom (friday-photo.js asks the player to find it) */
+  c.font='bold 5px monospace'; c.fillStyle='rgba(255,150,70,.62)'; c.fillText('00:20',276,189);
 }
 // ---------- finale footage LAST_STREAM.mp4 (11.08): Mia at her desk, he comes his usual way, she runs,
 // he sits down in her chair and puts on her headphones
